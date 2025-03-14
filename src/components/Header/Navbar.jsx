@@ -10,7 +10,6 @@ export default function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const dropdownRef = useRef(null)
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -25,7 +24,7 @@ export default function Navbar() {
   }, [])
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-[#1a1a1a] border-b border-[#333] h-14 px-4 flex items-center justify-between">
+    <div className="fixed top-0 left-0 right-0 z-50 bg-[#1a1a1a] border-b border-[#5f5d5d] h-14 px-4 flex items-center justify-between">
       {/* Logo */}
       <div className="font-semibold text-xl text-white">Serum</div>
 
