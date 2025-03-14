@@ -1,5 +1,5 @@
-import React from "react";
-import Card from "../components/Card/Card";
+// import {Card } from "../components/ui/card"
+import Card from "@/components/Card/Card"
 
 const videos = [
   {
@@ -20,7 +20,8 @@ const videos = [
   },
   {
     title: "10 Modern JavaScript Features You Should Be Using",
-    image: "https://images.creativemarket.com/0.1.0/ps/8153948/1820/1214/m1/fpnw/wm0/prev-cm-1-.jpg?1587131055&s=678d97b9e41e456f26c32a3315d711b6",
+    image:
+      "https://images.creativemarket.com/0.1.0/ps/8153948/1820/1214/m1/fpnw/wm0/prev-cm-1-.jpg?1587131055&s=678d97b9e41e456f26c32a3315d711b6",
     avatar: "https://randomuser.me/api/portraits/men/3.jpg",
     channel: "Channel Three",
     views: "890K",
@@ -42,7 +43,7 @@ const videos = [
     views: "2.1M",
     time: "6 months",
   },
-];
+]
 
 function Home() {
   return (
@@ -62,7 +63,7 @@ function Home() {
         ))}
       </div>
     </div>
-  );
+  )
 }
 
-export default Home;
+export default Home

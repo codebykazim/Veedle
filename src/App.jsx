@@ -1,18 +1,17 @@
 import React from "react";
 import Navbar from "./components/Header/Navbar";
 import Sidebar from "./components/Header/Sidebar";
-import Home from "./pages/Home";
+import { Outlet } from "react-router-dom";
 
 function App() {
   return (
     <div className="min-h-screen bg-[#121212]">
-      {/* Sidebar */}
+      <Navbar />
       <Sidebar />
 
       {/* Main content */}
-      <div className="flex flex-col flex-grow">
-        <Navbar />
-        <Home />
+      <div className="flex-grow">
+        <Outlet />
       </div>
     </div>
   );

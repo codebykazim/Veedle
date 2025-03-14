@@ -4,6 +4,9 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
 import Home from './pages/Home.jsx'
+import Subscriptions from './pages/Subscriptions'
+import YourVideos from './pages/YourVideos'
+import LikedVideos from './pages/LikedVideos'
 
 const router=createBrowserRouter([
   {
@@ -12,7 +15,19 @@ const router=createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Home/>,
+        element: <Home />,
+      },
+      {
+        path: '/subscriptions',
+        element: <Subscriptions />,
+      },
+      {
+        path: '/your-videos',
+        element: <YourVideos />,
+      },
+      {
+        path: '/liked-videos',
+        element: <LikedVideos />,
       },
     ]
   }
