@@ -90,7 +90,7 @@ function LikedVideos() {
         {/* <div className="flex h-screen"> */}
 {/* Left Side (Sticky) */}
 <div
-  className="w-[300px] h-full sticky top-0 p-3 relative border-1 border-[#5f5d5d]"
+  className="w-[300px] h-full sticky top-0 p-3 border-1 border-[#5f5d5d]"
   style={{
     backgroundImage: `url(${videos[0].image})`,
     backgroundSize: "cover",
