@@ -1,10 +1,11 @@
-"use client"
-
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useSelector } from "react-redux";
+import LoginPopup from "./LoginPopup";
 
 export default function Protected({ children, authentication = true }) {
   const navigate = useNavigate()
+  const authStatus = useSelector((state) => state.auth.status);
   const [loader, setLoader] = useState(false)
 
 //   useEffect(() => {
@@ -15,6 +16,16 @@ export default function Protected({ children, authentication = true }) {
 //     }
 //     setLoader(false)
 //   }, [authStatus, authentication, navigate])
+
+useEffect(() => {
+  if (!authentication && authStatus !== authentication) {
+      return
+  }
+}, [authStatus, authentication, navigate]);
+
+if (authentication && authStatus !== authentication) {
+  return <LoginPopup />;
+}
 
   return loader ? (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-purple-500 to-blue-600">

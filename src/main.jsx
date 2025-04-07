@@ -9,6 +9,7 @@ import YourVideos from "./pages/YourVideos";
 import LikedVideos from "./pages/LikedVideos";
 import AuthLayout from "./components/AuthLayout";
 import Signup from "./components/Signup";
+import Login from "./components/Login";
 import { Provider } from "react-redux";
 import store from "./store/store";
 
@@ -19,14 +20,18 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: (
+          <AuthLayout authentication={false}>
+            <Home />
+          </AuthLayout>
+        ),
       },
       {
-        path:"/signup",
+        path: "/signup",
         element: (
-            <AuthLayout authentication={false}>
-                <Signup />
-            </AuthLayout>
+          <AuthLayout authentication={false}>
+            <Signup />
+          </AuthLayout>
         ),
       },
       {
@@ -48,9 +53,25 @@ const router = createBrowserRouter([
       {
         path: "/liked-videos",
         element: (
-          <AuthLayout authentication>
-             {" "}
+          <AuthLayout authentication={false}>
+            {" "}
             <LikedVideos />
+          </AuthLayout>
+        ),
+      },
+      {
+        path: "/login",
+        element: (
+          <AuthLayout authentication={false}>
+            <Login />
+          </AuthLayout>
+        ),
+      },
+      {
+        path: "/signup",
+        element: (
+          <AuthLayout authentication={false}>
+            <Signup />
           </AuthLayout>
         ),
       },
@@ -59,8 +80,7 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")).render(
-
   <Provider store={store}>
     <RouterProvider router={router} />
-    </Provider>
+  </Provider>
 );
