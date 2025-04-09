@@ -1,8 +1,8 @@
 import axios from "axios";
-// import {BASE_URL} from "../constants.js"
+import {BASE_URL} from "../conf"
 
 const axiosInstance = axios.create();
-const BASE_URL=''
+
 axiosInstance.defaults.baseURL = BASE_URL;
 axiosInstance.defaults.withCredentials = true;
 

@@ -50,9 +50,9 @@ export default function Sidebar() {
                 : "text-gray-300 hover:bg-[#333] hover:text-white"
             }`}
           >
-            <Link to="/your-videos">
+            <Link to="/channel/:username">
               <Play className="h-4 w-4 mr-3" />
-              Your videos
+              My Content
             </Link>
           </Button>
 

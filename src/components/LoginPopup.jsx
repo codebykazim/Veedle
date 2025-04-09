@@ -1,9 +1,27 @@
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const LoginPopup = () => {
+
+    const modalRef = useRef(null);
+    const navigate=useNavigate();
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (modalRef.current && !modalRef.current.contains(event.target)) {
+                navigate("/");
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -13,6 +31,7 @@ const LoginPopup = () => {
             className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-90 backdrop-blur-sm z-50"
         >
             <motion.div
+                ref={modalRef}
                 initial={{ y: -20, scale: 0.98 }}
                 animate={{ y: 0, scale: 1 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
