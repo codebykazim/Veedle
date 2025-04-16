@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import ChannelHeader from "@/components/Channel/ChannelHeader";
-import ChannelNavigate from "@/components/Channel/ChannelNavigate";
+import React, { useEffect, useState } from "react";
+import ChannelHeader from '../../components/Channel/ChannelHeader';
+import ChannelNavigate from "../../components/Channel/ChannelNavigate";
 import { useDispatch, useSelector } from "react-redux";
 import { userChannelProfile } from '../../store/userSlice.js';
 import { Outlet, useParams } from "react-router-dom";
@@ -10,31 +10,35 @@ function Channel() {
     const { username } = useParams();
 
     const channel = useSelector((state) => state.user?.profileData);
+
     useEffect(() => {
         dispatch(userChannelProfile(username));
     }, [dispatch, username]);
+    console.log(channel);
 
     window.scrollTo(0, 0);
 
     return (
-        <>
-            {channel && (
-                <ChannelHeader
-                    username={username}
-                    coverImage={channel?.coverImage.url}
-                    avatar={channel?.avatar.url}
-                    subscribedCount={channel?.channelsSubscribedToCount}
-                    fullName={channel?.fullName}
-                    subscribersCount={channel?.subcribersCount}
-                    isSubscribed={channel?.isSubscribed}
-                    channelId={channel?._id}
-                />
-            )}
-            <ChannelNavigate username={username} />
-            <div className="overflow-y-scroll h-[32rem] sm:h-96 mb-20 sm:mb-0">
-                <Outlet />
+        <div className="min-h-screen bg-[#0F0F0F] text-white">
+            <div className="sm:ml-60 pt-14">
+                {channel && (
+                    <ChannelHeader
+                        username={username}
+                        coverImage={channel?.coverImage}
+                        avatar={channel?.avatar}
+                        subscribedCount={channel?.channelsSubscribedToCount}
+                        fullName={channel?.fullName}
+                        subscribersCount={channel?.subscribersCount}
+                        isSubscribed={channel?.isSubscribed}
+                        channelId={channel?._id}
+                    />
+                )}
+                <ChannelNavigate username={username} />
+                <div className="overflow-y-auto pb-20 sm:pb-0 px-4">
+                    <Outlet />
+                </div>
             </div>
-        </>
+        </div>
     );
 }
 
