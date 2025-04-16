@@ -19,6 +19,7 @@ import {
   SearchVideos,
   TermsAndConditions,
   ChannelPlaylist,
+  PlaylistVideos
 } from "./pages";
 import { EditPersonalInfo, ChangePassword, Layout } from "./components";
 
@@ -74,6 +75,15 @@ function App() {
               }
             />
             <Route
+  path="playlist/:id"
+  element={
+    <AuthLayout authentication>
+      <PlaylistVideos /> {/* ← You need to create or import this component */}
+    </AuthLayout>
+  }
+/>
+
+            <Route
               path="tweets"
               element={
                 <AuthLayout authentication>
@@ -106,14 +116,14 @@ function App() {
               </AuthLayout>
             }
           />
-          <Route
+          {/* <Route
             path="/subscriptions"
             element={
               <AuthLayout authentication>
                 <Subscriptions />
               </AuthLayout>
             }
-          />
+          /> */}
           <Route
             path="/edit"
             element={
