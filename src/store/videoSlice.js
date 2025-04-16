@@ -44,18 +44,50 @@ export const publishAvideo = createAsyncThunk("publishAvideo", async (data) => {
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("description", data.description);
-    formData.append("videoFile", data.videoFile[0]);
-    formData.append("thumbnail", data.thumbnail[0]);
+
+    // Make sure the file objects exist before appending
+    if (data.videoFile && data.videoFile[0]) {
+        formData.append("videoFile", data.videoFile[0]);
+    }
+
+    if (data.thumbnail && data.thumbnail[0]) {
+        formData.append("thumbnail", data.thumbnail[0]);
+    }
 
     try {
-        const response = await axiosInstance.post("/video", formData);
+        // Log the formData contents to verify what's being sent
+        console.log("FormData contents:");
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + (pair[1] instanceof File ?
+                        pair[1].name + ' (' + pair[1].type + ', ' + pair[1].size + ' bytes)' :
+                        pair[1]));
+        }
+
+        const response = await axiosInstance.post("/video", formData, {
+            headers: {
+                // Let axios set the Content-Type header automatically for FormData
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+
         toast.success(response?.data?.message);
         return response.data.data;
     } catch (error) {
-        toast.error(error?.response?.data?.error);
+        toast.error(error?.response?.data?.error || "Error uploading video");
+        console.log("Error object:", error);
+        console.log("Response data:", error?.response?.data);
+
+        // Try to extract more meaningful error if available
+        const errorMessage = error?.response?.data?.error ||
+                            error?.response?.data?.message ||
+                            error?.message ||
+                            "Unknown error";
+        console.log("Error message:", errorMessage);
+
         throw error;
     }
 });
+
 
 export const updateAVideo = createAsyncThunk(
     "updateAVideo",
