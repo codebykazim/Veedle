@@ -1,98 +1,107 @@
 import React, { useEffect } from "react";
-import { Input2 } from "../components";
+import { Input } from "../components";
 import { Button } from "./ui/button";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUserDetails } from "../store/authSlice";
 
 function EditPersonalInfo() {
-    const {
-        handleSubmit,
-        register,
-        formState: { errors },
-        setValue,
-    } = useForm();
-    const dispatch = useDispatch();
-    const auth = useSelector((state) => state.auth?.userData);
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isDirty, isSubmitting },
+    setValue,
+    reset,
+  } = useForm();
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth?.userData);
 
-    useEffect(() => {
-        setValue("fullName", auth?.fullName);
-        setValue("email", auth?.email);
-    }, [auth, setValue]);
+  useEffect(() => {
+    if (auth) {
+      reset({
+        fullName: auth.fullName,
+        email: auth.email,
+      });
+    }
+  }, [auth, reset]);
 
-    const saveChanges = (data) => {
-        dispatch(updateUserDetails(data));
-    };
+  // Modify your saveChanges function to log the data
+const saveChanges = async (data) => {
+  console.log("Submitting data:", data);
+  try {
+    const result = await dispatch(updateUserDetails(data)).unwrap();
+    console.log("Update response:", result);
+  } catch (error) {
+    console.error("Update failed:", error);
+  }
+};
 
-    const reset = (e) => {
-        e.preventDefault();
-        setValue("fullName", auth?.fullName);
-        setValue("email", auth?.email);
-    };
+  return (
+    <div className="w-full text-white flex justify-center items-start pt-8 px-4">
+      <div className="bg-[#222222] p-6 rounded-lg shadow-lg w-full max-w-md border border-gray-700">
+        <h2 className="text-xl font-bold mb-2">Personal Information</h2>
+        <p className="text-sm text-gray-400 mb-6">
+          Update your personal details
+        </p>
 
-    return (
-        <>
-            <div className="w-full text-white flex justify-center items-center mt-5">
-                <div className="bg-transparent p-5 border rounded shadow-lg w-full max-w-md">
-                    <h2 className="text-lg font-bold mb-4">
-                        Personal Information
-                        <p className="font-light text-xs">
-                            Update your personal details here.
-                        </p>
-                    </h2>
-                    <form
-                        onSubmit={handleSubmit(saveChanges)}
-                        className="space-y-4"
-                    >
-                        <div className="flex flex-col">
-                            <Input2
-                                label="Full Name"
-                                type="text"
-                                className="rounded"
-                                {...register("fullName", {
-                                    required: "FullName is required",
-                                })}
-                            />
-                            {errors.fullName && (
-                                <span className="text-sm text-red-500">
-                                    {errors.fullName?.message}
-                                </span>
-                            )}
-                        </div>
-                        <div className="flex flex-col">
-                            <Input2
-                                label="Email Address"
-                                type="email"
-                                className="rounded"
-                                {...register("email", {
-                                    required: "Email is required",
-                                })}
-                            />
-                            {errors.email && (
-                                <span className="text-sm text-red-500">
-                                    {errors.email?.message}
-                                </span>
-                            )}
-                        </div>
-                        <div className="flex justify-between mt-4">
-                            <Button
-                                onClick={(e) => reset(e)}
-                                className="bg-gray-500 text-white px-4 py-2 rounded"
-                            >
-                                Reset
-                            </Button>
-                            <Button
-                                type="submit"
-                                className="bg-purple-500 text-white px-4 py-2 rounded"
-                            >
-                                Save Changes
-                            </Button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </>
-    );
+        <form onSubmit={handleSubmit(saveChanges)} className="space-y-5">
+          <div className="space-y-1">
+            <Input
+              label="Full Name"
+              type="text"
+              placeholder="Enter your full name"
+              {...register("fullName", {
+                required: "Full name is required",
+              })}
+            />
+            {errors.fullName && (
+              <span className="text-xs text-red-500">
+                {errors.fullName.message}
+              </span>
+            )}
+          </div>
+
+          <div className="space-y-1">
+            <Input
+              label="Email Address"
+              type="email"
+              placeholder="Enter your email"
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Invalid email address",
+                },
+              })}
+            />
+            {errors.email && (
+              <span className="text-xs text-red-500">
+                {errors.email.message}
+              </span>
+            )}
+          </div>
+
+          <div className="flex justify-end gap-3 pt-2">
+            <Button
+              type="button"
+              onClick={() => reset()}
+              className="px-4 py-2 border border-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 transition-colors"
+              disabled={!isDirty || isSubmitting}
+            >
+              Reset
+            </Button>
+            <Button
+              type="submit"
+              className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg"
+              disabled={!isDirty || isSubmitting}
+            >
+              {isSubmitting ? "Saving..." : "Save Changes"}
+            </Button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 }
 
 export default EditPersonalInfo;

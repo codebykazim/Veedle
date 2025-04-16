@@ -1,105 +1,80 @@
-import React from "react";
-import { PiFilmReelFill } from "react-icons/pi";
-import {Spinner} from "./index";
-import { Button } from "./ui/button";
-import { IoCloseCircleOutline, TiTick } from "./icons";
-import { useDispatch } from "react-redux";
-import { updateUploadState } from "../store/videoSlice";
+"use client"
 
-function UploadingVideo({
-    videoFileName,
-    fileSize,
-    setUploadVideoPopup,
-    uploaded,
-}) {
-    const dispatch = useDispatch();
+import { PiFilmReelFill } from "react-icons/pi"
+import { Spinner } from "./index"
+import { Button } from "./ui/button"
+import { IoCloseCircleOutline, TiTick } from "./icons"
+import { useDispatch } from "react-redux"
+import { updateUploadState } from "../store/videoSlice"
 
-    const handleCancelAndFinish = () => {
-        setUploadVideoPopup((prev) => ({
-            ...prev,
-            uploadVideo: false,
-        }));
-        dispatch(updateUploadState());
-    };
+function UploadingVideo({ videoFileName, fileSize, setUploadVideoPopup, uploaded }) {
+  const dispatch = useDispatch()
 
-    return (
-        <>
-            <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-70 z-50">
-                <div className="w-96 p-3 text-white border outline-none rounded-lg space-y-5 border-slate-700 bg-black">
-                    <div className="flex items-start justify-between">
-                        <div>
-                            {uploaded ? (
-                                <h1 className="text-lg font-bold">
-                                    Uploaded Video
-                                </h1>
-                            ) : (
-                                <h1 className="text-lg font-bold">
-                                    Uploading Video...
-                                </h1>
-                            )}
-                            <span className="text-xs text-slate-400">
-                                Track your video uploading process.
-                            </span>
-                        </div>
-                        <IoCloseCircleOutline
-                            size={25}
-                            className="cursor-pointer"
-                            onClick={handleCancelAndFinish}
-                        />
-                    </div>
-                    <div className="border flex justify-start items-center p-1">
-                        <div className="mr-2">
-                            <PiFilmReelFill
-                                size={25}
-                                className="text-purple-500"
-                            />
-                        </div>
-                        <div className="">
-                            <h1 className="text-sm font-semibold">
-                                {videoFileName}
-                            </h1>
-                            <p className="text-xs">{fileSize} MB</p>
-                            <div className="flex gap-2 items-center mt-2">
-                                {uploaded ? (
-                                    <>
-                                        <span className="text-xs flex items-center">
-                                            <TiTick
-                                                size={25}
-                                                className="text-purple-500"
-                                            />
-                                            Uploaded Successfully
-                                        </span>
-                                    </>
-                                ) : (
-                                    <>
-                                        <Spinner />
-                                        <span className="text-xs">
-                                            Loading ...
-                                        </span>
-                                    </>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                    <div className="flex gap-2">
-                        <Button
-                            className="border flex-1 p-2"
-                            onClick={handleCancelAndFinish}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            className="flex-1 bg-purple-500 p-2"
-                            textColor="text-black"
-                            onClick={handleCancelAndFinish}
-                        >
-                            Finish
-                        </Button>
-                    </div>
-                </div>
+  const handleCancelAndFinish = () => {
+    setUploadVideoPopup((prev) => ({
+      ...prev,
+      uploadVideo: false,
+    }))
+    dispatch(updateUploadState())
+  }
+
+  return (
+    <div className="fixed inset-0 flex justify-center items-center bg-black/80 backdrop-blur-sm z-50 animate-in fade-in duration-200">
+      <div className="w-full max-w-md p-5 text-white border rounded-xl border-slate-700 bg-black shadow-xl">
+        <div className="flex items-start justify-between mb-4">
+          <div>
+            <h1 className="text-lg font-bold">{uploaded ? "Uploaded Video" : "Uploading Video..."}</h1>
+            <span className="text-xs text-slate-400">Track your video uploading process.</span>
+          </div>
+          <button
+            className="text-gray-400 hover:text-white transition-colors"
+            onClick={handleCancelAndFinish}
+            aria-label="Close"
+          >
+            <IoCloseCircleOutline size={25} />
+          </button>
+        </div>
+
+        <div className="border border-slate-700 rounded-lg flex items-center p-3 mb-5 bg-slate-900/50">
+          <div className="mr-3 flex-shrink-0">
+            <PiFilmReelFill size={30} className="text-purple-500" />
+          </div>
+          <div className="flex-1">
+            <h1 className="text-sm font-semibold truncate">{videoFileName}</h1>
+            <p className="text-xs text-slate-400">{fileSize} MB</p>
+            <div className="flex gap-2 items-center mt-2">
+              {uploaded ? (
+                <span className="text-xs flex items-center text-green-400">
+                  <TiTick size={20} className="text-green-400 mr-1" />
+                  Uploaded Successfully
+                </span>
+              ) : (
+                <span className="text-xs flex items-center text-purple-400">
+                  <Spinner className="mr-2" />
+                  Uploading...
+                </span>
+              )}
             </div>
-        </>
-    );
+          </div>
+        </div>
+
+        <div className="flex gap-3">
+          <Button
+            className="flex-1 border border-slate-700 hover:bg-slate-800 text-white transition-colors"
+            onClick={handleCancelAndFinish}
+          >
+            Cancel
+          </Button>
+          <Button
+            className="flex-1 bg-purple-500 hover:bg-purple-600 text-white transition-colors"
+            onClick={handleCancelAndFinish}
+          >
+            {uploaded ? "Finish" : "Close"}
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
 }
 
-export default UploadingVideo;
+export default UploadingVideo

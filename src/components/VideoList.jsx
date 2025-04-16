@@ -25,7 +25,7 @@ function VideoList({
                 className="w-full sm:p-2 cursor-pointer"
                 onClick={() => navigate(`/watch/${videoId}`)}
             >
-                <div className="relative sm:h-60 h-48">
+                <div className="relative h-40 sm:h-48"> 
                     <img
                         src={thumbnail}
                         className="object-cover w-full h-full"
@@ -44,9 +44,10 @@ function VideoList({
                         </div>
                     )}
                     <div>
-                        <h2 className="font-medium">{title}</h2>
+                        <h2 className="font-medium text-sm">{title}</h2> {/* Reduced text size */}
                         <div className="text-xs space-x-1 text-slate-400">
-                            <span>{views} Views</span> .
+                            <span>{views} Views</span>.
+                            <span></span>
                             <span>{timeAgo(createdAt)}</span>
                         </div>
                         {channelName && (

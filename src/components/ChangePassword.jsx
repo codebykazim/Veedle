@@ -1,107 +1,108 @@
 import React from "react";
-import { Input2 } from "../components";
+import { Input } from "../components";
 import { Button } from "./ui/button";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { changePassword } from "../store/authSlice";
 
 function ChangePassword() {
-    const {
-        handleSubmit,
-        register,
-        formState: { errors },
-        getValues,
-        resetField,
-    } = useForm();
-    const dispatch = useDispatch();
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isSubmitting },
+    getValues,
+    reset,
+  } = useForm();
+  const dispatch = useDispatch();
 
-    const onSubmit = (data) => {
-        dispatch(
-            changePassword({
-                oldPassword: data?.oldPassword,
-                newPassword: data?.oldPassword,
-            })
-        );
-        resetField("oldPassword");
-        resetField("newPassword");
-        resetField("confirmPassword");
-    };
+  const onSubmit = async (data) => {
+    try {
+      await dispatch(
+        changePassword({
+          oldPassword: data.oldPassword,
+          newPassword: data.newPassword,
+        })
+      ).unwrap();
+      reset();
+    } catch (error) {
+      console.error("Password change failed:", error);
+    }
+  };
 
-    return (
-        <div className="w-full text-white flex justify-center items-center mt-2">
-            <div className="bg-transparent p-8 border rounded shadow-lg w-full max-w-md">
-                <h2 className="text-lg font-bold mb-4">Change Password</h2>
-                <form
-                    onSubmit={handleSubmit(onSubmit)}
-                    className="space-y-4"
-                >
-                    <div className="flex flex-col">
-                        <Input2
-                            label="Old Password"
-                            type="password"
-                            className="rounded"
-                            {...register("oldPassword", {
-                                required: "Old password is required",
-                            })}
-                        />
-                        {errors.oldPassword && (
-                            <span className="text-sm text-red-500">
-                                {errors.oldPassword.message}
-                            </span>
-                        )}
-                    </div>
-                    <div className="flex flex-col">
-                        <Input2
-                            label="New Password"
-                            type="password"
-                            className="rounded"
-                            {...register("newPassword", {
-                                required: "New password is required",
-                                minLength: {
-                                    value: 6,
-                                    message:
-                                        "Password must be at least 6 characters long",
-                                },
-                            })}
-                        />
-                        {errors.newPassword && (
-                            <span className="text-sm text-red-500">
-                                {errors.newPassword.message}
-                            </span>
-                        )}
-                    </div>
-                    <div className="flex flex-col">
-                        <Input2
-                            label="Confirm New Password"
-                            type="password"
-                            className="rounded"
-                            {...register("confirmPassword", {
-                                required: "Please confirm your new password",
-                                validate: {
-                                    matchesNewPassword: (value) =>
-                                        value === getValues("newPassword") ||
-                                        "Passwords do not match",
-                                },
-                            })}
-                        />
-                        {errors.confirmPassword && (
-                            <span className="text-sm text-red-500">
-                                {errors.confirmPassword.message}
-                            </span>
-                        )}
-                    </div>
-                    <div className="flex justify-center mt-4">
-                        <Button
-                            type="submit"
-                            className="bg-purple-500 text-white px-4 py-2 rounded"
-                        >
-                            Change Password
-                        </Button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    );
+  return (
+    <div className="w-full text-white flex justify-center items-start pt-8 px-4">
+      <div className="bg-[#222222] p-6 rounded-lg shadow-lg w-full max-w-md border border-gray-700">
+        <h2 className="text-xl font-bold mb-2">Change Password</h2>
+        <p className="text-sm text-gray-400 mb-6">
+          Update your account password
+        </p>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          <div className="space-y-1">
+            <Input
+              label="Old Password"
+              type="password"
+              placeholder="Enter current password"
+              {...register("oldPassword", {
+                required: "Current password is required",
+              })}
+            />
+            {errors.oldPassword && (
+              <span className="text-xs text-red-500">
+                {errors.oldPassword.message}
+              </span>
+            )}
+          </div>
+
+          <div className="space-y-1">
+            <Input
+              label="New Password"
+              type="password"
+              placeholder="Enter new password"
+              {...register("newPassword", {
+                required: "New password is required",
+                minLength: {
+                  value: 6,
+                  message: "Password must be at least 6 characters",
+                },
+              })}
+            />
+            {errors.newPassword && (
+              <span className="text-xs text-red-500">
+                {errors.newPassword.message}
+              </span>
+            )}
+          </div>
+
+          <div className="space-y-1">
+            <Input
+              label="Confirm New Password"
+              type="password"
+              placeholder="Confirm new password"
+              {...register("confirmPassword", {
+                required: "Please confirm your password",
+                validate: (value) =>
+                  value === getValues("newPassword") || "Passwords don't match",
+              })}
+            />
+            {errors.confirmPassword && (
+              <span className="text-xs text-red-500">
+                {errors.confirmPassword.message}
+              </span>
+            )}
+          </div>
+
+          <Button
+            type="submit"
+            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 rounded-lg"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Updating..." : "Change Password"}
+          </Button>
+        </form>
+      </div>
+    </div>
+  );
 }
 
 export default ChangePassword;

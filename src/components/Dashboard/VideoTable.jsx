@@ -3,97 +3,103 @@ import { ImBin, GrEdit } from "../../components/icons";
 import TogglePublish from "../TogglePublish";
 
 function VideoTable({ videos, setPopUp, setVideoDetails }) {
-    return (
-        <>
-            <section className="mx-auto w-full overflow-x-scroll">
-                <table className="min-w-full border border-slate-500">
-                    <thead>
-                        <tr>
-                            <th className="py-2 px-4 border-b border-slate-500">
-                                Toggle Publish
-                            </th>
-                            <th className="py-2 px-4 border-b border-slate-500">
-                                Status
-                            </th>
-                            <th className="py-2 px-4 border-b border-slate-500">
-                                Uploaded
-                            </th>
-                            <th className="py-2 px-4 border-b border-slate-500">
-                                Rating
-                            </th>
-                            <th className="py-2 px-4 border-b border-slate-500">
-                                Date Uploaded
-                            </th>
-                            <th className="py-2 px-4 border-b border-slate-500"></th>
-                        </tr>
-                    </thead>
-                    <tbody className="text-center">
-                        {videos?.map((video) => (
-                            <tr key={video?._id}>
-                                <td className="py-2 px-4 border-b border-slate-500">
-                                    <TogglePublish
-                                        isPublished={video?.isPublished}
-                                        videoId={video?._id}
-                                    />
-                                </td>
-                                <td className="py-2 px-4 border-b border-slate-500 ">
-                                    {video?.isPublished ? (
-                                        <span className="text-green-500 py-1 px-2 border border-green-500 rounded-full">
-                                            Published
-                                        </span>
-                                    ) : (
-                                        <span className="text-orange-500 py-1 px-2 border border-orange-500 rounded-full">
-                                            UnPublished
-                                        </span>
-                                    )}
-                                </td>
-                                <td className="py-2 px-4 border-b border-slate-500">
-                                    {video?.title}
-                                </td>
-                                <td className="border-b border-slate-500">
-                                    <span className="border rounded-lg outline-none px-2 bg-green-200 text-green-600">
-                                        {video?.likesCount} likes
-                                    </span>
-                                </td>
-                                <td className="py-2 px-4 border-b border-slate-500">
-                                    {video?.createdAt?.day}/
-                                    {video?.createdAt?.month}/
-                                    {video?.createdAt?.year}
-                                </td>
-                                <td className="py-2 border-b border-slate-500">
-                                    <span className="flex gap-3 justify-start">
-                                        <ImBin
-                                            size={20}
-                                            className="cursor-pointer hover:text-purple-500"
-                                            onClick={() => {
-                                                setPopUp((prev) => ({
-                                                    ...prev,
-                                                    deleteVideo:
-                                                        !prev.deleteVideo,
-                                                }));
-                                                setVideoDetails(video);
-                                            }}
-                                        />
-                                        <GrEdit
-                                            size={20}
-                                            className="cursor-pointer hover:text-purple-500"
-                                            onClick={() => {
-                                                setPopUp((prev) => ({
-                                                    ...prev,
-                                                    editVideo: !prev.editVideo,
-                                                }));
-                                                setVideoDetails(video);
-                                            }}
-                                        />
-                                    </span>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </section>
-        </>
-    );
+  return (
+    <div className="overflow-x-auto">
+      <table className="min-w-full divide-y divide-gray-700">
+        <thead className="bg-[#1a1a1a]">
+          <tr>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+              Publish
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+              Status
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+              Title
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+              Rating
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+              Date Uploaded
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-700">
+          {videos?.map((video) => (
+            <tr
+              key={video?._id}
+              className="hover:bg-[#1a1a1a] transition-colors"
+            >
+              <td className="px-6 py-4 whitespace-nowrap">
+                <TogglePublish
+                  isPublished={video?.isPublished}
+                  videoId={video?._id}
+                />
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <span
+                  className={`px-3 py-1 rounded-full text-xs font-medium ${
+                    video?.isPublished
+                      ? "bg-green-900 text-green-300"
+                      : "bg-orange-900 text-orange-300"
+                  }`}
+                >
+                  {video?.isPublished ? "Published" : "Unpublished"}
+                </span>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap max-w-xs truncate">
+                {video?.title}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <span className="bg-green-900 text-green-300 px-3 py-1 rounded-full text-xs">
+                  {video?.likesCount} likes
+                </span>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                {video?.createdAt
+                  ? new Date(
+                      video.createdAt.year,
+                      video.createdAt.month - 1,
+                      video.createdAt.day
+                    ).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })
+                  : "N/A"}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <div className="flex gap-4">
+                  <button
+                    onClick={() => {
+                      setVideoDetails(video);
+                      setPopUp((prev) => ({ ...prev, editVideo: true }));
+                    }}
+                    className="text-gray-400 hover:text-purple-500 transition-colors"
+                  >
+                    <GrEdit size={18} />
+                  </button>
+                  <button
+                    onClick={() => {
+                      setVideoDetails(video);
+                      setPopUp((prev) => ({ ...prev, deleteVideo: true }));
+                    }}
+                    className="text-gray-400 hover:text-red-500 transition-colors"
+                  >
+                    <ImBin size={18} />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 }
 
 export default VideoTable;

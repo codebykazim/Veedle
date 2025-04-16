@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Like, DeleteConfirmation, Edit } from "./index";
 import { HiOutlineDotsVertical } from "./icons";
 import { deleteAComment, editAComment } from "../store/commentSlice";
+import Avatar from "./Avatar";
 
 function CommentsList({
     avatar,
@@ -14,7 +15,7 @@ function CommentsList({
     isLiked,
     likesCount,
 }) {
-    const avatar2 = useSelector((state) => state.auth?.userData?.avatar.url);
+    const avatar2 = useSelector((state) => state.auth?.userData?.avatar?.url);
     const authUsername = useSelector((state) => state.auth?.userData?.username);
     const dispatch = useDispatch();
 
@@ -26,10 +27,9 @@ function CommentsList({
     });
 
     const handleEditComment = (editedContent) => {
-        console.log(editedContent);
         dispatch(editAComment({ commentId, content: editedContent }));
-        setEditState((prevState) => ({
-            ...prevState,
+        setEditState(prev => ({
+            ...prev,
             editing: false,
             editedContent,
             isOpen: false,
@@ -39,124 +39,85 @@ function CommentsList({
 
     const handleDeleteComment = () => {
         dispatch(deleteAComment(commentId));
-        setEditState((prevState) => ({
-            ...prevState,
-            delete: false,
-        }));
+        setEditState(prev => ({ ...prev, delete: false }));
     };
 
     return (
-        <>
-            <div className="text-white w-full flex justify-start items-center sm:gap-5 gap-3 border-b border-slate-600 p-3 sm:p-5">
-                <div className="w-12">
-                    <img
-                        src={avatar || avatar2}
-                        className="w-10 h-10 object-cover rounded-full"
-                    />
+        <div className="w-full flex gap-4 p-4 hover:bg-[#1a1a1a] transition-colors border-b border-gray-800">
+            <Avatar src={avatar || avatar2} channelName={username} size="sm" />
+
+            <div className="flex-1 relative">
+                <div className="flex items-center gap-2 mb-1">
+                    <span className="text-sm font-medium">{username}</span>
+                    <span className="text-xs text-gray-500">
+                        {timeAgo(createdAt)}
+                    </span>
                 </div>
-                <div className="w-full flex flex-col gap-1 relative">
-                    <div className="flex items-center gap-2">
-                        <h2 className="text-xs">{username}</h2>
-                        <span className="text-xs text-slate-400">
-                            {timeAgo(createdAt)}
-                        </span>
-                    </div>
 
-                    {/*dropdown for edit and delete comment */}
-                    {authUsername === username && (
-                        <div className="absolute right-0">
-                            <div className="relative">
-                                <HiOutlineDotsVertical
-                                    className="text-white cursor-pointer"
-                                    onClick={() =>
-                                        setEditState((prevState) => ({
-                                            ...prevState,
-                                            isOpen: !prevState.isOpen,
-                                        }))
-                                    }
-                                />
+                {editState.editing ? (
+                    <Edit
+                        initialContent={editState.editedContent}
+                        onCancel={() => setEditState(prev => ({ ...prev, editing: false }))}
+                        onSave={handleEditComment}
+                    />
+                ) : (
+                    <p className="text-sm text-gray-300 mb-2">{editState.editedContent}</p>
+                )}
 
-                                {editState.isOpen && (
-                                    <div className="border bg-[#222222] text-lg border-slate-600 absolute text-center right-2 rounded-xl">
-                                        <ul>
-                                            <li
-                                                className="hover:opacity-50 px-5 cursor-pointer border-b border-slate-600"
-                                                onClick={() =>
-                                                    setEditState(
-                                                        (prevState) => ({
-                                                            ...prevState,
-                                                            editing:
-                                                                !prevState.editing,
-                                                            isOpen: false,
-                                                        })
-                                                    )
-                                                }
-                                            >
-                                                Edit
-                                            </li>
-                                            <li
-                                                className="px-5 hover:opacity-50 cursor-pointer"
-                                                onClick={() =>
-                                                    setEditState(
-                                                        (prevState) => ({
-                                                            ...prevState,
-                                                            delete: true,
-                                                            isOpen: false,
-                                                        })
-                                                    )
-                                                }
-                                            >
-                                                Delete
-                                            </li>
-                                        </ul>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Delete Confirm popup */}
-                    {editState.delete && (
-                        <DeleteConfirmation
-                            onCancel={() =>
-                                setEditState((prevState) => ({
-                                    ...prevState,
-                                    delete: false,
-                                    isOpen: false,
-                                }))
-                            }
-                            onDelete={handleDeleteComment}
-                            comment={true}
-                        />
-                    )}
-
-                    {/* edit comment */}
-                    {editState.editing ? (
-                        <Edit
-                            initialContent={editState.editedContent}
-                            onCancel={() =>
-                                setEditState((prevState) => ({
-                                    ...prevState,
-                                    editing: false,
-                                    isOpen: false,
-                                }))
-                            }
-                            onSave={handleEditComment}
-                        />
-                    ) : (
-                        editState.editedContent
-                    )}
-
-                    {/* Like for comments */}
+                <div className="flex items-center gap-4">
                     <Like
                         isLiked={isLiked}
                         likesCount={likesCount}
                         commentId={commentId}
-                        size={17}
+                        size={16}
                     />
                 </div>
+
+                {authUsername === username && (
+                    <div className="absolute top-0 right-0">
+                        <button
+                            onClick={() => setEditState(prev => ({ ...prev, isOpen: !prev.isOpen }))}
+                            className="text-gray-400 hover:text-white p-1"
+                        >
+                            <HiOutlineDotsVertical size={18} />
+                        </button>
+
+                        {editState.isOpen && (
+                            <div className="absolute right-0 mt-1 w-32 bg-[#222222] border border-gray-700 rounded-lg shadow-lg z-10 overflow-hidden">
+                                <button
+                                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-700 transition-colors"
+                                    onClick={() => setEditState(prev => ({
+                                        ...prev,
+                                        editing: true,
+                                        isOpen: false
+                                    }))}
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-700 text-red-400 transition-colors"
+                                    onClick={() => setEditState(prev => ({
+                                        ...prev,
+                                        delete: true,
+                                        isOpen: false
+                                    }))}
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {editState.delete && (
+                    <DeleteConfirmation
+                        onCancel={() => setEditState(prev => ({ ...prev, delete: false }))}
+                        onDelete={handleDeleteComment}
+                        comment={true}
+                    />
+                )}
             </div>
-        </>
+        </div>
     );
 }
 

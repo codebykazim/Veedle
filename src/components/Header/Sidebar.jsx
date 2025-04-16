@@ -1,77 +1,144 @@
-import { Link, useLocation } from "react-router-dom";
-import { Home, Heart, Tv, Play } from "lucide-react";
-import { Button } from "@/components/ui/button";
+"use client"
+import { NavLink, useNavigate } from "react-router-dom"
+import { useSelector, useDispatch } from "react-redux"
+import { IoMdLogOut } from "react-icons/io"
+import { BiHistory, BiLike, HiOutlineVideoCamera, IoFolderOutline, RiHome6Line } from "../icons"
+import { userLogout } from "../../store/authSlice"
 
-export default function Sidebar() {
-  const location = useLocation();
+function Sidebar() {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const username = useSelector((state) => state.auth?.userData?.username)
 
-  const isActive = (path) => location.pathname === path;
+  const sidebarTopItems = [
+    {
+      icon: <RiHome6Line size={22} />,
+      title: "Home",
+      url: "/",
+    },
+    {
+      icon: <BiLike size={22} />,
+      title: "Liked Videos",
+      url: "/liked-videos",
+    },
+    {
+      icon: <BiHistory size={22} />,
+      title: "History",
+      url: "/history",
+    },
+    {
+      icon: <HiOutlineVideoCamera size={22} />,
+      title: "My Content",
+      url: username ? `/channel/${username}` : "/channel",
+    },
+    {
+      icon: <IoFolderOutline size={22} />,
+      title: "Collections",
+      url: "/collections",
+    },
+  ]
+
+  const bottomBarItems = [
+    {
+      icon: <RiHome6Line size={24} />, // Increased icon size for mobile
+      title: "Home",
+      url: "/",
+    },
+    {
+      icon: <BiHistory size={24} />, // Increased icon size for mobile
+      title: "History",
+      url: "/history",
+    },
+    {
+      icon: <IoFolderOutline size={24} />, // Increased icon size for mobile
+      title: "Collections",
+      url: "/collections",
+    },
+    {
+      icon: <BiLike size={24} />, // Increased icon size for mobile
+      title: "Liked",
+      url: "/liked-videos",
+    },
+  ]
+
+  const logout = async () => {
+    await dispatch(userLogout())
+    navigate("/")
+  }
+
+  const NavItem = ({ item }) => (
+    <NavLink
+      to={item.url}
+      className={({ isActive }) =>
+        `group relative flex items-center gap-4 px-4 py-3 text-sm transition-colors ${
+          isActive ? "bg-[#2d2d2d] text-white font-medium" : "text-gray-300 hover:bg-[#2d2d2d] hover:text-[#a855f7]"
+        }`
+      }
+    >
+      {({ isActive }) => (
+        <>
+          <span className={`${isActive ? "text-purple-500" : "group-hover:text-[#a855f7]"}`}>{item.icon}</span>
+          <span>{item.title}</span>
+          {isActive && <div className="absolute left-0 top-0 h-full w-[4px] bg-purple-500" />}
+        </>
+      )}
+    </NavLink>
+  )
+
+  const MobileNavItem = ({ item }) => (
+    <NavLink
+      to={item.url}
+      className={({ isActive }) =>
+        `flex flex-col items-center justify-center h-full px-2 text-sm relative ${
+          isActive ? "text-[#a855f7]" : "text-gray-300"
+        }`
+      }
+    >
+      {({ isActive }) => (
+        <>
+          <div className="mb-1">{item.icon}</div>
+          <span className="text-[11px] font-medium">{item.title}</span>
+          {isActive && <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#a855f7]" />}
+        </>
+      )}
+    </NavLink>
+  )
 
   return (
-    <div className="fixed left-0 top-14 h-[calc(100vh-56px)] w-60 bg-[#1A1A1A] border-r border-[#5f5d5d] flex flex-col">
-      <div className="flex-1 px-3 py-4">
-        <nav className="space-y-1">
-          <Button
-            asChild
-            variant="ghost"
-            className={`w-full justify-start px-3 py-2 text-sm transition-colors ${
-              isActive("/")
-                ? "text-white bg-[#7c3aed] hover:bg-[#6b21a8] hover:text-white"
-                : "text-gray-300 hover:bg-[#333] hover:text-white"
-            }`}
-          >
-            <Link to="/">
-              <Home className="h-4 w-4 mr-3" />
-              Home
-            </Link>
-          </Button>
+    <>
+      {/* Sidebar for large screens */}
+      <div className="text-[#a855f7] fixed left-0 top-14 h-[calc(100vh-56px)] w-64 bg-[#1A1A1A] border-r border-[#5f5d5d] hidden sm:flex flex-col py-2">
+        <div className="flex flex-col h-full">
+          {/* Scrollable Top Items */}
+          <div className="flex-1 overflow-y-auto custom-scrollbar">
+            {sidebarTopItems.map((item) => (
+              <NavItem key={item.title} item={item} />
+            ))}
+          </div>
 
-          <Button
-            asChild
-            variant="ghost"
-            className={`w-full justify-start px-3 py-2 text-sm transition-colors ${
-              isActive("/subscriptions")
-                ? "text-white bg-[#7c3aed] hover:bg-[#6b21a8] hover:text-white"
-                : "text-gray-300 hover:bg-[#333] hover:text-white"
-            }`}
-          >
-            <Link to="/subscriptions">
-              <Tv className="h-4 w-4 mr-3" />
-              Subscriptions
-            </Link>
-          </Button>
-
-          <Button
-            asChild
-            variant="ghost"
-            className={`w-full justify-start px-3 py-2 text-sm transition-colors ${
-              isActive("/your-videos")
-                ? "text-white bg-[#7c3aed] hover:bg-[#6b21a8] hover:text-white"
-                : "text-gray-300 hover:bg-[#333] hover:text-white"
-            }`}
-          >
-            <Link to="/channel/:username">
-              <Play className="h-4 w-4 mr-3" />
-              My Content
-            </Link>
-          </Button>
-
-          <Button
-            asChild
-            variant="ghost"
-            className={`w-full justify-start px-3 py-2 text-sm transition-colors ${
-              isActive("/liked-videos")
-                ? "text-white bg-[#7c3aed] hover:bg-[#6b21a8] hover:text-white"
-                : "text-gray-300 hover:bg-[#333] hover:text-white"
-            }`}
-          >
-            <Link to="/liked-videos">
-              <Heart className="h-4 w-4 mr-3" />
-              Liked videos
-            </Link>
-          </Button>
-        </nav>
+          {/* Logout at bottom */}
+          <div className="py-2 border-t border-[#2d2d2d]">
+            {username && (
+              <button
+                onClick={logout}
+                className="group flex items-center gap-4 px-4 py-3 text-sm text-gray-300 hover:bg-[#2d2d2d] hover:text-[#a855f7] transition-colors"
+              >
+                <IoMdLogOut size={20} className="group-hover:text-[#a855f7]" />
+                Logout
+              </button>
+            )}
+          </div>
+        </div>
       </div>
-    </div>
-  );
+
+      {/* Bottom bar for mobile */}
+      <div className="sm:hidden fixed bottom-0 w-full h-16 bg-[#0E0F0F] border-t border-[#5f5d5d] flex justify-around items-center text-white z-20">
+        {bottomBarItems.map((item) => (
+          <MobileNavItem key={item.title} item={item} />
+        ))}
+      </div>
+    </>
+  )
 }
+
+export default Sidebar

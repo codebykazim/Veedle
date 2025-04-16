@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { toggleSubscription } from "../store/subscriptionSlice";
+import Avatar from "./Avatar";
 
 function Description({
     title,
@@ -26,75 +27,64 @@ function Description({
 
     const handleSubscribe = () => {
         dispatch(toggleSubscription(channelId));
-        setLocalIsSubscribed((prev) => !prev);
-        if (localIsSubscribed) {
-            setLocalSubscribersCount((prev) => prev - 1);
-        } else {
-            setLocalSubscribersCount((prev) => prev + 1);
-        }
+        setLocalIsSubscribed(prev => !prev);
+        setLocalSubscribersCount(prev => localIsSubscribed ? prev - 1 : prev + 1);
     };
 
-    const handleSubsribe = () => {};
     return (
-        <>
-            <section className="sm:max-w-4xl w-full text-white sm:p-5 p-2 space-y-2">
-                <div className="border-b border-slate-700">
-                    <div className="space-y-2 mb-2">
-                        <h1 className="sm:text-2xl font-semibold">{title}</h1>
-                        <div className="flex items-center justify-between sm:justify-start sm:gap-5">
-                            <div>
-                                <span className="text-sm text-slate-400">
-                                    {views} views .{" "}
-                                </span>
-                                <span className="text-sm text-slate-400">
-                                    {timeAgo(createdAt)}
-                                </span>
-                            </div>
-                            <div className=" rounded-full w-24 flex justify-center bg-[#222222] py-1">
-                                <Like
-                                    isLiked={isLiked}
-                                    videoId={videoId}
-                                    likesCount={likesCount}
-                                    size={25}
-                                />
-                            </div>
-                        </div>
-                        <div className="flex gap-2 justify-between items-center">
-                            <Link
-                                to={`/channel/${channelName}/videos`}
-                                className="flex gap-2"
-                            >
-                                <img
-                                    src={avatar}
-                                    className="w-10 h-10 rounded-full object-cover"
-                                />
-                                <div>
-                                    <h1 className="font-semibold">
-                                        {channelName}
-                                    </h1>
-                                    <p className="text-xs text-slate-400">
-                                        {localSubscribersCount} Subscribers
-                                    </p>
-                                </div>
-                            </Link>
-                            <div onClick={handleSubsribe}>
-                                <Button
-                                    onClick={handleSubscribe}
-                                    className="border-slate-500 hover:scale-110 transition-all text-black font-bold px-4 py-1 bg-purple-500"
-                                >
-                                    {localIsSubscribed
-                                        ? "Subscribed"
-                                        : "Subscribe"}
-                                </Button>
-                            </div>
-                        </div>
+        <div className="w-full max-w-4xl mx-auto p-4 space-y-4 text-white">
+            <div className="space-y-3">
+                <h1 className="text-xl sm:text-2xl font-bold">{title}</h1>
+                <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-gray-400">
+                    <div>
+                        <span>{views} views</span>
+                        <span className="mx-2">•</span>
+                        <span>{timeAgo(createdAt)}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Like
+                            isLiked={isLiked}
+                            videoId={videoId}
+                            likesCount={likesCount}
+                            size={20}
+                        />
                     </div>
                 </div>
-                <p className="text-xs bg-[#222222] rounded-lg p-2 outline-none">
+            </div>
+
+            <div className="flex items-center justify-between pt-3 border-t border-gray-800">
+                <Link
+                    to={`/channel/${channelName}/videos`}
+                    className="flex items-center gap-3 group"
+                >
+                    <Avatar src={avatar} channelName={channelName} size="md" />
+                    <div>
+                        <p className="font-medium group-hover:text-purple-400 transition-colors">
+                            {channelName}
+                        </p>
+                        <p className="text-xs text-gray-400">
+                            {localSubscribersCount} subscribers
+                        </p>
+                    </div>
+                </Link>
+                <Button
+                    onClick={handleSubscribe}
+                    className={`rounded-full px-4 py-1.5 font-medium transition-all ${
+                        localIsSubscribed
+                            ? "bg-gray-700 hover:bg-gray-600 text-white"
+                            : "bg-purple-600 hover:bg-purple-700 text-white"
+                    }`}
+                >
+                    {localIsSubscribed ? "Subscribed" : "Subscribe"}
+                </Button>
+            </div>
+
+            {description && (
+                <div className="bg-[#1a1a1a] rounded-lg p-4 text-sm text-gray-300 whitespace-pre-line">
                     {description}
-                </p>
-            </section>
-        </>
+                </div>
+            )}
+        </div>
     );
 }
 

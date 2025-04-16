@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Input2, UploadingVideo } from "./index";
+import { Input, UploadingVideo } from "./index";
 import { Button } from "./ui/button";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,171 +8,141 @@ import { IoCloseCircleOutline } from "./icons";
 import GetImagePreview from "./GetImagePreview";
 
 function UploadVideo({ setUploadVideoPopup }) {
-    const [videoName, setVideoName] = useState("");
-    const [videoSize, setVideoSize] = useState(0);
-    const {
-        handleSubmit,
-        register,
-        control,
-        formState: { errors },
-    } = useForm();
-    const dispatch = useDispatch();
-    const uploading = useSelector((state) => state.video.uploading);
-    const uploaded = useSelector((state) => state.video.uploaded);
+  const [videoName, setVideoName] = useState("");
+  const [videoSize, setVideoSize] = useState(0);
+  const {
+    handleSubmit,
+    register,
+    control,
+    formState: { errors, isSubmitting },
+  } = useForm();
+  const dispatch = useDispatch();
+  const uploaded = useSelector((state) => state.video.uploaded);
 
-    const publishVideo = async (data) => {
-        setVideoSize(Math.floor(data.videoFile[0].size / (1024 * 1024)));
-        await dispatch(publishAvideo(data));
-    };
+  const publishVideo = async (data) => {
+    console.log("Form data being submitted:", data);
+    console.log("Video file:", data.videoFile?.[0]);
+    console.log("Thumbnail:", data.thumbnail?.[0]);
 
-    if (uploading) {
-        return (
-            <>
-                <UploadingVideo
-                    setUploadVideoPopup={setUploadVideoPopup}
-                    videoFileName={videoName}
-                    fileSize={videoSize}
-                />
-            </>
-        );
-    }
+    setVideoSize(Math.floor(data.videoFile[0].size / (1024 * 1024)));
+    await dispatch(publishAvideo(data));
+};
+if (uploaded) {
+  return (
+    <UploadingVideo
+      setUploadVideoPopup={setUploadVideoPopup}
+      videoFileName={videoName}
+      fileSize={videoSize}
+      uploaded
+    />
+  );
+}
 
-    if (uploaded) {
-        return (
-            <>
-                <UploadingVideo
-                    setUploadVideoPopup={setUploadVideoPopup}
-                    videoFileName={videoName}
-                    fileSize={videoSize}
-                    uploaded={true}
-                />
-            </>
-        );
-    }
 
-    return (
-        <>
-            <div className="fixed top-5 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-70 z-30">
-                <div className="relative w-[95vw] sm:w-3/4 h-[80vh] sm:h-[80vh] mx-auto text-white border overflow-y-scroll bg-black">
-                    <form
-                        onSubmit={handleSubmit(publishVideo)}
-                        className="space-y-5"
-                    >
-                        <section className="h-12 sticky top-0 z-50 border-b w-full bg-[#222222] flex justify-between items-center px-3">
-                            <div className="flex gap-1 items-center cursor-pointer">
-                                <IoCloseCircleOutline
-                                    size={23}
-                                    onClick={() =>
-                                        setUploadVideoPopup((prev) => !prev)
-                                    }
-                                />
-                                <h3 className="font-semibold">Upload Videos</h3>
-                            </div>
-                            <div>
-                                <Button
-                                    className="bg-purple-500 py-1 px-2 font-bold"
-                                    textColor="text-black"
-                                    type="submit"
-                                >
-                                    Save
-                                </Button>
-                            </div>
-                        </section>
-
-                        <section className="px-6 py-2">
-                            <div className="w-full border border-dotted h-44 p-1 flex flex-col gap-3 justify-center items-center text-center">
-                                <div>
-                                    <h1 className="font-medium text-sm">
-                                        Drag and drop video files to upload{" "}
-                                    </h1>
-                                    <p className="font-light text-xs">
-                                        Your videos will be private untill you
-                                        publish them.
-                                    </p>
-                                </div>
-                                <label
-                                    htmlFor="video-upload"
-                                    className="cursor-pointer bg-purple-500 text-black font-bold text-sm py-2 px-4"
-                                >
-                                    Select Files
-                                </label>
-                                <input
-                                    id="video-upload"
-                                    type="file"
-                                    accept="video/*"
-                                    className="hidden"
-                                    {...register("videoFile", {
-                                        required: "VideoFile is required",
-                                        onChange: (e) =>
-                                            setVideoName(
-                                                e.target.files[0]?.name
-                                            ),
-                                    })}
-                                />
-                                <input
-                                    className="sm:w-3/4 w-full text-center h-10 bg-transparent text-white outline-none"
-                                    value={videoName}
-                                    readOnly
-                                ></input>
-                                <span className="text-red-500 text-xs">
-                                    {errors.videoFile?.message}
-                                </span>
-                            </div>
-                            <div className="space-y-5 mt-2 w-full grid lg:grid-cols-2 grid-cols-1 lg:gap-10 justify-start items-start">
-                                {/* THUMBNAIL */}
-                                <div className="w-full">
-                                    <GetImagePreview
-                                        name="thumbnail"
-                                        control={control}
-                                        label="Thumbnail *"
-                                        className={
-                                            "w-full h-56 border object-contain"
-                                        }
-                                        cameraIcon={true}
-                                        cameraSize={40}
-                                    />
-                                    <span className="text-red-500 text-xs">
-                                        {errors.thumbnail?.message}
-                                    </span>
-                                </div>
-
-                                <div className="w-full">
-                                    {/* TITLE */}
-                                    <Input2
-                                        type="text"
-                                        label="Title *"
-                                        className="mb-2"
-                                        {...register("title", {
-                                            required: "Title is required",
-                                        })}
-                                    />
-                                    <span className="text-red-500 text-xs">
-                                        {errors.title?.message}
-                                    </span>
-
-                                    {/* DESCRIPTION */}
-                                    <div>
-                                        <label>Description *</label>
-                                        <textarea
-                                            rows="5"
-                                            className="focus:bg-[#222222] bg-transparent outline-none border w-full mt-1 p-1"
-                                            {...register("description", {
-                                                required:
-                                                    "Description is required",
-                                            })}
-                                        ></textarea>
-                                        <span className="text-red-500 text-xs">
-                                            {errors.description?.message}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </form>
-                </div>
+  return (
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-80 p-4">
+      <div className="bg-[#222222] border border-gray-700 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+        <form onSubmit={handleSubmit(publishVideo)}>
+          <div className="sticky top-0 bg-[#222222] border-b border-gray-700 p-4 flex justify-between items-center z-10">
+            <div className="flex items-center gap-2">
+              <IoCloseCircleOutline
+                size={24}
+                onClick={() => setUploadVideoPopup(false)}
+                className="text-gray-400 hover:text-white cursor-pointer"
+              />
+              <h3 className="text-xl font-bold">Upload Video</h3>
             </div>
-        </>
-    );
+            <Button
+              type="submit"
+              className="bg-purple-600 hover:bg-purple-700"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Uploading..." : "Save"}
+            </Button>
+          </div>
+
+          <div className="p-6 space-y-6">
+            <div className="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center hover:border-purple-500 transition-colors">
+              <div className="mb-4">
+                <h1 className="font-medium">
+                  Drag and drop video files to upload
+                </h1>
+                <p className="text-sm text-gray-400 mt-1">
+                  Your videos will be private until you publish them
+                </p>
+              </div>
+              <label className="cursor-pointer bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg inline-block">
+                Select Files
+                <input
+                  id="video-upload"
+                  type="file"
+                  accept="video/*"
+                  className="hidden"
+                  {...register("videoFile", {
+                    required: "Video file is required",
+                    onChange: (e) => setVideoName(e.target.files[0]?.name),
+                  })}
+                />
+              </label>
+              {videoName && (
+                <p className="mt-3 text-sm text-gray-300">{videoName}</p>
+              )}
+              {errors.videoFile && (
+                <p className="text-red-500 text-xs mt-2">
+                  {errors.videoFile.message}
+                </p>
+              )}
+            </div>
+
+            <div className="grid lg:grid-cols-2 gap-6">
+              <div>
+                <GetImagePreview
+                  name="thumbnail"
+                  control={control}
+                  label="Thumbnail"
+                  className="w-full h-64 object-cover rounded-lg border border-gray-700"
+                  cameraIcon
+                  cameraSize={40}
+                />
+                {errors.thumbnail && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.thumbnail.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-4">
+                <Input
+                  type="text"
+                  label="Title"
+                  {...register("title", { required: "Title is required" })}
+                  error={errors.title}
+                />
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Description
+                  </label>
+                  <textarea
+                    rows={5}
+                    className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg p-3 text-sm focus:ring-1 focus:ring-purple-500 focus:border-transparent"
+                    {...register("description", {
+                      required: "Description is required",
+                    })}
+                  />
+                  {errors.description && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.description.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 }
 
 export default UploadVideo;

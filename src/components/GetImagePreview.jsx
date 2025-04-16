@@ -16,9 +16,13 @@ function GetImagePreview({
 
     const handlePreview = (e) => {
         const files = e.target.files;
-        setPreview(URL.createObjectURL(files[0]));
-        return files;
-    };
+        if (files && files[0]) {
+          setPreview(URL.createObjectURL(files[0]));
+          return files;
+        }
+        return [];
+      };
+
     return (
         <>
             <div className="w-full">
@@ -44,22 +48,29 @@ function GetImagePreview({
                     )}
                     {/* </div> */}
                     <Controller
-                        name={name}
-                        control={control}
-                        defaultValue={defaultValue || ""}
-                        render={({ field: { onChange } }) => (
-                            <input
-                                id={name}
-                                type="file"
-                                accept="image/*"
-                                className="hidden"
-                                onChange={(e) => {
-                                    onChange(handlePreview(e));
-                                }}
-                            />
-                        )}
-                        rules={{ required: `${name} is required` }}
-                    />
+  name={name}
+  control={control}
+  defaultValue={defaultValue || ""}
+  render={({ field: { onChange } }) => (
+    <input
+      id={name}
+      type="file"
+      accept="image/*"
+      className="hidden"
+      onChange={(e) => {
+        const files = e.target.files;
+        if (files && files[0]) {
+          setPreview(URL.createObjectURL(files[0]));
+          onChange([files[0]]); // Only pass the file if it exists
+        } else {
+          onChange([]); // Pass empty array if no file selected
+        }
+      }}
+    />
+  )}
+  rules={{ required: `${name} is required` }}
+/>
+
                 </label>
             </div>
         </>
