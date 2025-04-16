@@ -111,7 +111,7 @@ export const updateCoverImg = createAsyncThunk(
     async (coverImage) => {
         try {
             const response = await axiosInstance.patch(
-                "/users/update-coverImg",
+                "/users/cover-image",
                 coverImage
             );
             toast.success(response.data?.message);
@@ -127,13 +127,16 @@ export const updateUserDetails = createAsyncThunk(
     "updateUserDetails",
     async (data) => {
         try {
+            console.log("Sending to API:", data);
             const response = await axiosInstance.patch(
-                "/users/update-user",
+                "/users/update-account",
                 data
             );
+            console.log("API response:", response.data);
             toast.success("Updated details successfully!!!");
             return response.data;
         } catch (error) {
+            console.error("Full error:", error);
             toast.error(error?.response?.data?.error);
             throw error;
         }
