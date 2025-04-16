@@ -12,6 +12,7 @@ import VideoDetail from "./VideoDetail";
 import SearchVideos from "./SearchVideos";
 import TermsAndConditions from "./TermsAndConditions";
 import ChannelPlaylist from "./Channel/Playlist";
+import PlaylistVideos from "./PlaylistVideos";
 
 export {
     Channel,
@@ -27,5 +28,6 @@ export {
     VideoDetail,
     SearchVideos,
     TermsAndConditions,
-    ChannelPlaylist
+    ChannelPlaylist,
+    PlaylistVideos,
 }

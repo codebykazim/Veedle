@@ -1,164 +1,155 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { NoVideosFound, VideoList } from "../components";
-// import HomeSkeleton from "../skeleton/HomeSkeleton";
-import { getAllVideos, makeVideosNull } from "../store/videoSlice";
-import { FaFilter } from "react-icons/fa";
-import { IoCloseCircleOutline } from "react-icons/io5";
-import { useParams, useSearchParams } from "react-router-dom";
+"use client"
+
+import { useEffect, useState } from "react"
+import { useSelector, useDispatch } from "react-redux"
+import { NoVideosFound, VideoList } from "../components"
+// import HomeSkeleton from "../skeleton/HomeSkeleton"
+import { getAllVideos, makeVideosNull } from "../store/videoSlice"
+import { Filter, X } from "lucide-react"
+import { useParams, useSearchParams } from "react-router-dom"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 function SearchVideos() {
-    const loading = useSelector((state) => state.video?.loading);
-    const videos = useSelector((state) => state.video?.videos);
-    const dispatch = useDispatch();
-    const { query } = useParams();
-    const [filterOpen, setFilterOpen] = useState(false);
-    const [searchParams, setSearchParms] = useSearchParams();
+  const loading = useSelector((state) => state.video?.loading)
+  const videos = useSelector((state) => state.video?.videos)
+  const dispatch = useDispatch()
+  const { query } = useParams()
+  const [filterOpen, setFilterOpen] = useState(false)
+  const [searchParams, setSearchParms] = useSearchParams()
 
-    useEffect(() => {
-        const sortType = searchParams.get("sortType");
-        const sortBy = searchParams.get("sortBy");
-        dispatch(
-            getAllVideos({
-                query,
-                sortBy,
-                sortType,
-            })
-        );
-        setFilterOpen(false);
-        return () => dispatch(makeVideosNull());
-    }, [dispatch, query, searchParams]);
+  useEffect(() => {
+    const sortType = searchParams.get("sortType")
+    const sortBy = searchParams.get("sortBy")
+    dispatch(
+      getAllVideos({
+        query,
+        sortBy,
+        sortType,
+      }),
+    )
+    return () => dispatch(makeVideosNull())
+  }, [dispatch, query, searchParams])
 
-    const handleSortParams = (newSortBy, newSortType = "asc") => {
-        setSearchParms({ sortBy: newSortBy, sortType: newSortType });
-    };
+  const handleSortParams = (newSortBy, newSortType = "asc") => {
+    setSearchParms({ sortBy: newSortBy, sortType: newSortType })
+    setFilterOpen(false)
+  }
 
-    if (videos?.totalDocs === 0) {
-        return <NoVideosFound text={"Try searching something else"} />;
-    }
+  if (videos?.totalDocs === 0) {
+    return <NoVideosFound text={"Try searching something else"} />
+  }
 
-    // if (loading) {
-    //     return <HomeSkeleton />;
-    // }
+  // if (loading) {
+  //   return <HomeSkeleton />
+  // }
 
-    return (
-        <>
-            <div
-                className="w-full h-10 flex items-center font-bold justify-end cursor-pointer px-8"
-                onClick={() => setFilterOpen((prev) => !prev)}
+  return (
+    <div className="w-full text-white">
+      <div className="sticky top-0 z-20 bg-black/80 backdrop-blur-sm p-4 flex items-center justify-between border-b border-slate-800">
+        <h1 className="text-lg font-medium">
+          Search results for <span className="text-purple-400">"{query}"</span>
+        </h1>
+        <button
+          className="flex items-center gap-2 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 rounded-full text-sm transition-colors"
+          onClick={() => setFilterOpen(true)}
+        >
+          <Filter size={16} />
+          <span>Filters</span>
+        </button>
+      </div>
+
+      <Dialog open={filterOpen} onOpenChange={setFilterOpen}>
+        <DialogContent className="bg-black border border-slate-800 text-white sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold">Search Filters</DialogTitle>
+            <button
+              className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+              onClick={() => setFilterOpen(false)}
             >
-                <span className="text-white hover:text-purple-500">
-                    Filters
-                </span>
-                <FaFilter
-                    size={20}
-                    className="text-purple-500 hover:text-purple-800"
-                />
-            </div>
-            <div className="w-full text-white">
-                {filterOpen && (
-                    <div className="w-full absolute bg-transparent">
-                        <div className="max-w-sm border border-slate-800 rounded bg-[#222222] fixed mx-auto z-50 inset-x-0 h-96 p-5">
-                            <h1 className="font-semibold text-lg">
-                                Search filters
-                            </h1>
-                            <IoCloseCircleOutline
-                                size={25}
-                                className="absolute right-5 top-5 cursor-pointer"
-                                onClick={() => setFilterOpen((prev) => !prev)}
-                            />
-                            <table className="mt-4">
-                                <tr className="w-full text-start border-b">
-                                    <th>SortBy</th>
-                                </tr>
-                                <tr className="flex flex-col gap-2 text-slate-400 cursor-pointer">
-                                    <td
-                                        onClick={() =>
-                                            handleSortParams(
-                                                "createdAt",
-                                                "desc"
-                                            )
-                                        }
-                                    >
-                                        Upload date{" "}
-                                        <span className="text-xs">
-                                            (Latest)
-                                        </span>
-                                    </td>
-                                    <td
-                                        onClick={() =>
-                                            handleSortParams("createdAt", "asc")
-                                        }
-                                    >
-                                        Upload date{" "}
-                                        <span className="text-xs">
-                                            (Oldest)
-                                        </span>
-                                    </td>
-                                    <td
-                                        onClick={() =>
-                                            handleSortParams("views", "asc")
-                                        }
-                                    >
-                                        View count{" "}
-                                        <span className="text-xs">
-                                            (Low to High)
-                                        </span>
-                                    </td>
-                                    <td
-                                        onClick={() =>
-                                            handleSortParams("views", "desc")
-                                        }
-                                    >
-                                        View count{" "}
-                                        <span className="text-xs">
-                                            (High to Low)
-                                        </span>
-                                    </td>
-                                    <td
-                                        onClick={() =>
-                                            handleSortParams("duration", "asc")
-                                        }
-                                    >
-                                        Duration{" "}
-                                        <span className="text-xs">
-                                            (Low to High)
-                                        </span>
-                                    </td>
-                                    <td
-                                        onClick={() =>
-                                            handleSortParams("duration", "desc")
-                                        }
-                                    >
-                                        Duration{" "}
-                                        <span className="text-xs">
-                                            (High to Low)
-                                        </span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
+              <X size={18} />
+            </button>
+          </DialogHeader>
+
+          <div className="p-2">
+            <h3 className="font-medium border-b border-slate-700 pb-2 mb-3">Sort By</h3>
+            <div className="space-y-2 text-sm">
+              <button
+                onClick={() => handleSortParams("createdAt", "desc")}
+                className="w-full text-left py-2 px-3 hover:bg-slate-800 rounded-md transition-colors flex justify-between items-center"
+              >
+                <span>Upload date (Latest)</span>
+                {searchParams.get("sortBy") === "createdAt" && searchParams.get("sortType") === "desc" && (
+                  <span className="text-purple-400">✓</span>
                 )}
-                <div className="grid h-screen xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 text-white overflow-y-scroll">
-                    {videos &&
-                        videos?.docs?.map((video) => (
-                            <VideoList
-                                key={video?._id}
-                                thumbnail={video?.thumbnail?.url}
-                                duration={video?.duration}
-                                title={video?.title}
-                                views={video?.views}
-                                avatar={video?.ownerDetails?.avatar?.url}
-                                channelName={video?.ownerDetails?.username}
-                                createdAt={video?.createdAt}
-                                videoId={video?._id}
-                            ></VideoList>
-                        ))}
-                </div>
+              </button>
+              <button
+                onClick={() => handleSortParams("createdAt", "asc")}
+                className="w-full text-left py-2 px-3 hover:bg-slate-800 rounded-md transition-colors flex justify-between items-center"
+              >
+                <span>Upload date (Oldest)</span>
+                {searchParams.get("sortBy") === "createdAt" && searchParams.get("sortType") === "asc" && (
+                  <span className="text-purple-400">✓</span>
+                )}
+              </button>
+              <button
+                onClick={() => handleSortParams("views", "asc")}
+                className="w-full text-left py-2 px-3 hover:bg-slate-800 rounded-md transition-colors flex justify-between items-center"
+              >
+                <span>View count (Low to High)</span>
+                {searchParams.get("sortBy") === "views" && searchParams.get("sortType") === "asc" && (
+                  <span className="text-purple-400">✓</span>
+                )}
+              </button>
+              <button
+                onClick={() => handleSortParams("views", "desc")}
+                className="w-full text-left py-2 px-3 hover:bg-slate-800 rounded-md transition-colors flex justify-between items-center"
+              >
+                <span>View count (High to Low)</span>
+                {searchParams.get("sortBy") === "views" && searchParams.get("sortType") === "desc" && (
+                  <span className="text-purple-400">✓</span>
+                )}
+              </button>
+              <button
+                onClick={() => handleSortParams("duration", "asc")}
+                className="w-full text-left py-2 px-3 hover:bg-slate-800 rounded-md transition-colors flex justify-between items-center"
+              >
+                <span>Duration (Low to High)</span>
+                {searchParams.get("sortBy") === "duration" && searchParams.get("sortType") === "asc" && (
+                  <span className="text-purple-400">✓</span>
+                )}
+              </button>
+              <button
+                onClick={() => handleSortParams("duration", "desc")}
+                className="w-full text-left py-2 px-3 hover:bg-slate-800 rounded-md transition-colors flex justify-between items-center"
+              >
+                <span>Duration (High to Low)</span>
+                {searchParams.get("sortBy") === "duration" && searchParams.get("sortType") === "desc" && (
+                  <span className="text-purple-400">✓</span>
+                )}
+              </button>
             </div>
-        </>
-    );
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <div className="grid xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 p-4 text-white">
+        {videos &&
+          videos?.docs?.map((video) => (
+            <VideoList
+              key={video?._id}
+              thumbnail={video?.thumbnail?.url}
+              duration={video?.duration}
+              title={video?.title}
+              views={video?.views}
+              avatar={video?.ownerDetails?.avatar?.url}
+              channelName={video?.ownerDetails?.username}
+              createdAt={video?.createdAt}
+              videoId={video?._id}
+            />
+          ))}
+      </div>
+    </div>
+  )
 }
 
-export default SearchVideos;
+export default SearchVideos
