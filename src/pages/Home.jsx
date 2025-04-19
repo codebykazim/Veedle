@@ -55,13 +55,19 @@ function HomePage() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [fetchMoreVideos, loading, hasNextPage])
 
+  const uniqueVideos = videos?.filter(
+    (video, index, self) =>
+      index === self.findIndex((v) => v._id === video._id)
+  )
+
+
   return (
     <div className="bg-[#121212] min-h-screen px-0 sm:px-6 pt-16 sm:pt-14 sm:ml-60 pb-20 sm:pb-8">
       {/* Initial loading skeleton when no videos yet */}
       {isLoading && (!videos || videos.length === 0) && <HomeSkeleton />}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-y-4 sm:gap-x-4 sm:gap-y-3 text-white">
-        {videos?.map((video) => (
+        {uniqueVideos?.map((video) => (
           <VideoList
             key={video._id}
             avatar={video.ownerDetails?.avatar}
