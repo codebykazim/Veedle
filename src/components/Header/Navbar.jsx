@@ -48,6 +48,12 @@ export default function Navbar() {
     navigate("/")
   }
 
+  const handleAvatarClick = (e) => {
+    e.stopPropagation()
+    navigate(`/channel/${username}`)
+  }
+
+
   return (
     <div className="fixed top-0 left-0 right-0 z-50 bg-[#1a1a1a] border-b border-[#5f5d5d] h-14 px-4 flex items-center justify-between">
       {/* Logo */}
@@ -63,7 +69,7 @@ export default function Navbar() {
         <div className="relative">
           {/* <Search/> */}
           <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          
+
         </div>
       </div>
 
@@ -106,7 +112,7 @@ export default function Navbar() {
             )}
 
             {/* Avatar */}
-            <Avatar className="h-8 w-8 border border-[#333] ml-2">
+            <Avatar onClick={handleAvatarClick} className="h-8 w-8 border border-[#333] ml-2">
               <AvatarImage
                 src={profileImg || "/placeholder.svg"}
                 alt={username}
