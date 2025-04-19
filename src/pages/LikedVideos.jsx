@@ -16,6 +16,8 @@ function LikedVideos() {
   const likedVideos = useSelector((state) => state.like?.likedVideos)
   const loading = useSelector((state) => state.like.loading)
 
+  const firstLikedVideo = likedVideos?.find((v) => v?.likedVideo)
+
   useEffect(() => {
     window.scrollTo(0, 0)
     dispatch(getLikedVideos())
@@ -24,25 +26,19 @@ function LikedVideos() {
 
   const formatDuration = (durationInSeconds) => {
     if (!durationInSeconds || durationInSeconds === 0) return "0:00"
-
-    // Round the duration to the nearest whole second
     const roundedDuration = Math.floor(durationInSeconds)
-
     const minutes = Math.floor(roundedDuration / 60)
     const seconds = roundedDuration % 60
     return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`
   }
 
   const playFirstVideo = () => {
-    if (likedVideos.length > 0) {
-      const firstVideo = likedVideos[0].likedVideo
-      navigate(`/watch/${firstVideo._id}`)
+    if (firstLikedVideo) {
+      navigate(`/watch/${firstLikedVideo.likedVideo._id}`)
     }
   }
 
-  if (loading) {
-    return <LikedVideosSkeleton />
-  }
+  if (loading) return <LikedVideosSkeleton />
 
   const hasVideos = Array.isArray(likedVideos) && likedVideos.length > 0
 
@@ -58,14 +54,14 @@ function LikedVideos() {
         </div>
       )}
 
-      {hasVideos && (
+      {hasVideos && firstLikedVideo && (
         <div className="flex flex-col md:flex-row gap-3 md:gap-6 p-2 sm:p-3 md:p-6">
           {/* Left Panel - Featured Video */}
           <div
             className="relative w-full md:w-[300px] h-auto md:h-full md:sticky md:top-16 p-3 border border-[#5f5d5d] rounded-lg overflow-hidden"
             style={{
-              backgroundImage: likedVideos[0]?.likedVideo?.thumbnail?.url
-                ? `url(${likedVideos[0]?.likedVideo?.thumbnail?.url})`
+              backgroundImage: firstLikedVideo?.likedVideo?.thumbnail?.url
+                ? `url(${firstLikedVideo.likedVideo.thumbnail.url})`
                 : undefined,
               backgroundSize: "cover",
               backgroundPosition: "center",
@@ -76,7 +72,7 @@ function LikedVideos() {
             <div className="relative z-10">
               <div className="w-full h-36 sm:h-32 md:h-40">
                 <img
-                  src={likedVideos[0]?.likedVideo?.thumbnail?.url || "/placeholder.svg"}
+                  src={firstLikedVideo?.likedVideo?.thumbnail?.url || "/placeholder.svg"}
                   alt="Featured video"
                   className="w-full h-full object-cover rounded-lg"
                 />
@@ -84,7 +80,7 @@ function LikedVideos() {
 
               <div className="mt-2 sm:mt-3">
                 <h1 className="text-white text-base sm:text-lg font-semibold">Liked videos</h1>
-                <p className="text-xs text-gray-300">{likedVideos[0]?.likedVideo?.ownerDetails?.username}</p>
+                <p className="text-xs text-gray-300">{firstLikedVideo?.likedVideo?.ownerDetails?.username}</p>
                 <p className="text-xs text-gray-400 mt-0.5 sm:mt-1">{likedVideos.length} videos</p>
               </div>
 
@@ -99,50 +95,56 @@ function LikedVideos() {
             </div>
           </div>
 
-          {/* Right Panel - Video List with BIGGER thumbnails on mobile */}
+          {/* Right Panel - Video List with correct numbering */}
           <div className="flex-1 space-y-2 sm:space-y-2 mt-3 md:mt-0">
-            {likedVideos.map((videoObj, index) => {
-              const video = videoObj?.likedVideo
-              if (!video) return null
+            {(() => {
+              let count = 0
+              return likedVideos.map((videoObj) => {
+                const video = videoObj?.likedVideo
+                if (!video) return null
 
-              return (
-                <div
-                  key={video._id}
-                  className="flex gap-2 sm:gap-2 md:gap-4 p-2 hover:bg-[#272727] group rounded-lg cursor-pointer"
-                  onClick={() => navigate(`/watch/${video._id}`)}
-                >
-                  <div className="flex items-center w-5 sm:w-6 md:w-8 text-center text-gray-400 font-medium text-xs sm:text-sm md:text-base">
-                    {index + 1}
-                  </div>
-                  <div className="relative w-32 sm:w-32 md:w-40 h-20 sm:h-20 md:h-24 flex-shrink-0">
-                    <img
-                      src={video.thumbnail?.url || "/placeholder.svg"}
-                      alt={video.title || "Video"}
-                      className="w-full h-full object-cover rounded-lg"
-                    />
-                    <div className="absolute bottom-1 right-1 bg-black bg-opacity-80 text-white text-[10px] sm:text-xs px-1 rounded">
-                      {formatDuration(video.duration)}
+                count += 1
+
+                return (
+                  <div
+                    key={video._id}
+                    className="flex gap-2 sm:gap-2 md:gap-4 p-2 hover:bg-[#272727] group rounded-lg cursor-pointer"
+                    onClick={() => navigate(`/watch/${video._id}`)}
+                  >
+                    <div className="flex items-center w-5 sm:w-6 md:w-8 text-center text-gray-400 font-medium text-xs sm:text-sm md:text-base">
+                      {count}
                     </div>
-                  </div>
-                  <div className="flex-1 min-w-0 pr-1">
-                    <h3 className="text-xs sm:text-sm font-medium line-clamp-2">{video.title || "Untitled Video"}</h3>
-                    <div className="flex flex-col mt-0.5 sm:mt-1 text-[10px] sm:text-xs text-gray-400">
-                      <span className="truncate">{video.ownerDetails?.username || "Unknown"}</span>
-                      <div className="flex items-center text-[10px] sm:text-xs">
-                        <span>{video.views || 0} views</span>
-                        <span className="mx-0.5 sm:mx-1">•</span>
-                        <span>{new Date(video.createdAt).toLocaleDateString() || "N/A"}</span>
+                    <div className="relative w-32 sm:w-32 md:w-40 h-20 sm:h-20 md:h-24 flex-shrink-0">
+                      <img
+                        src={video.thumbnail?.url || "/placeholder.svg"}
+                        alt={video.title || "Video"}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                      <div className="absolute bottom-1 right-1 bg-black bg-opacity-80 text-white text-[10px] sm:text-xs px-1 rounded">
+                        {formatDuration(video.duration)}
                       </div>
                     </div>
+                    <div className="flex-1 min-w-0 pr-1">
+                      <h3 className="text-xs sm:text-sm font-medium line-clamp-2">
+                        {video.title || "Untitled Video"}
+                      </h3>
+                      <div className="flex flex-col mt-0.5 sm:mt-1 text-[10px] sm:text-xs text-gray-400">
+                        <span className="truncate">{video.ownerDetails?.username || "Unknown"}</span>
+                        <div className="flex items-center text-[10px] sm:text-xs">
+                          <span>{video.views || 0} views</span>
+                          <span className="mx-0.5 sm:mx-1">•</span>
+                          <span>{new Date(video.createdAt).toLocaleDateString() || "N/A"}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <button className="self-start p-1 sm:p-1.5 md:p-2 rounded-full text-gray-400 opacity-0 group-hover:opacity-100 hover:bg-[#383838]">
+                      <MoreVertical size={14} className="sm:hidden" />
+                      <MoreVertical size={16} className="hidden sm:block" />
+                    </button>
                   </div>
-                  <button className="self-start p-1 sm:p-1.5 md:p-2 rounded-full text-gray-400 opacity-0 group-hover:opacity-100 hover:bg-[#383838]">
-                    <MoreVertical size={14} className="sm:hidden" />
-                    <MoreVertical size={16} className="hidden sm:block" />
-                  </button>
-                </div>
-              )
-            })}
-            {/* Extra padding element to ensure last item is fully visible */}
+                )
+              })
+            })()}
             <div className="h-4 md:hidden"></div>
           </div>
         </div>
