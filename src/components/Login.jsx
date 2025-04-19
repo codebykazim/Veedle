@@ -1,158 +1,61 @@
-// import React from "react";
-// import {  Input } from "./index";
-// import { Button } from "./ui/button";
-// import { useForm } from "react-hook-form";
-// import { useNavigate } from "react-router-dom";
-// import { getCurrentUser, userLogin } from "../store/authSlice.js";
-// import { Link } from "react-router-dom";
-// import { useDispatch, useSelector } from "react-redux";
-// // import LoginSkeleton from "../skeleton/loginSkeleton.jsx";
+"use client"
 
-// function Login() {
-//     const {
-//         handleSubmit,
-//         register,
-//         formState: { errors },
-//     } = useForm();
-//     const navigate = useNavigate();
-//     const dispatch = useDispatch();
-//     const loading = useSelector((state) => state.auth?.loading);
-
-//     const submit = async (data) => {
-//         const isEmail = data.username.includes("@");
-//         const loginData = isEmail
-//             ? { email: data.username, password: data.password }
-//             : data;
-
-//         const response = await dispatch(userLogin(loginData));
-//         const user = await dispatch(getCurrentUser());
-//         if (user && response?.payload) {
-//             navigate("/");
-//         }
-//     };
-
-//     // if (loading) {
-//     //     return <LoginSkeleton />;
-//     // }
-
-//     return (
-//         <>
-//             <div className="w-full h-screen text-white p-3 flex justify-center items-start">
-//                 <div className="flex max-w-5xl flex-col space-y-5 justify-center items-center border border-slate-600 p-3 mt-20">
-//                     <div className="flex items-center gap-2 mt-5">
-//                         {/* <Logo /> */}
-//                     </div>
-
-//                     <form
-//                         onSubmit={handleSubmit(submit)}
-//                         className="space-y-5 p-2"
-//                     >
-//                         <Input
-//                             label="Username / email : "
-//                             type="text"
-//                             placeholder="example@gmail.com"
-//                             {...register("username", {
-//                                 required: "username is required",
-//                             })}
-//                         />
-//                         {errors.username && (
-//                             <span className="text-red-500">
-//                                 {errors.username.message}
-//                             </span>
-//                         )}
-//                         <Input
-//                             label="Password: "
-//                             type="password"
-//                             placeholder="1kd074fjw0"
-//                             {...register("password", {
-//                                 required: "password is required",
-//                             })}
-//                         />
-//                         {errors.password && (
-//                             <span>{errors.password.message}</span>
-//                         )}
-
-//                         <Button
-//                             type="submit"
-//                             bgcolor="bg-purple-500"
-//                             className="w-full sm:py-3 py-2 hover:bg-purple-700 text-lg"
-//                         >
-//                             Login
-//                         </Button>
-
-//                         <p className="text-center text-sm">
-//                             Don&apos;t have an account?{" "}
-//                             <Link
-//                                 to={"/signup"}
-//                                 className="text-purple-600 cursor-pointer hover:opacity-70"
-//                             >
-//                                 SignUp
-//                             </Link>
-//                         </p>
-//                     </form>
-//                 </div>
-//             </div>
-//         </>
-//     );
-// }
-
-// export default Login;
-
-import React, { useEffect, useRef } from "react";
-import Input from "../components/Input";
-import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
-import { useNavigate, Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { getCurrentUser, userLogin } from "../store/authSlice";
-import { motion } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react"
+import Input from "../components/Input"
+import { Button } from "@/components/ui/button"
+import { useForm } from "react-hook-form"
+import { useNavigate, Link } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import { getCurrentUser, userLogin } from "../store/authSlice"
+import { motion } from "framer-motion"
+import { Eye, EyeOff } from "lucide-react" // 👁️ icons
 
 function Login() {
-  const modalRef = useRef(null);
-  const navigate = useNavigate();
+  const modalRef = useRef(null)
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const [showPassword, setShowPassword] = useState(false) // ✅ toggle state
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
-        navigate("/");
+        navigate("/")
       }
-    };
+    }
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside)
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
 
   const {
     handleSubmit,
     register,
     formState: { errors },
-  } = useForm();
-  const dispatch = useDispatch();
-  const loading = useSelector((state) => state.auth?.loading);
+  } = useForm()
+  const loading = useSelector((state) => state.auth?.loading)
 
   const submit = async (data) => {
-    const isEmail = data.username.includes("@");
+    const isEmail = data.username.includes("@")
     const loginData = isEmail
       ? { email: data.username, password: data.password }
-      : data;
+      : data
 
-    const response = await dispatch(userLogin(loginData));
-    const user = await dispatch(getCurrentUser());
+    const response = await dispatch(userLogin(loginData))
+    const user = await dispatch(getCurrentUser())
     if (user && response?.payload) {
-      navigate("/");
+      navigate("/")
     }
-  };
+  }
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      // exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
       className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-90 backdrop-blur-sm z-50"
-      style={{ pointerEvents: "auto" }}
     >
       <motion.div
         ref={modalRef}
@@ -204,15 +107,24 @@ function Login() {
               )}
             </div>
 
-            <div>
+            <div className="relative">
               <Input
-                className="w-full bg-gray-800 border-gray-700 text-white placeholder-gray-500 py-3 px-4 rounded-xl focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-                type="password"
+                className="w-full bg-gray-800 border-gray-700 text-white placeholder-gray-500 py-3 px-4 rounded-xl pr-12 focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                type={showPassword ? "text" : "password"} // ✅ dynamic type
                 placeholder="Password"
                 {...register("password", {
                   required: "Password is required",
                 })}
               />
+              {/* 👁️ Toggle icon */}
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+
               {errors.password && (
                 <p className="mt-1 text-sm text-red-400">
                   {errors.password.message}
@@ -240,7 +152,7 @@ function Login() {
         </div>
       </motion.div>
     </motion.div>
-  );
+  )
 }
 
-export default Login;
+export default Login

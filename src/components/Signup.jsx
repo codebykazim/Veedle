@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,6 +6,7 @@ import { createAccount, userLogin } from "../store/authSlice";
 import { Link } from "react-router-dom";
 import Input from "./Input";
 import { Button } from "@/components/ui/button";
+import { Eye, EyeOff } from "lucide-react"
 import { motion } from "framer-motion";
 import GetImagePreview from "./GetImagePreview";
 
@@ -33,6 +34,7 @@ function SignUp() {
         control,
         formState: { errors },
     } = useForm();
+    const [showPassword, setShowPassword]= useState(false)
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const loading = useSelector((state) => state.auth?.loading);
@@ -168,13 +170,20 @@ function SignUp() {
                                         Password
                                     </label>
                                     <Input
-                                        type="password"
+                                        type={showPassword ? "text" : "password"}
                                         placeholder="Enter password"
                                         {...register("password", {
                                             required: "Password is required",
                                         })}
                                         className="w-full bg-gray-800 border-gray-700 text-white placeholder-gray-500 py-2 px-4 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                                     />
+                                    <button
+                                                    type="button"
+                                                    className="absolute right-7 bottom-32 -translate-y-1/2 text-gray-400 hover:text-white"
+                                                    onClick={() => setShowPassword((prev) => !prev)}
+                                                  >
+                                                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                                  </button>
                                     {errors.password && (
                                         <p className="mt-1 text-sm text-red-400">{errors.password.message}</p>
                                     )}
