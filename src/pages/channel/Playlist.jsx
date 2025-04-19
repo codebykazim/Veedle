@@ -2,14 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import {
-  createAPlaylist,
-  getPlaylistsByUser,
-  addVideoToPlaylist,
-  removeVideoFromPlaylist,
-  updatePlaylist,
-  deletePlaylist,
-} from "../../store/playlistSlice"
+import { createAPlaylist, getPlaylistsByUser, updatePlaylist, deletePlaylist } from "../../store/playlistSlice"
 import { getAllVideos } from "../../store/videoSlice"
 import { Input } from "../../components/index"
 import { useForm } from "react-hook-form"
@@ -19,6 +12,7 @@ import { Button } from "@/components/ui/button"
 import { Trash, Pencil, Plus, X } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { PlaylistSkeleton } from "../../skeleton/PlaylistSkeleton"
+import axiosInstance from "../../helpers/axiosInstance"
 
 function ChannelPlaylist() {
   const dispatch = useDispatch()
@@ -41,6 +35,9 @@ function ChannelPlaylist() {
   const [selectedPlaylistId, setSelectedPlaylistId] = useState(null)
   const [openVideoModal, setOpenVideoModal] = useState(false)
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false)
+  const [currentPlaylist, setCurrentPlaylist] = useState(null)
+  const [modalLoading, setModalLoading] = useState(false)
+  const [localPlaylists, setLocalPlaylists] = useState([])
 
   useEffect(() => {
     if (userId) {
@@ -48,6 +45,13 @@ function ChannelPlaylist() {
       dispatch(getAllVideos({ userId }))
     }
   }, [dispatch, userId])
+
+  // Update local playlists when Redux playlists change
+  useEffect(() => {
+    if (playlists) {
+      setLocalPlaylists(playlists)
+    }
+  }, [playlists])
 
   const createPlaylist = (data) => {
     dispatch(createAPlaylist(data))
@@ -72,16 +76,51 @@ function ChannelPlaylist() {
     }
   }
 
-  const handleAddVideo = (videoId) => {
+  const handleAddVideo = async (videoId) => {
     if (selectedPlaylistId && videoId) {
-      dispatch(addVideoToPlaylist({ videoId, playlistId: selectedPlaylistId }))
+      try {
+        // Make direct API call
+        const response = await axiosInstance.patch(`/playlist/add/${videoId}/${selectedPlaylistId}`)
+        if (response.data?.success) {
+          // Fetch the updated playlist directly
+          const updatedPlaylist = await fetchCurrentPlaylist(selectedPlaylistId)
+
+          // Also update the local playlists array
+          if (updatedPlaylist) {
+            updateLocalPlaylist(updatedPlaylist)
+          }
+        }
+      } catch (error) {
+        console.error("Error adding video:", error)
+      }
     }
   }
 
-  const handleRemoveVideo = (videoId) => {
+  const handleRemoveVideo = async (videoId) => {
     if (selectedPlaylistId && videoId) {
-      dispatch(removeVideoFromPlaylist({ playlistId: selectedPlaylistId, videoId }))
+      try {
+        // Make direct API call
+        const response = await axiosInstance.patch(`/playlist/remove/${videoId}/${selectedPlaylistId}`)
+        if (response.data?.success) {
+          // Fetch the updated playlist directly
+          const updatedPlaylist = await fetchCurrentPlaylist(selectedPlaylistId)
+
+          // Also update the local playlists array
+          if (updatedPlaylist) {
+            updateLocalPlaylist(updatedPlaylist)
+          }
+        }
+      } catch (error) {
+        console.error("Error removing video:", error)
+      }
     }
+  }
+
+  // Update the local playlists array with the updated playlist
+  const updateLocalPlaylist = (updatedPlaylist) => {
+    setLocalPlaylists((prev) =>
+      prev.map((playlist) => (playlist._id === updatedPlaylist._id ? updatedPlaylist : playlist)),
+    )
   }
 
   const openEditModal = (playlist) => {
@@ -98,6 +137,55 @@ function ChannelPlaylist() {
     reset()
   }
 
+  // Function to fetch the current playlist directly from the API
+  const fetchCurrentPlaylist = async (playlistId) => {
+    setModalLoading(true)
+    try {
+      const response = await axiosInstance.get(`/playlist/${playlistId}`)
+      if (response.data?.success) {
+        const playlist = response.data.data
+        setCurrentPlaylist(playlist)
+        return playlist
+      }
+    } catch (error) {
+      console.error("Error fetching playlist:", error)
+    } finally {
+      setModalLoading(false)
+    }
+    return null
+  }
+
+  const openVideoManagementModal = async (playlistId) => {
+    setSelectedPlaylistId(playlistId)
+    setOpenVideoModal(true)
+
+    // Fetch the current playlist directly from the API
+    await fetchCurrentPlaylist(playlistId)
+  }
+
+  // Function to check if a video is in the current playlist
+  const isVideoInPlaylist = (videoId) => {
+    if (!currentPlaylist || !currentPlaylist.videos) return false
+
+    return currentPlaylist.videos.some((video) => {
+      if (typeof video === "object" && video._id) {
+        return video._id === videoId
+      }
+      return video === videoId
+    })
+  }
+
+  // When closing the video modal, refresh the playlists from the server
+  const handleCloseVideoModal = () => {
+    setOpenVideoModal(false)
+    setCurrentPlaylist(null)
+
+    // Refresh the playlists list to get updated video counts
+    if (userId) {
+      dispatch(getPlaylistsByUser(userId))
+    }
+  }
+
   if (loading) {
     return <PlaylistSkeleton />
   }
@@ -105,14 +193,12 @@ function ChannelPlaylist() {
   return (
     <>
       <div className="w-full relative text-white sm:px-5 px-0">
-        {playlists?.length === 0 && !loading && (
+        {localPlaylists?.length === 0 && !loading && (
           <div className="text-center py-16 flex flex-col justify-center items-center">
             <div className="bg-slate-800/50 p-6 rounded-xl border border-slate-700 max-w-md">
               <h1 className="text-xl font-medium mb-2">No Playlists Found</h1>
               {authId === userId && (
-                <p className="text-gray-400 mb-4">
-                  Create your first playlist to organize your favorite videos.
-                </p>
+                <p className="text-gray-400 mb-4">Create your first playlist to organize your favorite videos.</p>
               )}
             </div>
           </div>
@@ -135,7 +221,7 @@ function ChannelPlaylist() {
         )}
 
         <div className="grid xl:grid-cols-3 md:grid-cols-2 p-4 gap-5 grid-cols-1 w-full mt-5">
-          {playlists?.map((playlist) => (
+          {localPlaylists?.map((playlist) => (
             <div
               key={playlist._id}
               className="relative h-[15rem] w-full border border-slate-700 rounded-lg overflow-hidden hover:border-purple-500 transition-all hover:shadow-md hover:shadow-purple-900/20 group"
@@ -151,9 +237,7 @@ function ChannelPlaylist() {
                     {playlist.totalViews} Views • {timeAgo(playlist.updatedAt)}
                   </div>
                 </div>
-                <p className="bg-black/50 px-2 py-1 rounded-full text-xs self-start">
-                  {playlist.totalVideos} Videos
-                </p>
+                <p className="bg-black/50 px-2 py-1 rounded-full text-xs self-start">{playlist.totalVideos} Videos</p>
               </div>
 
               <div className="py-2 px-3 z-20 relative">
@@ -168,8 +252,7 @@ function ChannelPlaylist() {
                     onClick={(e) => {
                       e.preventDefault()
                       e.stopPropagation()
-                      setSelectedPlaylistId(playlist._id)
-                      setOpenVideoModal(true)
+                      openVideoManagementModal(playlist._id)
                     }}
                   >
                     Manage Videos
@@ -208,9 +291,7 @@ function ChannelPlaylist() {
       <Dialog open={openCreatePlaylist} onOpenChange={setOpenCreatePlaylist}>
         <DialogContent className="bg-black border border-slate-700 text-white sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold">
-              {isEditMode ? "Edit Playlist" : "Create Playlist"}
-            </DialogTitle>
+            <DialogTitle className="text-2xl font-bold">{isEditMode ? "Edit Playlist" : "Create Playlist"}</DialogTitle>
             <button
               className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
               onClick={closeModal}
@@ -250,53 +331,55 @@ function ChannelPlaylist() {
 
       {/* Video Management Modal */}
       {openVideoModal && (
-  <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-90 z-50 flex justify-center items-center p-4 overflow-y-auto">
-    <div className="w-full max-w-2xl bg-zinc-900 p-6 rounded-md border border-slate-600 relative">
-      <button className="absolute top-2 right-4 cursor-pointer" onClick={() => setOpenVideoModal(false)}>
-        <X size={24} />
-      </button>
-      <h2 className="text-xl mb-4">Manage Playlist Videos</h2>
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-90 z-50 flex justify-center items-center p-4 overflow-y-auto">
+          <div className="w-full max-w-2xl bg-zinc-900 p-6 rounded-md border border-slate-600 relative">
+            <button className="absolute top-2 right-4 cursor-pointer" onClick={handleCloseVideoModal}>
+              <X size={24} />
+            </button>
+            <h2 className="text-xl mb-4">Manage Playlist Videos</h2>
 
-      <div className="space-y-4 max-h-[70vh] overflow-y-auto">
-        {videos?.length > 0 ? (
-          videos.map((video) => {
-            const playlist = playlists?.find((p) => p._id === selectedPlaylistId)
-            const isInPlaylist = playlist?.videos?.includes(video._id)
-
-            return (
-              <div key={video._id} className="flex justify-between items-center border-b border-slate-700 pb-2">
-                <div className="flex items-center gap-3">
-                  <img
-                    src={video.thumbnail?.url || "/placeholder.svg"}
-                    alt={video.title}
-                    className="w-24 h-16 object-cover rounded"
-                  />
-                  <div>
-                    <p className="font-semibold line-clamp-1">{video.title}</p>
-                    <p className="text-xs text-slate-400">
-                      {video.views} views • {timeAgo(video.createdAt)}
-                    </p>
-                  </div>
+            <div className="space-y-4 max-h-[70vh] overflow-y-auto">
+              {modalLoading ? (
+                <div className="flex justify-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-purple-500"></div>
                 </div>
-                <Button
-                  className={`text-sm ${
-                    isInPlaylist ? "bg-red-500 hover:bg-red-600" : "bg-green-500 hover:bg-green-600"
-                  }`}
-                  onClick={() => (isInPlaylist ? handleRemoveVideo(video._id) : handleAddVideo(video._id))}
-                >
-                  {isInPlaylist ? "Remove" : "Add"}
-                </Button>
-              </div>
-            )
-          })
-        ) : (
-          <p className="text-center text-gray-400">No videos available.</p>
-        )}
-      </div>
-    </div>
-  </div>
-)}
+              ) : videos?.length > 0 ? (
+                videos.map((video) => {
+                  const isInPlaylist = isVideoInPlaylist(video._id)
 
+                  return (
+                    <div key={video._id} className="flex justify-between items-center border-b border-slate-700 pb-2">
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={video.thumbnail?.url || "/placeholder.svg"}
+                          alt={video.title}
+                          className="w-24 h-16 object-cover rounded"
+                        />
+                        <div>
+                          <p className="font-semibold line-clamp-1">{video.title}</p>
+                          <p className="text-xs text-slate-400">
+                            {video.views} views • {timeAgo(video.createdAt)}
+                          </p>
+                        </div>
+                      </div>
+                      <Button
+                        className={`text-sm ${
+                          isInPlaylist ? "bg-red-500 hover:bg-red-600" : "bg-green-500 hover:bg-green-600"
+                        }`}
+                        onClick={() => (isInPlaylist ? handleRemoveVideo(video._id) : handleAddVideo(video._id))}
+                      >
+                        {isInPlaylist ? "Remove" : "Add"}
+                      </Button>
+                    </div>
+                  )
+                })
+              ) : (
+                <p className="text-center text-gray-400">No videos available.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Delete Confirmation Modal */}
       {openDeleteConfirm && (
