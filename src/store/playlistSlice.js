@@ -41,9 +41,9 @@ export const addVideoToPlaylist = createAsyncThunk(
 )
 
 
-export const removeVideoFromPlaylist = createAsyncThunk("removeVideoFromPlaylist", async (playlistId) => {
+export const removeVideoFromPlaylist = createAsyncThunk("removeVideoFromPlaylist", async ({videoId, playlistId}) => {
   try {
-    const response = await axiosInstance.patch(`/playlist/remove/${playlistId}`)
+    const response = await axiosInstance.patch(`/playlist/remove/${videoId}/${playlistId}`)
     if (response.data?.success) {
       toast.success(response.data.message)
     }
@@ -126,6 +126,11 @@ const playlistSlice = createSlice({
       .addCase(addVideoToPlaylist.fulfilled, (state, action) => {
         state.loading = false
         state.playlist = action.payload
+        // Also update the playlist in the playlists array
+        const index = state.playlists.findIndex(p => p._id === action.payload._id)
+        if (index !== -1) {
+          state.playlists[index] = action.payload
+        }
       })
       .addCase(addVideoToPlaylist.rejected, (state) => {
         state.loading = false
@@ -138,6 +143,11 @@ const playlistSlice = createSlice({
       .addCase(removeVideoFromPlaylist.fulfilled, (state, action) => {
         state.loading = false
         state.playlist = action.payload
+        // Also update the playlist in the playlists array
+        const index = state.playlists.findIndex(p => p._id === action.payload._id)
+        if (index !== -1) {
+          state.playlists[index] = action.payload
+        }
       })
       .addCase(removeVideoFromPlaylist.rejected, (state) => {
         state.loading = false

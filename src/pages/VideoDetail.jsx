@@ -3,89 +3,149 @@
 import { useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
-import { getVideoById } from "../store/videoSlice"
-import { CommentList, TweetAndComment, Video, Description, Spinner, InfiniteScroll, Navbar } from "../components"
+import { getVideoById, getAllVideos } from "../store/videoSlice"
+import {
+  CommentList,
+  TweetAndComment,
+  Video,
+  Description,
+  Spinner,
+  InfiniteScroll,
+  Navbar,
+  VideoList,
+} from "../components"
 import { cleanUpComments, getVideoComments } from "../store/commentSlice"
 
 function VideoDetail() {
   const dispatch = useDispatch()
   const { videoId } = useParams()
-  const video = useSelector((state) => state.video?.video)
-  const comments = useSelector((state) => state.comment?.comments)
-  const totalComments = useSelector((state) => state.comment?.totalComments)
-  const hasNextPage = useSelector((state) => state.comment?.hasNextPage)
-  const loading = useSelector((state) => state.comment?.loading)
   const [page, setPage] = useState(1)
+
+  // Video data
+  const video = useSelector((state) => state.video?.video)
+  const allVideos = useSelector((state) => state.video?.videos?.docs || [])
+  const videosLoading = useSelector((state) => state.video?.loading)
+
+  // Comments data
+  const comments = useSelector((state) => state.comment?.comments)
+  console.log('total comments: ',comments);
+  const totalComments = useSelector((state) => state.comment?.totalComments)
+
+  const hasNextPage = useSelector((state) => state.comment?.hasNextPage)
+  const commentLoading = useSelector((state) => state.comment?.loading)
+
+  const relatedVideos = allVideos.filter((v) => v._id !== videoId)
 
   useEffect(() => {
     if (videoId) {
       dispatch(getVideoById({ videoId }))
       dispatch(getVideoComments({ videoId }))
+      dispatch(getAllVideos({ page: 1, limit: 15 }))
     }
-
     return () => dispatch(cleanUpComments())
   }, [dispatch, videoId])
 
   const fetchMoreComments = useCallback(() => {
-    if (!loading && hasNextPage) {
+    if (!commentLoading && hasNextPage) {
       dispatch(getVideoComments({ videoId, page: page + 1 }))
       setPage((prev) => prev + 1)
     }
-  }, [page, loading, hasNextPage, dispatch, videoId])
+  }, [page, commentLoading, hasNextPage, dispatch, videoId])
 
   return (
-    <div className="bg-black min-h-screen">
+    <div className="bg-[#0f0f0f] min-h-screen text-white">
       <Navbar />
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="pt-4">
-          <Video src={video?.videoFile?.url} poster={video?.thumbnail?.url} />
-        </div>
+      <div className="max-w-[1800px] mx-auto px-4 pt-16 flex gap-6">
+        {/* Main Content */}
+        <div className="flex-1 max-w-[1100px]">
+          {/* Video Player */}
+          <div className="w-full bg-black rounded-xl overflow-hidden">
+            <Video
+              src={video?.videoFile?.url}
+              poster={video?.thumbnail?.url}
+              className="w-full aspect-video"
+            />
+          </div>
 
-        <div className="mt-4">
-          <Description
-            avatar={video?.owner?.avatar}
-            channelName={video?.owner?.username}
-            createdAt={video?.createdAt}
-            description={video?.description}
-            isSubscribed={video?.owner?.isSubscribed}
-            likesCount={video?.likesCount}
-            subscribersCount={video?.owner?.subscribersCount}
-            title={video?.title}
-            views={video?.views}
-            key={video?._id}
-            isLiked={video?.isLiked}
-            videoId={video?._id}
-            channelId={video?.owner?._id}
-          />
-        </div>
+          {/* Video Metadata */}
+          <div className="mt-4">
+            <Description
+              avatar={video?.owner?.avatar}
+              channelName={video?.owner?.username}
+              createdAt={video?.createdAt}
+              description={video?.description}
+              isSubscribed={video?.owner?.isSubscribed}
+              likesCount={video?.likesCount}
+              subscribersCount={video?.owner?.subscribersCount}
+              title={video?.title}
+              views={video?.views}
+              isLiked={video?.isLiked}
+              videoId={video?._id}
+              channelId={video?.owner?._id}
+            />
+          </div>
 
-        <div className="mt-6">
-          <div className="text-white font-semibold px-2 py-2 border-b border-slate-800">{totalComments} Comments</div>
-
-          <TweetAndComment comment={true} videoId={video?._id} />
-
-          <InfiniteScroll fetchMore={fetchMoreComments} hasNextPage={hasNextPage}>
-            <div className="w-full">
-              {comments?.map((comment) => (
-                <CommentList
-                  key={comment?._id}
-                  avatar={comment?.owner?.avatar?.url}
-                  commentId={comment?._id}
-                  content={comment?.content}
-                  createdAt={comment?.createdAt}
-                  fullName={comment?.owner?.fullName}
-                  isLiked={comment?.isLiked}
-                  likesCount={comment?.likesCount}
-                  username={comment?.owner?.username}
-                />
-              ))}
-              {loading && (
-                <div className="w-full flex justify-center items-center py-4">
-                  <Spinner width={10} />
-                </div>
-              )}
+          {/* Comments Section */}
+          <div className="mt-6">
+            <div className="flex items-center gap-2 mb-4">
+              <h2 className="text-lg font-semibold">{totalComments} Comments</h2>
             </div>
-          </InfiniteScroll>
+
+            <TweetAndComment comment={true} videoId={video?._id} className="mb-4" />
+
+            <InfiniteScroll fetchMore={fetchMoreComments} hasNextPage={hasNextPage}>
+              <div className="space-y-4">
+                {comments?.map((comment) => (
+                  <CommentList
+                    key={comment?._id}
+                    avatar={comment?.owner?.avatar}
+                    commentId={comment?._id}
+                    content={comment?.content}
+                    createdAt={comment?.createdAt}
+                    fullName={comment?.owner?.fullName}
+                    isLiked={comment?.isLiked}
+                    likesCount={comment?.likesCount}
+                    username={comment?.owner?.username}
+                  />
+                ))}
+                {commentLoading && <Spinner width={8} className="mx-auto my-4" />}
+              </div>
+            </InfiniteScroll>
+          </div>
+        </div>
+
+        {/* Related Videos Sidebar */}
+        <div className="w-[350px] shrink-0 space-y-3">
+          <h3 className="font-medium text-[15px] mb-2">Related Videos</h3>
+
+          {videosLoading ? (
+            Array(5).fill(0).map((_, i) => (
+              <div key={i} className="flex gap-2">
+                <div className="w-[168px] h-[94px] bg-[#252525] rounded animate-pulse" />
+                <div className="flex-1 space-y-1">
+                  <div className="h-3.5 bg-[#252525] rounded w-full" />
+                  <div className="h-3 bg-[#252525] rounded w-3/4" />
+                  <div className="h-3 bg-[#252525] rounded w-2/3" />
+                </div>
+              </div>
+            ))
+          ) : (
+            relatedVideos.slice(0, 8).map((video) => (
+              <VideoList
+                key={video._id}
+                avatar={video.ownerDetails?.avatar}
+                duration={video.duration}
+                title={video.title}
+                thumbnail={video.thumbnail?.url}
+                createdAt={video.createdAt}
+                views={video.views}
+                channelName={video.ownerDetails?.username}
+                videoId={video._id}
+                compact={true}
+                className="!gap-2 !items-start"
+              />
+            ))
+          )}
         </div>
       </div>
     </div>
