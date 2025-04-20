@@ -1,9 +1,8 @@
 import React from "react";
 
-function Spinner({width = 5}) {
+function Spinner({ width = 10 }) {
     return (
-        <>
-            {" "}
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div role="status">
                 <svg
                     aria-hidden="true"
@@ -23,7 +22,7 @@ function Spinner({width = 5}) {
                 </svg>
                 <span className="sr-only">Loading...</span>
             </div>
-        </>
+        </div>
     );
 }
 

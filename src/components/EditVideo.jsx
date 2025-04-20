@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { updateAVideo, updateUploadState } from "../store/videoSlice";
-import Spinner from "./Spinner";
+// import {Spinner} from "./Spinner";
 import GetImagePreview from "./GetImagePreview";
 
 function EditVideo({ videoId, title, description, setEditVideoPopup, thumbnail }) {

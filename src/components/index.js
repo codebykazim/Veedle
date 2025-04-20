@@ -1,11 +1,10 @@
-// import Button from "./Button";
 import Container from "./Container";
 import Input from "./Input";
 import Login from "./Login";
 import Navbar from "./Header/Navbar";
-// import Search from "./Header/Search";
+import Search from "./Header/Search";
 import Sidebar from "./Header/Sidebar";
-// import Logo from "./Logo";
+import Logo from "./Logo";
 import ChannelHeader from "./channel/ChannelHeader";
 import ChannelNavigate from "./channel/ChannelNavigate";
 import VideoList from "./VideoList";
@@ -21,7 +20,7 @@ import TweetsList from "./TweetsList";
 import Avatar from "./Avatar";
 import NoVideosFound from "./NoVideosFound";
 import Input2 from "./Input2";
-import Spinner from "./Spinner";
+import  Spinner  from "./Spinner";
 import UploadVideo from "./UploadVideo";
 import UploadingVideo from "./UploadingVideo";
 import TogglePublish from "./TogglePublish";
@@ -37,16 +36,15 @@ import LoginPopup from "./LoginPopup";
 import AuthLayout from "./AuthLayout";
 import InfiniteScroll from "./InfiniteScroll";
 import SearchForSmallScreen from "./SearchForSmallScreen";
-// import AddToPlaylist from "./AddToPlaylist";
 
 export {
     Container,
     Input,
     Login,
     Navbar,
-    // Search,
+    Search,
     Sidebar,
-    // Logo,
+    Logo,
     ChannelHeader,
     VideoList,
     SignUp,
@@ -78,5 +76,4 @@ export {
     AuthLayout,
     InfiniteScroll,
     SearchForSmallScreen,
-    // AddToPlaylist,
 };

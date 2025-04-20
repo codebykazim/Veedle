@@ -20,13 +20,13 @@ function EditAvatar({ cover, preImage }) {
     formData.append(`${cover ? "coverImage" : "avatar"}`, data.avatar[0]);
 
     if (data) {
-      if (cover) {
-        dispatch(updateCoverImg(formData));
-      } else {
-        dispatch(updateAvatar(formData));
-      }
+      const action = cover ? updateCoverImg : updateAvatar;
+      dispatch(action(formData)).then(() => {
+        window.location.reload(); // Refresh the page after update
+      });
     }
   };
+
 
   return (
     <form onSubmit={handleSubmit(upload)} className="relative">

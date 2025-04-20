@@ -95,9 +95,9 @@ export const getCurrentUser = createAsyncThunk("getCurrentUser", async () => {
 
 export const updateAvatar = createAsyncThunk("updateAvatar", async (avatar) => {
     try {
-        const formData = new FormData();
-        formData.append("avatar", avatar);
-        const response = await axiosInstance.patch("/users/update-avatar", formData);
+        // const formData = new FormData();
+        // formData.append("avatar", avatar);
+        const response = await axiosInstance.patch("/users/avatar", avatar);
         toast.success("Updated details successfully!!!");
         return response.data.data;
     } catch (error) {

@@ -49,7 +49,7 @@ export const getSubscribedChannels = createAsyncThunk(
                 `subscriptions/u/${subscriberId}`
             );
             console.log(response.data.data);
-            
+
             return response.data.data;
         } catch (error) {
             return error;
@@ -84,10 +84,8 @@ const subscriptionSlice = createSlice({
         });
         builder.addCase(getSubscribedChannels.fulfilled, (state, action) => {
             state.loading = false;
-            state.mySubscriptions = action.payload.filter(
-                (subscription) => subscription?.subscribedChannel?.latestVideo
-            );
-        });
+            state.mySubscriptions = action.payload; // ✅ No filter here!
+          });
     },
 });
 

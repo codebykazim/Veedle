@@ -91,9 +91,17 @@ function ChannelHeader({
               <h1 className="text-xl font-bold">{fullName}</h1>
               <h3 className="text-sm text-slate-400">@{username}</h3>
               <div className="flex gap-3">
-                <p className="text-xs text-slate-400">{localSubscribersCount} Subscribers</p>
-                <p className="text-xs text-slate-400">{subscribedCount} Subscribed</p>
-              </div>
+  <p className="text-xs text-slate-400">{localSubscribersCount} Subscribers</p>
+  {user === userProfile && (
+    <Link
+      to="/subscriptions"
+      className="text-xs text-slate-400 hover:text-purple-400 underline transition-all"
+    >
+      My Subscriptions: {subscribedCount}
+    </Link>
+  )}
+</div>
+
             </div>
 
             {/* Action buttons */}

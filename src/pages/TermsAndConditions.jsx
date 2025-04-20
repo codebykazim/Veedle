@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
-// import { Logo } from "../components"
+import { Logo } from "../components"
 
 function TermsAndConditions() {
   const [isChecked, setIsChecked] = useState(false)
@@ -13,8 +13,7 @@ function TermsAndConditions() {
     <div className="min-h-screen flex justify-center items-center bg-black p-4">
       <div className="max-w-md w-full bg-black border border-slate-800 text-white rounded-xl p-8 shadow-xl">
         <div className="mb-6 flex justify-center">
-          {/* <Logo /> */}
-          <div className="h-10 w-10 bg-purple-500 rounded-full"></div>
+          <Logo />
         </div>
 
         <h1 className="text-2xl font-bold mb-6 text-center">Terms and Conditions</h1>
@@ -23,19 +22,19 @@ function TermsAndConditions() {
           <ul className="space-y-3 text-gray-300">
             <li className="flex items-start">
               <span className="text-purple-500 mr-2">•</span>
-              <span>This project is to showcase my skills in web development.</span>
+              <span>This web app is in development, and we're continuously improving it to give you the best experience possible.</span>
             </li>
             <li className="flex items-start">
               <span className="text-purple-500 mr-2">•</span>
-              <span>This web app is still in development.</span>
+              <span>Please avoid uploading files larger than 100MB to ensure a smooth experience for everyone.</span>
             </li>
             <li className="flex items-start">
               <span className="text-purple-500 mr-2">•</span>
-              <span>Do not upload videos greater than 100 MB.</span>
+              <span>We strive to keep the content clean and respectful. No explicit or inappropriate uploads, please.</span>
             </li>
             <li className="flex items-start">
               <span className="text-purple-500 mr-2">•</span>
-              <span>Upload no explicit content meant to be emotionally gratifying.</span>
+              <span>By agreeing, you're helping us create a better platform for all users. Thank you!</span>
             </li>
           </ul>
         </div>

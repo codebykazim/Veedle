@@ -10,6 +10,7 @@ import { userLogout } from "../../store/authSlice"
 // import Search from "./Search"
 import { userChannelProfile } from '../../store/userSlice'
 import { useParams } from "react-router-dom"
+import Logo from "../Logo"
 
 export default function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
@@ -56,12 +57,11 @@ export default function Navbar() {
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 bg-[#1a1a1a] border-b border-[#5f5d5d] h-14 px-4 flex items-center justify-between">
-      {/* Logo */}
       <div
         className="font-semibold text-xl text-white cursor-pointer"
         onClick={() => navigate("/")}
       >
-        Serum
+        <Logo/>
       </div>
 
       {/* Search Bar */}
