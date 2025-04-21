@@ -25,7 +25,7 @@ import UploadVideo from "./UploadVideo";
 import UploadingVideo from "./UploadingVideo";
 import TogglePublish from "./TogglePublish";
 import HeaderSection from "./Dashboard/HeaderSection";
-import StatsSection from ".Dashboard/StatsSection";
+import StatsSection from "./Dashboard/StatsSection";
 import VideoTable from "./Dashboard/VideoTable";
 import EditVideo from "./EditVideo";
 import EditPersonalInfo from "./EditPersonalInfo";
