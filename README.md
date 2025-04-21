@@ -1,12 +1,45 @@
-# React + Vite
+# 📺 Veedle — A Modern Video Streaming Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to **Veedle** — a YouTube-inspired video streaming web app where users can log in, upload videos, watch content, and manage playlists. Built with modern frontend tools and connected to a powerful backend, Veedle is your all-in-one media hub.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## Expanding the ESLint configuration
+- 🎥 **Upload & Watch Videos**  
+  Users can upload their own videos and view content uploaded by others.
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- 🔐 **Authentication**  
+  Secure login and signup functionality.
+
+- 🧠 **State Management with Redux Toolkit**  
+  Clean and efficient global state management.
+
+- 🧭 **Routing with React Router**  
+  Seamless navigation between pages like Home, Watch, Upload, Playlists, and more.
+
+- 🧩 **ShadCN UI + Tailwind CSS**  
+  Beautiful and responsive UI powered by Tailwind and shadcn components.
+
+- 📂 **Playlist Management**  
+  Create, edit, delete playlists, and manage videos within them.
+
+- ❤️ **Like Videos**  
+  Save your favorites in a personalized Liked Videos section.
+
+---
+
+## 🛠️ Tech Stack
+
+| Frontend        
+|----------------
+| React + Vite     
+| React Router
+| Redux Toolkit
+| Tailwind CSS  
+| ShadCN UI     
+
+---
+
+## 📁 Folder Structure (Frontend)
+
