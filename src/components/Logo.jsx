@@ -23,18 +23,6 @@ function Logo() {
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
           </filter>
         </defs>
-
-        {/* Play Icon with Pulse Animation */}
-        {/* <path
-          d="M15 8C8.92487 8 4 12.9249 4 19C4 25.0751 8.92487 30 15 30C21.0751 30 26 25.0751 26 19C26 12.9249 21.0751 8 15 8ZM13 14.5L20 19L13 23.5V14.5Z"
-          fill="url(#vibecastGradient)"
-          filter="url(#vibeGlow)"
-          transform="scale(1.2)"
-        >
-          <animate attributeName="opacity" values="1;0.8;1" dur="2s" begin="0s" repeatCount="1" />
-        </path> */}
-
-        {/* Text: VibeCast */}
         <text x="39" y="29" fontFamily="sans-serif" fontSize="25" fontWeight="bold" fill="white" letterSpacing="2">
           VEEDLE
         </text>
