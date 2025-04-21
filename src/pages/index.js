@@ -1,4 +1,4 @@
-import Channel from "./Channel/Channel";
+import Channel from "../pages/Channel/Channel";
 import ChannelSubscribers from "./Channel/Subscribers";
 import ChannelTweets from "./Channel/Tweets";
 import ChannelVideos from "./Channel/Videos";
