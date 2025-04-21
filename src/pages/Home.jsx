@@ -36,7 +36,6 @@ function HomePage() {
       dispatch(getAllVideos({ page: page + 1, limit: 10 }))
         .then(() => setPage((prev) => prev + 1))
         .catch((error) => {
-          console.error("Error loading more videos:", error)
           setIsLoading(false)
         })
     }
