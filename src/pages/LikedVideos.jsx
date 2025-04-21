@@ -47,12 +47,12 @@ function LikedVideos() {
     <div className="bg-[#051622] min-h-screen sm:ml-60 mt-14 text-white px-2 sm:px-0 pb-16 sm:pb-6">
       {!hasVideos && (
         <div className="flex flex-col items-center justify-center py-10 sm:py-16 p-4 sm:p-6">
-          <img
+          {/* <img
             src={MessyDoodle || "/placeholder.svg"}
             alt="No videos available"
             className="mb-4 sm:mb-6"
             width="160"
-          />
+          /> */}
           <p className="text-base sm:text-lg text-gray-400 mb-2">
             No videos liked yet
           </p>
