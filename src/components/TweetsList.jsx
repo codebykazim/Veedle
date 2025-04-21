@@ -6,7 +6,7 @@ import { timeAgo } from "../helpers/timeAgo"
 import Like from "./Like"
 import DeleteConfirmation from "./DeleteConfirmation"
 import Edit from "./Edit"
-import { HiOutlineDotsVertical } from "./icons"
+import { MoreVertical } from "lucide-react"
 import { deleteTweet, editTweet } from "../store/tweetSlice"
 
 function TweetsList({ tweetId, avatar, username, createdAt, content, likesCount = 0, isLiked }) {
@@ -43,12 +43,12 @@ function TweetsList({ tweetId, avatar, username, createdAt, content, likesCount 
   }
 
   return (
-    <div className="text-white w-full flex justify-start items-start sm:gap-5 gap-3 border-b border-slate-600 p-3 sm:p-5 hover:bg-slate-900/30 transition-colors">
+    <div className="text-white w-full flex justify-start items-start sm:gap-5 gap-3 border-b border-[#1e3a47] p-3 sm:p-5 hover:bg-[#0d3446]/30 transition-colors">
       <div className="w-10 flex-shrink-0">
         <img
           src={avatar || avatar2}
           alt={username}
-          className="w-8 h-8 object-cover rounded-full border border-slate-700"
+          className="w-8 h-8 object-cover rounded-full border border-[#1e3a47]"
         />
       </div>
       <div className="w-full flex flex-col gap-1 relative">
@@ -82,7 +82,7 @@ function TweetsList({ tweetId, avatar, username, createdAt, content, likesCount 
         {/* 3 dots */}
         {authUsername == username && (
           <div className="absolute right-0 top-0 cursor-pointer">
-            <HiOutlineDotsVertical
+            <MoreVertical
               size={18}
               className="hover:text-gray-300 transition-colors"
               onClick={() =>
@@ -97,10 +97,10 @@ function TweetsList({ tweetId, avatar, username, createdAt, content, likesCount 
 
         {/* edit and delete dropdown */}
         {editState.isOpen && (
-          <div className="border bg-[#222222] text-sm border-slate-600 absolute text-center right-0 top-6 rounded-lg overflow-hidden z-10 shadow-lg">
+          <div className="border bg-[#072331] text-sm border-[#1e3a47] absolute text-center right-0 top-6 rounded-lg overflow-hidden z-10 shadow-lg">
             <ul>
               <li
-                className="hover:bg-slate-700 px-5 py-2 cursor-pointer border-b border-slate-600 transition-colors"
+                className="hover:bg-[#0d3446] px-5 py-2 cursor-pointer border-b border-[#1e3a47] transition-colors"
                 onClick={() =>
                   setEditState((prevState) => ({
                     ...prevState,
@@ -112,7 +112,7 @@ function TweetsList({ tweetId, avatar, username, createdAt, content, likesCount 
                 Edit
               </li>
               <li
-                className="px-5 py-2 hover:bg-slate-700 cursor-pointer transition-colors text-red-400 hover:text-red-300"
+                className="px-5 py-2 hover:bg-[#0d3446] cursor-pointer transition-colors text-red-400 hover:text-red-300"
                 onClick={() =>
                   setEditState((prevState) => ({
                     ...prevState,

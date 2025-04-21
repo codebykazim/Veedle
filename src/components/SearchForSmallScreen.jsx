@@ -19,7 +19,7 @@ function SearchForSmallScreen({ open, setOpenSearch }) {
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 bg-black/95 backdrop-blur-sm z-50 flex items-start justify-center animate-in fade-in duration-200">
+    <div className="fixed inset-0 bg-[#051622] backdrop-blur-sm z-50 flex items-start justify-center animate-in fade-in duration-200">
       <div className="sm:p-8 p-4 relative w-full max-w-lg">
         <button
           className="absolute top-5 right-5 text-white hover:text-gray-300 transition-colors"
@@ -33,12 +33,12 @@ function SearchForSmallScreen({ open, setOpenSearch }) {
           <Input
             type="text"
             placeholder="Search videos, channels..."
-            className="w-full px-4 py-2 border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-md"
+            className="w-full px-4 py-2 border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-[#00ed64] rounded-md"
             {...register("query", { required: true })}
           />
           <Button
             type="submit"
-            className="w-full sm:w-auto px-6 py-2 bg-purple-500 text-white font-semibold hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 rounded-md transition-colors"
+            className="w-full sm:w-auto px-6 py-2 bg-[#23e072] text-white font-semibold hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 rounded-md transition-colors"
           >
             Search
           </Button>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
-import { BiSolidLike, BiSolidDislike } from "../components/icons"
+import { ThumbsUp, ThumbsDown } from "lucide-react"
 import { toggleCommentLike, toggleTweetLike, toggleVideoLike } from "../store/likeSlice"
 
 function Like({ isLiked, likesCount = 0, tweetId, commentId, videoId, size }) {
@@ -38,15 +38,15 @@ function Like({ isLiked, likesCount = 0, tweetId, commentId, videoId, size }) {
   return (
     <div className="flex items-center gap-2">
       <button onClick={handleLikeToggle} className="flex items-center gap-1 group">
-        <BiSolidLike
+        <ThumbsUp
           size={size}
           className={`cursor-pointer transition-colors ${
-            localIsLiked ? "text-purple-500" : "group-hover:text-gray-300"
+            localIsLiked ? "text-[#00ed64]" : "group-hover:text-gray-300"
           }`}
         />
-        <span className={`text-xs mr-3 ${localIsLiked ? "text-purple-500" : "text-gray-400"}`}>{localLikesCount}</span>
+        <span className={`text-xs mr-3 ${localIsLiked ? "text-[#00ed64]" : "text-gray-400"}`}>{localLikesCount}</span>
       </button>
-      <BiSolidDislike size={size} className="cursor-pointer hover:text-gray-300 transition-colors" />
+      <ThumbsDown size={size} className="cursor-pointer hover:text-gray-300 transition-colors" />
     </div>
   )
 }

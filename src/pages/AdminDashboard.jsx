@@ -17,8 +17,7 @@ function AdminDashboard() {
   const username = useSelector((state) => state.auth.userData?.username);
   const dashboard = useSelector((state) => state.dashboard.channelStats);
   const videos = useSelector((state) => state.dashboard.channelVideos);
-  console.log(videos);
-  
+
   const uploaded = useSelector((state) => state.video.uploaded);
   const publishToggled = useSelector((state) => state.video.publishToggled);
   const deleting = useSelector((state) => state.video.loading);
@@ -42,7 +41,7 @@ function AdminDashboard() {
   }, [dispatch, uploaded, publishToggled, deleting]);
 
   return (
-    <div className="min-h-screen bg-[#0F0F0F] text-white pt-14">
+    <div className="min-h-screen bg-[#051622] text-white pt-14">
       <Container>
         <div className="space-y-8 p-4">
           {popUp.uploadVideo && (
@@ -77,7 +76,7 @@ function AdminDashboard() {
 
           {deleting && (
             <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50">
-              <div className="bg-[#222222] border border-gray-700 rounded-lg px-4 py-3 flex items-center gap-3">
+              <div className="bg-[#072331] border border-[#1e3a47] rounded-lg px-4 py-3 flex items-center gap-3">
                 <Spinner />
                 <span className="font-medium">Deleting video...</span>
               </div>
@@ -86,7 +85,7 @@ function AdminDashboard() {
 
           {/* Welcome Section */}
           <div className="space-y-2">
-            <h1 className="text-2xl font-bold"></h1>
+            <h1 className="text-2xl font-bold text-[#00ed64]"></h1>
             <HeaderSection username={username} setPopUp={setPopUp} />
           </div>
 
@@ -94,7 +93,7 @@ function AdminDashboard() {
           <StatsSection dashboard={dashboard} />
 
           {/* Video Table */}
-          <div className="bg-[#222222] border border-gray-700 rounded-lg overflow-hidden">
+          <div className="bg-[#072331] border border-[#1e3a47] rounded-lg overflow-hidden">
             <VideoTable
               videos={videos}
               setPopUp={setPopUp}

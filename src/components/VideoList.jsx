@@ -1,65 +1,53 @@
-import React from "react";
-import { formatDuration, timeAgo } from "../helpers/timeAgo";
-import { useNavigate } from "react-router-dom";
+"use client"
+import { formatDuration, timeAgo } from "../helpers/timeAgo"
+import { useNavigate } from "react-router-dom"
+import { MoreVertical } from "lucide-react"
 
-function VideoList({
-    thumbnail,
-    duration,
-    title,
-    views = 0,
-    avatar,
-    channelName,
-    createdAt,
-    videoId,
-}) {
-    const navigate = useNavigate();
+function VideoList({ thumbnail, duration, title, views = 0, avatar, channelName, createdAt, videoId }) {
+  const navigate = useNavigate()
 
-    const handleAvatarClick = (e) => {
-        e.stopPropagation();
-        navigate(`/channel/${channelName}`);
-    };
+  const handleAvatarClick = (e) => {
+    e.stopPropagation()
+    navigate(`/channel/${channelName}`)
+  }
 
-    return (
-        <>
-            <div
-                className="w-full sm:p-2 cursor-pointer"
-                onClick={() => navigate(`/watch/${videoId}`)}
-            >
-                <div className="relative h-40 sm:h-48"> 
-                    <img
-                        src={thumbnail}
-                        className="object-cover w-full h-full"
-                    />
-                    <span className="absolute bottom-2 right-2 rounded-lg text-sm bg-black py-1 px-2">
-                        {formatDuration(duration)}
-                    </span>
-                </div>
-                <div className="flex items-center py-2 px-2 gap-2">
-                    {avatar && (
-                        <div onClick={handleAvatarClick}>
-                            <img
-                                src={avatar}
-                                className="w-10 h-10 rounded-full object-cover border border-slate-700"
-                            />
-                        </div>
-                    )}
-                    <div>
-                        <h2 className="font-medium text-sm">{title}</h2> {/* Reduced text size */}
-                        <div className="text-xs space-x-1 text-slate-400">
-                            <span>{views} Views</span>.
-                            <span></span>
-                            <span>{timeAgo(createdAt)}</span>
-                        </div>
-                        {channelName && (
-                            <h2 className="text-xs space-x-1 text-slate-200">
-                                {channelName}
-                            </h2>
-                        )}
-                    </div>
-                </div>
+  return (
+    <div className="w-full">
+      <div className="bg-[#0d2a38] rounded-lg overflow-hidden">
+        {/* Thumbnail with duration */}
+        <div className="relative cursor-pointer" onClick={() => navigate(`/watch/${videoId}`)}>
+          <img src={thumbnail || "/placeholder.svg"} className="w-full aspect-video object-cover" alt={title} />
+          <span className="absolute bottom-1 right-1 bg-black/80 text-xs px-1.5 py-0.5 rounded">
+            {formatDuration(duration)}
+          </span>
+        </div>
+
+        {/* Video info */}
+        <div className="p-3 flex">
+          {/* Avatar */}
+          {avatar && (
+            <div onClick={handleAvatarClick} className="flex-shrink-0 cursor-pointer mr-3">
+              <img src={avatar || "/placeholder.svg"} className="w-8 h-8 rounded-full object-cover" alt={channelName} />
             </div>
-        </>
-    );
+          )}
+
+          {/* Title, views, etc. */}
+          <div className="flex-1 min-w-0">
+            <h3 className="text-[#00ed64] text-sm font-medium leading-tight line-clamp-1 mb-1">{title}</h3>
+            <div className="text-xs text-gray-400">
+              {views} views • {timeAgo(createdAt)}
+            </div>
+            <div className="text-xs text-gray-400">{channelName}</div>
+          </div>
+
+          {/* More options button */}
+          <button className="text-gray-400 hover:text-white ml-2">
+            {/* <MoreVertical size={16} /> */}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
 }
 
-export default VideoList;
+export default VideoList

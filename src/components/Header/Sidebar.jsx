@@ -71,15 +71,17 @@ function Sidebar() {
       to={item.url}
       className={({ isActive }) =>
         `group relative flex items-center gap-4 px-4 py-3 text-sm transition-colors ${
-          isActive ? "bg-[#2d2d2d] text-white font-medium" : "text-gray-300 hover:bg-[#2d2d2d] hover:text-[#a855f7]"
+          isActive
+            ? "bg-[#0d3446] text-white font-medium"
+            : "text-gray-300 hover:bg-[#0d3446] hover:text-[#00ed64]"
         }`
       }
     >
       {({ isActive }) => (
         <>
-          <span className={`${isActive ? "text-purple-500" : "group-hover:text-[#a855f7]"}`}>{item.icon}</span>
+          <span className={`${isActive ? "text-[#00ed64]" : "group-hover:text-[#00ed64]"}`}>{item.icon}</span>
           <span>{item.title}</span>
-          {isActive && <div className="absolute left-0 top-0 h-full w-[4px] bg-purple-500" />}
+          {isActive && <div className="absolute left-0 top-0 h-full w-[4px] bg-[#00ed64]" />}
         </>
       )}
     </NavLink>
@@ -90,7 +92,7 @@ function Sidebar() {
       to={item.url}
       className={({ isActive }) =>
         `flex flex-col items-center justify-center h-full px-2 text-sm relative ${
-          isActive ? "text-[#a855f7]" : "text-gray-300"
+          isActive ? "text-[#00ed64]" : "text-gray-300"
         }`
       }
     >
@@ -98,7 +100,7 @@ function Sidebar() {
         <>
           <div className="mb-1">{item.icon}</div>
           <span className="text-[11px] font-medium">{item.title}</span>
-          {isActive && <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#a855f7]" />}
+          {isActive && <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#00ed64]" />}
         </>
       )}
     </NavLink>
@@ -107,7 +109,7 @@ function Sidebar() {
   return (
     <>
       {/* Sidebar for large screens */}
-      <div className="text-[#a855f7] fixed left-0 top-14 h-[calc(100vh-56px)] w-64 bg-[#1A1A1A] border-r border-[#5f5d5d] hidden sm:flex flex-col py-2">
+      <div className="text-white fixed left-0 top-14 h-[calc(100vh-56px)] w-64 bg-[#072331] border-r border-[#1e3a47] hidden sm:flex flex-col py-2">
         <div className="flex flex-col h-full">
           {/* Scrollable Top Items */}
           <div className="flex-1 overflow-y-auto custom-scrollbar">
@@ -117,13 +119,13 @@ function Sidebar() {
           </div>
 
           {/* Logout at bottom */}
-          <div className="py-2 border-t border-[#2d2d2d]">
+          <div className="py-2 border-t border-[#1e3a47]">
             {username && (
               <button
                 onClick={logout}
-                className="group flex items-center gap-4 px-4 py-3 text-sm text-gray-300 hover:bg-[#2d2d2d] hover:text-[#a855f7] transition-colors"
+                className="group flex items-center gap-4 px-4 py-3 text-sm text-gray-300 hover:bg-[#0d3446] hover:text-[#00ed64] transition-colors"
               >
-                <IoMdLogOut size={20} className="group-hover:text-[#a855f7]" />
+                <IoMdLogOut size={20} className="group-hover:text-[#00ed64]" />
                 Logout
               </button>
             )}
@@ -132,7 +134,7 @@ function Sidebar() {
       </div>
 
       {/* Bottom bar for mobile */}
-      <div className="sm:hidden fixed bottom-0 w-full h-16 bg-[#0E0F0F] border-t border-[#5f5d5d] flex justify-around items-center text-white z-20">
+      <div className="sm:hidden fixed bottom-0 w-full h-16 bg-[#072331] border-t border-[#1e3a47] flex justify-around items-center text-white z-20">
         {bottomBarItems.map((item) => (
           <MobileNavItem key={item.title} item={item} />
         ))}

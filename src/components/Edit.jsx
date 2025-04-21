@@ -1,36 +1,38 @@
-  import React, { useState } from "react";
+"use client"
 
-  function Edit({ initialContent, onCancel, onSave }) {
-    const [editedContent, setEditedContent] = useState(initialContent);
+import { useState } from "react"
 
-    const handleSave = () => {
-      onSave(editedContent);
-    };
+function Edit({ initialContent, onCancel, onSave }) {
+  const [editedContent, setEditedContent] = useState(initialContent)
 
-    return (
-      <div className="w-full text-sm">
-        <input
-          className="bg-[#222222] outline-none border-b w-3/4 p-2 focus:border-purple-500 transition-colors"
-          value={editedContent}
-          autoFocus
-          onChange={(e) => setEditedContent(e.target.value)}
-        />
-        <div className="space-x-4 mt-3 w-3/4 inline-flex justify-end items-center">
-          <button
-            className="bg-[#222222] py-1.5 px-4 font-normal rounded-lg hover:bg-black transition-colors cursor-pointer"
-            onClick={onCancel}
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSave}
-            className="bg-[#222222] py-1.5 px-4 font-normal rounded-lg hover:bg-black transition-colors cursor-pointer"
-          >
-            Save
-          </button>
-        </div>
-      </div>
-    );
+  const handleSave = () => {
+    onSave(editedContent)
   }
 
-  export default Edit;
+  return (
+    <div className="w-full text-sm">
+      <input
+        className="bg-[#0d3446] outline-none border-b border-[#1e3a47] w-3/4 p-2 focus:border-[#00ed64] transition-colors rounded-md"
+        value={editedContent}
+        autoFocus
+        onChange={(e) => setEditedContent(e.target.value)}
+      />
+      <div className="space-x-4 mt-3 w-3/4 inline-flex justify-end items-center">
+        <button
+          className="bg-[#0d3446] py-1.5 px-4 font-normal rounded-md hover:bg-[#164863] transition-colors cursor-pointer"
+          onClick={onCancel}
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleSave}
+          className="bg-[#00ed64] py-1.5 px-4 font-normal rounded-md hover:bg-[#00c050] transition-colors cursor-pointer text-[#051622]"
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  )
+}
+
+export default Edit

@@ -21,16 +21,12 @@ function VideoDetail() {
   const { videoId } = useParams()
   const [page, setPage] = useState(1)
 
-  // Video data
   const video = useSelector((state) => state.video?.video)
   const allVideos = useSelector((state) => state.video?.videos?.docs || [])
   const videosLoading = useSelector((state) => state.video?.loading)
 
-  // Comments data
   const comments = useSelector((state) => state.comment?.comments)
-  console.log('total comments: ',comments);
   const totalComments = useSelector((state) => state.comment?.totalComments)
-
   const hasNextPage = useSelector((state) => state.comment?.hasNextPage)
   const commentLoading = useSelector((state) => state.comment?.loading)
 
@@ -53,11 +49,12 @@ function VideoDetail() {
   }, [page, commentLoading, hasNextPage, dispatch, videoId])
 
   return (
-    <div className="bg-[#0f0f0f] min-h-screen text-white">
+    <div className="bg-[#051622] min-h-screen text-white">
       <Navbar />
-      <div className="max-w-[1800px] mx-auto px-4 pt-16 flex gap-6">
+
+      <div className="max-w-[1800px] mx-auto px-4 pt-16 flex flex-col lg:flex-row gap-4 lg:gap-6">
         {/* Main Content */}
-        <div className="flex-1 max-w-[1100px]">
+        <div className="flex-1 max-w-full lg:max-w-[1100px]">
           {/* Video Player */}
           <div className="w-full bg-black rounded-xl overflow-hidden">
             <Video
@@ -115,17 +112,17 @@ function VideoDetail() {
         </div>
 
         {/* Related Videos Sidebar */}
-        <div className="w-[350px] shrink-0 space-y-3">
+        <div className="w-full lg:w-[350px] shrink-0 space-y-3 mt-6 lg:mt-0">
           <h3 className="font-medium text-[15px] mb-2">Related Videos</h3>
 
           {videosLoading ? (
             Array(5).fill(0).map((_, i) => (
               <div key={i} className="flex gap-2">
-                <div className="w-[168px] h-[94px] bg-[#252525] rounded animate-pulse" />
+                <div className="w-[168px] h-[94px] bg-[#0d3446] rounded animate-pulse" />
                 <div className="flex-1 space-y-1">
-                  <div className="h-3.5 bg-[#252525] rounded w-full" />
-                  <div className="h-3 bg-[#252525] rounded w-3/4" />
-                  <div className="h-3 bg-[#252525] rounded w-2/3" />
+                  <div className="h-3.5 bg-[#0d3446] rounded w-full" />
+                  <div className="h-3 bg-[#0d3446] rounded w-3/4" />
+                  <div className="h-3 bg-[#0d3446] rounded w-2/3" />
                 </div>
               </div>
             ))

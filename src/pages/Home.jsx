@@ -22,8 +22,6 @@ function HomePage() {
 
   useEffect(() => {
     if (videos && videos.length > 0) {
-      console.log("Video data sample:", videos[0])
-      console.log("Owner details:", videos[0].ownerDetails)
     }
   }, [videos])
 
@@ -55,18 +53,20 @@ function HomePage() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [fetchMoreVideos, loading, hasNextPage])
 
-  const uniqueVideos = videos?.filter(
-    (video, index, self) =>
-      index === self.findIndex((v) => v._id === video._id)
-  )
-
+  const uniqueVideos = videos?.filter((video, index, self) => index === self.findIndex((v) => v._id === video._id))
 
   return (
-    <div className="bg-[#121212] min-h-screen px-0 sm:px-6 pt-16 sm:pt-14 sm:ml-60 pb-20 sm:pb-8">
+    <div className="bg-[#051622] min-h-screen px-4 sm:px-6 md:px-10 pt-16 sm:pt-14 sm:ml-60 pb-20 sm:pb-8">
+      {/* Recommended Videos Header */}
+      <h2 className="text-2xl sm:text-xl md:text-2xl font-bold text-white md:text-white mt-3 mb-5">
+        Recommended Videos
+      </h2>
+
       {/* Initial loading skeleton when no videos yet */}
       {isLoading && (!videos || videos.length === 0) && <HomeSkeleton />}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-y-4 sm:gap-x-4 sm:gap-y-3 text-white">
+      <div className="grid gap-4 grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 text-white">
+        {/* Videos */}
         {uniqueVideos?.map((video) => (
           <VideoList
             key={video._id}

@@ -48,12 +48,12 @@ function ChannelHeader({
   return (
     <div className="w-full text-white">
       {/* Cover image section with position container */}
-      <section className="w-full ">
+      <section className="w-full">
         <div className="w-full">
           {coverImage ? (
             <img src={coverImage || "/placeholder.svg"} alt="Cover" className="sm:h-40 h-28 w-full object-cover" />
           ) : (
-            <div className="sm:h-40 h-28 w-full border-slate-600 border-b bg-black"></div>
+            <div className="sm:h-40 h-28 w-full border-[#1e3a47] border-b bg-[#072331]"></div>
           )}
         </div>
 
@@ -73,7 +73,7 @@ function ChannelHeader({
             <img
               src={avatar || "/placeholder.svg"}
               alt={username}
-              className="rounded-full sm:w-32 w-28 sm:h-32 h-28 object-cover border-2 border-purple-700"
+              className="rounded-full sm:w-32 w-28 sm:h-32 h-28 object-cover border-2 border-[#00ed64]"
             />
           )}
           {edit && (
@@ -91,24 +91,23 @@ function ChannelHeader({
               <h1 className="text-xl font-bold">{fullName}</h1>
               <h3 className="text-sm text-slate-400">@{username}</h3>
               <div className="flex gap-3">
-  <p className="text-xs text-slate-400">{localSubscribersCount} Subscribers</p>
-  {user === userProfile && (
-    <Link
-      to="/subscriptions"
-      className="text-xs text-slate-400 hover:text-purple-400 underline transition-all"
-    >
-      My Subscriptions: {subscribedCount}
-    </Link>
-  )}
-</div>
-
+                <p className="text-xs text-slate-400">{localSubscribersCount} Subscribers</p>
+                {user === userProfile && (
+                  <Link
+                    to="/subscriptions"
+                    className="text-xs text-slate-400 hover:text-[#00ed64] underline transition-all"
+                  >
+                    My Subscriptions: {subscribedCount}
+                  </Link>
+                )}
+              </div>
             </div>
 
             {/* Action buttons */}
             <div className="flex-shrink-0">
               {user == userProfile && !edit && (
                 <Link to={"/edit"}>
-                  <Button className="border-slate-500 hover:scale-110 transition-all text-white font-bold px-4 py-1 bg-purple-500">
+                  <Button className="border-[#1e3a47] hover:scale-110 transition-all text-[#051622] font-bold px-4 py-1 bg-[#00ed64] hover:bg-[#00c050]">
                     Edit
                   </Button>
                 </Link>
@@ -116,14 +115,14 @@ function ChannelHeader({
               {user != userProfile && !edit && (
                 <Button
                   onClick={handleSubscribe}
-                  className="border-slate-500 hover:scale-110 transition-all text-black font-bold px-4 py-1 bg-purple-500"
+                  className="border-[#1e3a47] hover:scale-110 transition-all text-[#051622] font-bold px-4 py-1 bg-[#00ed64] hover:bg-[#00c050]"
                 >
                   {localIsSubscribed ? "Subscribed" : "Subscribe"}
                 </Button>
               )}
               {edit && (
                 <Link to={`/channel/${username}`}>
-                  <Button className="border-slate-500 hover:scale-110 transition-all text-white font-bold px-4 py-1 bg-purple-500">
+                  <Button className="border-[#1e3a47] hover:scale-110 transition-all text-[#051622] font-bold px-4 py-1 bg-[#00ed64] hover:bg-[#00c050]">
                     View Channel
                   </Button>
                 </Link>

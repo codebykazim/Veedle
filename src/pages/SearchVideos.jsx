@@ -7,7 +7,7 @@ import { getAllVideos, makeVideosNull } from "../store/videoSlice"
 import { Filter, X } from "lucide-react"
 import { useParams, useSearchParams } from "react-router-dom"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import HomeSkeleton from "@/skeleton/HomeSkeleton" // ✅ Import the skeleton
+import HomeSkeleton from "@/skeleton/HomeSkeleton"
 
 function SearchVideos() {
   const loading = useSelector((state) => state.video?.loading)
@@ -33,19 +33,18 @@ function SearchVideos() {
   }
 
   const uniqueVideos = videos?.docs?.filter(
-    (video, index, self) =>
-      index === self.findIndex((v) => v._id === video._id)
+    (video, index, self) => index === self.findIndex((v) => v._id === video._id),
   )
 
   return (
-    <div className="bg-[#121212] min-h-screen px-0 sm:px-6 pt-16 sm:pt-14 sm:ml-60 pb-20 sm:pb-8 text-white">
+    <div className="bg-[#051622] min-h-screen px-4 sm:px-8 pt-16 sm:pt-17 sm:ml-60 pb-20 sm:pb-8 text-white">
       {/* Header Section */}
-      <div className="flex justify-between items-center pb-4">
+      <div className="flex justify-between items-center pb-1">
         <h1 className="text-xl font-semibold">
-          Search results for <span className="text-purple-400">"{query}"</span>
+          Search results for <span className="text-[#00ed64]">"{query}"</span>
         </h1>
         <button
-          className="flex items-center gap-2 px-3 py-1.5 bg-[#252525] hover:bg-[#3d3d3d] rounded-full text-sm transition-colors"
+          className="flex items-center gap-2 px-3 py-1.5 bg-[#0d3446] hover:bg-[#164863] rounded-md text-sm transition-colors"
           onClick={() => setFilterOpen(true)}
         >
           <Filter size={16} />
@@ -55,21 +54,18 @@ function SearchVideos() {
 
       {/* Filter Dialog */}
       <Dialog open={filterOpen} onOpenChange={setFilterOpen}>
-        <DialogContent className="bg-[#0f0f0f] border border-[#252525] text-white sm:max-w-md">
-          <DialogHeader className="border-b border-[#252525] pb-4">
+        <DialogContent className="bg-[#072331] border border-[#1e3a47] text-white sm:max-w-md">
+          <DialogHeader className="border-b border-[#1e3a47] pb-4">
             <DialogTitle className="text-xl font-bold flex justify-between items-center">
               Search Filters
-              <button
-                className="text-gray-400 hover:text-white transition-colors"
-                onClick={() => setFilterOpen(false)}
-              >
+              <button className="text-gray-400 hover:text-white transition-colors" onClick={() => setFilterOpen(false)}>
                 <X size={18} />
               </button>
             </DialogTitle>
           </DialogHeader>
 
           <div className="p-2">
-            <h3 className="font-medium text-[15px] border-b border-[#252525] pb-2 mb-3">Sort By</h3>
+            <h3 className="font-medium text-[15px] border-b border-[#1e3a47] pb-2 mb-3">Sort By</h3>
             <div className="space-y-1 text-sm">
               {[
                 { label: "Upload date (Latest)", value: "createdAt", type: "desc" },
@@ -83,14 +79,15 @@ function SearchVideos() {
                   key={`${option.value}-${option.type}`}
                   onClick={() => handleSortParams(option.value, option.type)}
                   className={`w-full text-left py-2 px-3 rounded-md transition-colors flex justify-between items-center
-                    ${searchParams.get("sortBy") === option.value && searchParams.get("sortType") === option.type
-                      ? "bg-[#252525] text-purple-400"
-                      : "hover:bg-[#252525]"
+                    ${
+                      searchParams.get("sortBy") === option.value && searchParams.get("sortType") === option.type
+                        ? "bg-[#0d3446] text-[#00ed64]"
+                        : "hover:bg-[#0d3446]"
                     }`}
                 >
                   <span>{option.label}</span>
                   {searchParams.get("sortBy") === option.value && searchParams.get("sortType") === option.type && (
-                    <span className="text-purple-400">✓</span>
+                    <span className="text-[#00ed64]">✓</span>
                   )}
                 </button>
               ))}

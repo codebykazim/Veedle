@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { getLikedVideos } from "../store/likeSlice"
 import { makeVideosNull } from "../store/videoSlice"
 import LikedVideosSkeleton from "@/skeleton/LikedVideosSkeleton"
-import { MoreVertical } from "lucide-react"
+import { MoreVertical } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import MessyDoodle from "../assets/MessyDoodle.svg"
 import { useNavigate } from "react-router-dom"
@@ -43,7 +43,7 @@ function LikedVideos() {
   const hasVideos = Array.isArray(likedVideos) && likedVideos.length > 0
 
   return (
-    <div className="bg-[#121212] min-h-screen sm:ml-60 mt-14 text-white px-2 sm:px-0 pb-16 sm:pb-6">
+    <div className="bg-[#051622] min-h-screen sm:ml-60 mt-14 text-white px-2 sm:px-0 pb-16 sm:pb-6">
       {!hasVideos && (
         <div className="flex flex-col items-center justify-center py-10 sm:py-16 p-4 sm:p-6">
           <img src={MessyDoodle || "/placeholder.svg"} alt="No videos available" className="mb-4 sm:mb-6" width="160" />
@@ -58,7 +58,7 @@ function LikedVideos() {
         <div className="flex flex-col md:flex-row gap-3 md:gap-6 p-2 sm:p-3 md:p-6">
           {/* Left Panel - Featured Video */}
           <div
-            className="relative w-full md:w-[300px] h-auto md:h-full md:sticky md:top-16 p-3 border border-[#5f5d5d] rounded-lg overflow-hidden"
+            className="relative w-full md:w-[300px] h-auto md:h-full md:sticky md:top-16 p-3 border border-[#1e3a47] rounded-lg overflow-hidden"
             style={{
               backgroundImage: firstLikedVideo?.likedVideo?.thumbnail?.url
                 ? `url(${firstLikedVideo.likedVideo.thumbnail.url})`
@@ -67,7 +67,7 @@ function LikedVideos() {
               backgroundPosition: "center",
             }}
           >
-            <div className="absolute inset-0 backdrop-blur-md bg-black/50 rounded-lg"></div>
+            <div className="absolute inset-0 backdrop-blur-md bg-[#051622]/70 rounded-lg"></div>
 
             <div className="relative z-10">
               <div className="w-full h-36 sm:h-32 md:h-40">
@@ -86,7 +86,7 @@ function LikedVideos() {
 
               <div className="flex items-center mt-2 sm:mt-3 gap-2 mb-1 sm:mb-2 md:mb-0">
                 <Button
-                  className="bg-white text-black hover:bg-gray-200 rounded-full px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm"
+                  className="bg-[#00ed64] text-[#051622] hover:bg-[#00c050] rounded-md px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm"
                   onClick={playFirstVideo}
                 >
                   Play
@@ -108,7 +108,7 @@ function LikedVideos() {
                 return (
                   <div
                     key={video._id}
-                    className="flex gap-2 sm:gap-2 md:gap-4 p-2 hover:bg-[#272727] group rounded-lg cursor-pointer"
+                    className="flex gap-2 sm:gap-2 md:gap-4 p-2 hover:bg-[#0d3446] group rounded-lg cursor-pointer"
                     onClick={() => navigate(`/watch/${video._id}`)}
                   >
                     <div className="flex items-center w-5 sm:w-6 md:w-8 text-center text-gray-400 font-medium text-xs sm:text-sm md:text-base">
@@ -137,7 +137,7 @@ function LikedVideos() {
                         </div>
                       </div>
                     </div>
-                    <button className="self-start p-1 sm:p-1.5 md:p-2 rounded-full text-gray-400 opacity-0 group-hover:opacity-100 hover:bg-[#383838]">
+                    <button className="self-start p-1 sm:p-1.5 md:p-2 rounded-full text-gray-400 opacity-0 group-hover:opacity-100 hover:bg-[#164863]">
                       <MoreVertical size={14} className="sm:hidden" />
                       <MoreVertical size={16} className="hidden sm:block" />
                     </button>

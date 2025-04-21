@@ -1,3 +1,5 @@
+"use client"
+
 function Video({ src, poster }) {
   return (
     <div className="relative w-full bg-black rounded-md overflow-hidden">

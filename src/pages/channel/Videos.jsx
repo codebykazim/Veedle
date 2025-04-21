@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useState } from "react"
 import NoVideosFound from "../../components/NoVideosFound"
 import VideoList from "../../components/VideoList"
@@ -9,8 +11,6 @@ function ChannelVideos() {
   const dispatch = useDispatch()
   const userId = useSelector((state) => state.user?.profileData?._id)
   const videos = useSelector((state) => state.video?.videos?.docs)
-  console.log(videos);
-  
   const loading = useSelector((state) => state.video?.loading)
   const [searchParams, setSearchParams] = useState()
   const [activeButton, setActiveButton] = useState("button1")
@@ -48,10 +48,8 @@ function ChannelVideos() {
             setActiveButton("button1")
             handleSort("createdAt", "desc")
           }}
-          className={`py-1.5 px-4 rounded-full transition-colors ${
-            activeButton === "button1"
-              ? "bg-purple-500 text-white"
-              : "bg-[#222222] hover:bg-[#333333] text-gray-200"
+          className={`py-1.5 px-4 rounded-md transition-colors ${
+            activeButton === "button1" ? "bg-[#00ed64] text-[#051622]" : "bg-[#072331] hover:bg-[#0d3446] text-gray-200"
           }`}
         >
           Latest
@@ -61,10 +59,8 @@ function ChannelVideos() {
             setActiveButton("button2")
             handleSort("views", "desc")
           }}
-          className={`py-1.5 px-4 rounded-full transition-colors ${
-            activeButton === "button2"
-              ? "bg-purple-500 text-white"
-              : "bg-[#222222] hover:bg-[#333333] text-gray-200"
+          className={`py-1.5 px-4 rounded-md transition-colors ${
+            activeButton === "button2" ? "bg-[#00ed64] text-[#051622]" : "bg-[#072331] hover:bg-[#0d3446] text-gray-200"
           }`}
         >
           Popular
@@ -74,10 +70,8 @@ function ChannelVideos() {
             setActiveButton("button3")
             handleSort("createdAt", "asc")
           }}
-          className={`py-1.5 px-4 rounded-full transition-colors ${
-            activeButton === "button3"
-              ? "bg-purple-500 text-white"
-              : "bg-[#222222] hover:bg-[#333333] text-gray-200"
+          className={`py-1.5 px-4 rounded-md transition-colors ${
+            activeButton === "button3" ? "bg-[#00ed64] text-[#051622]" : "bg-[#072331] hover:bg-[#0d3446] text-gray-200"
           }`}
         >
           Oldest
@@ -104,9 +98,9 @@ function ChannelVideos() {
       {loading && videos?.length > 0 && (
         <div className="flex justify-center items-center py-8">
           <div className="animate-pulse flex space-x-2">
-            <div className="h-2 w-2 bg-purple-500 rounded-full"></div>
-            <div className="h-2 w-2 bg-purple-500 rounded-full"></div>
-            <div className="h-2 w-2 bg-purple-500 rounded-full"></div>
+            <div className="h-2 w-2 bg-[#00ed64] rounded-full"></div>
+            <div className="h-2 w-2 bg-[#00ed64] rounded-full"></div>
+            <div className="h-2 w-2 bg-[#00ed64] rounded-full"></div>
           </div>
         </div>
       )}

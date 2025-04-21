@@ -1,22 +1,23 @@
-import React from "react";
-import Navbar from "../components/Header/Navbar";
-import { Outlet } from "react-router-dom";
-import Sidebar from "../components/Header/Sidebar";
+"use client"
+
+import Navbar from "../components/Header/Navbar"
+import { Outlet } from "react-router-dom"
+import Sidebar from "../components/Header/Sidebar"
 
 function Layout() {
-    return (
-        <>
-            <Navbar />
-            <div className="sm:flex flex-none">
-                <div className="">
-                    <Sidebar />
-                </div>
-                <div className="sm:flex-1">
-                    <Outlet />
-                </div>
-            </div>
-        </>
-    );
+  return (
+    <div className="bg-[#051622] min-h-screen">
+      <Navbar />
+      <div className="sm:flex flex-none">
+        <div className="">
+          <Sidebar />
+        </div>
+        <div className="sm:flex-1">
+          <Outlet />
+        </div>
+      </div>
+    </div>
+  )
 }
 
-export default Layout;
+export default Layout
