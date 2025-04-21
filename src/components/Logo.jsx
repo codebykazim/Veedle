@@ -35,13 +35,13 @@ function Logo() {
         </path> */}
 
         {/* Text: VibeCast */}
-        <text x="40" y="28" fontFamily="sans-serif" fontSize="20" fontWeight="bold" fill="white" letterSpacing="0.5">
-          VIBECAST
+        <text x="39" y="29" fontFamily="sans-serif" fontSize="25" fontWeight="bold" fill="white" letterSpacing="2">
+          VEEDLE
         </text>
 
         {/* Animated Accent Line */}
-        <rect x="40" y="34" width="0" height="2" rx="1" fill="url(#vibecastGradient)">
-          <animate attributeName="width" values="0;100;100" dur="2s" begin="0s" repeatCount="1" fill="freeze" />
+        <rect x="40" y="36" width="0" height="2" rx="1" fill="url(#vibecastGradient)">
+          <animate attributeName="width" values="0;109;109" dur="2s" begin="0s" repeatCount="1" fill="freeze" />
         </rect>
       </svg>
     </div>
