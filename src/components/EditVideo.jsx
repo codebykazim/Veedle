@@ -32,7 +32,8 @@ function EditVideo({ videoId, title, description, setEditVideoPopup, thumbnail }
   useEffect(() => {
     setValue("title", title)
     setValue("description", description)
-  }, [title, description, setValue])
+    setValue("thumbnail", thumbnail);
+  }, [title, description, thumbnail, setValue])
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-80 p-4">
