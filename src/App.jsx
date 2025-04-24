@@ -149,7 +149,8 @@ function App() {
             element={
               <Suspense fallback={<Spinner />}>
                 <AuthLayout authentication={true}>
-                  <AdminDashboard />
+                <Subscriptions />
+
                 </AuthLayout>
               </Suspense>
             }
@@ -159,7 +160,7 @@ function App() {
             element={
               <Suspense fallback={<Spinner />}>
                 <AuthLayout authentication={true}>
-                  <Subscriptions />
+                <AdminDashboard />
                 </AuthLayout>
               </Suspense>
             }
