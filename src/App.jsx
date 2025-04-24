@@ -5,26 +5,29 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCurrentUser } from "./store/authSlice";
 import Spinner from "./components/Spinner";
 
+
 const Home = lazy(() => import("./pages/Home"));
-const Login = lazy(() => import("./components/index"));
-const SignUp = lazy(() => import("./components/index"));
+
+const Login = lazy(() => import("./components/Login"));
+const SignUp = lazy(() => import("./components/Signup"));
+const AuthLayout = lazy(() => import("./components/AuthLayout"));
+const Layout = lazy(() => import("./components/Layout"));
+const EditPersonalInfo = lazy(() => import("./components/EditPersonalInfo"));
+const ChangePassword = lazy(() => import("./components/ChangePassword"));
+
 const Channel = lazy(() => import("./pages/Channel/Channel"));
-const ChannelVideos = lazy(() => import("./pages/index"));
-const ChannelTweets = lazy(() => import("./pages/index"));
-const ChannelSubscribers = lazy(() => import("./pages/index"));
+const ChannelVideos = lazy(() => import("./pages/Channel/Videos"));
+const ChannelTweets = lazy(() => import("./pages/Channel/Tweets"));
+const ChannelSubscribers = lazy(() => import("./pages/Channel/Subscribers"));
+const ChannelPlaylist = lazy(() => import("./pages/Channel/Playlist"));
 const LikedVideos = lazy(() => import("./pages/LikedVideos"));
 const History = lazy(() => import("./pages/History"));
 const VideoDetail = lazy(() => import("./pages/VideoDetail"));
 const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
 const EditChannel = lazy(() => import("./pages/EditChannel"));
-const ChannelPlaylist = lazy(() => import("./pages/index"));
 const PlaylistVideos = lazy(() => import("./pages/PlaylistVideos"));
 const SearchVideos = lazy(() => import("./pages/SearchVideos"));
 const TermsAndConditions = lazy(() => import("./pages/TermsAndConditions"));
-const AuthLayout = lazy(() => import("./components/index"));
-const Layout = lazy(() => import("./components/index"));
-const EditPersonalInfo = lazy(() => import("./components/index"));
-const ChangePassword = lazy(() => import("./components/index"));
 
 function App() {
   const dispatch = useDispatch();
