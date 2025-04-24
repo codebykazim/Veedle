@@ -1,201 +1,89 @@
-import React, { useEffect } from "react";
+import React, { useEffect, lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
-import { AuthLayout, Login, SignUp } from "./components/index";
 import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrentUser } from "./store/authSlice";
-import Spinner  from './components/Spinner';
-import {
-  History,
-  Channel,
-  ChannelVideos,
-  ChannelTweets,
-  LikedVideos,
-  VideoDetail,
-  ChannelSubscribers,
-  Subscriptions,
-  AdminDashboard,
-  EditChannel,
-  Home,
-  SearchVideos,
-  TermsAndConditions,
-  ChannelPlaylist,
-  PlaylistVideos
-} from "./pages";
-import { EditPersonalInfo, ChangePassword, Layout } from "./components";
+import Spinner from "./components/Spinner";
+
+const Home = lazy(() => import("./pages/Home"));
+const Login = lazy(() => import("./components/Login"));
+const SignUp = lazy(() => import("./components/SignUp"));
+const Channel = lazy(() => import("./pages/Channel/Channel"));
+const ChannelVideos = lazy(() => import("./pages/index"));
+const ChannelTweets = lazy(() => import("./pages/index"));
+const ChannelSubscribers = lazy(() => import("./pages/index"));
+const LikedVideos = lazy(() => import("./pages/LikedVideos"));
+const History = lazy(() => import("./pages/History"));
+const VideoDetail = lazy(() => import("./pages/VideoDetail"));
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
+const EditChannel = lazy(() => import("./pages/EditChannel"));
+const ChannelPlaylist = lazy(() => import("./pages/index"));
+const PlaylistVideos = lazy(() => import("./pages/PlaylistVideos"));
+const SearchVideos = lazy(() => import("./pages/SearchVideos"));
+const TermsAndConditions = lazy(() => import("./pages/TermsAndConditions"));
+const AuthLayout = lazy(() => import("./components/AuthLayout"));
+const Layout = lazy(() => import("./components/Layout"));
+const EditPersonalInfo = lazy(() => import("./components/EditPersonalInfo"));
+const ChangePassword = lazy(() => import("./components/ChangePassword"));
 
 function App() {
   const dispatch = useDispatch();
-  const { loading, status } = useSelector(state => state.auth);
+  const { loading } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(getCurrentUser());
   }, [dispatch]);
 
-  if (loading) {
-    return <Spinner />;
-  }
-
   return (
     <>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route
-            path=""
-            element={
-              <AuthLayout authentication={false}>
-                <Home />
-              </AuthLayout>
-            }
-          />
-          <Route
-            path="/search/:query"
-            element={
-              <AuthLayout authentication={false}>
-                <SearchVideos />
-              </AuthLayout>
-            }
-          />
-          <Route
-            path="/channel/:username"
-            element={
-              <AuthLayout authentication={true}>
-                <Channel />
-              </AuthLayout>
-            }
-          >
+      <Suspense fallback={<Spinner />}>
+        <Routes>
+          <Route path="/" element={<Layout />}>
             <Route
-              path="videos"
-              element={
-                <AuthLayout authentication={true}>
-                  <ChannelVideos />
-                </AuthLayout>
-              }
-            />
-            <Route
-              path="playlists"
-              element={
-                <AuthLayout authentication={true}>
-                  <ChannelPlaylist />
-                </AuthLayout>
-              }
-            />
-            <Route
-              path="playlist/:id"
-              element={
-                <AuthLayout authentication={true}>
-                  <PlaylistVideos />
-                </AuthLayout>
-              }
-            />
-            <Route
-              path="tweets"
-              element={
-                <AuthLayout authentication={true}>
-                  <ChannelTweets />
-                </AuthLayout>
-              }
-            />
-            <Route
-              path="subscribed"
+              path=""
               element={
                 <AuthLayout authentication={false}>
-                  <ChannelSubscribers />
-                </AuthLayout>
-              }
-            />
-          </Route>
-          <Route
-            path="/history"
-            element={
-              <AuthLayout authentication={true}>
-                <History />
-              </AuthLayout>
-            }
-          />
-          <Route
-            path="/liked-videos"
-            element={
-              <AuthLayout authentication={true}>
-                <LikedVideos />
-              </AuthLayout>
-            }
-          />
-          <Route
-          path="/subscriptions"
-          element={
-            <AuthLayout authentication={true}>
-              <Subscriptions />
-            </AuthLayout>
-          }
-        />
-          <Route
-            path="/edit"
-            element={
-              <AuthLayout authentication={true}>
-                <EditChannel />
-              </AuthLayout>
-            }
-          >
-            <Route
-              path="personalInfo"
-              element={
-                <AuthLayout authentication={true}>
-                  <EditPersonalInfo />
+                  <Home />
                 </AuthLayout>
               }
             />
             <Route
-              path="password"
+              path="/search/:query"
               element={
-                <AuthLayout authentication={true}>
-                  <ChangePassword />
+                <AuthLayout authentication={false}>
+                  <SearchVideos />
                 </AuthLayout>
               }
             />
+            <Route
+              path="/channel/:username"
+              element={
+                <AuthLayout authentication={true}>
+                  <Channel />
+                </AuthLayout>
+              }
+            >
+              <Route path="videos" element={<ChannelVideos />} />
+              <Route path="playlists" element={<ChannelPlaylist />} />
+              <Route path="playlist/:id" element={<PlaylistVideos />} />
+              <Route path="tweets" element={<ChannelTweets />} />
+              <Route path="subscribed" element={<ChannelSubscribers />} />
+            </Route>
+            <Route path="/history" element={<History />} />
+            <Route path="/liked-videos" element={<LikedVideos />} />
+            <Route path="/subscriptions" element={<AdminDashboard />} />
+            <Route path="/edit" element={<EditChannel />}>
+              <Route path="personalInfo" element={<EditPersonalInfo />} />
+              <Route path="password" element={<ChangePassword />} />
+            </Route>
           </Route>
-        </Route>
-        <Route
-          path="/login"
-          element={
-            <AuthLayout authentication={false}>
-              <Login />
-            </AuthLayout>
-          }
-        />
-        <Route
-          path="/signup"
-          element={
-            <AuthLayout authentication={false}>
-              <SignUp />
-            </AuthLayout>
-          }
-        />
-        <Route
-          path="/watch/:videoId"
-          element={
-            <AuthLayout authentication={true}>
-              <VideoDetail />
-            </AuthLayout>
-          }
-        />
-        <Route
-          path="/collections"
-          element={
-            <AuthLayout authentication={true}>
-              <AdminDashboard />
-            </AuthLayout>
-          }
-        />
-        <Route
-          path="/terms&conditions"
-          element={
-            <AuthLayout authentication={true}>
-              <TermsAndConditions />
-            </AuthLayout>
-          }
-        />
-      </Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/watch/:videoId" element={<VideoDetail />} />
+          <Route path="/collections" element={<AdminDashboard />} />
+          <Route path="/terms&conditions" element={<TermsAndConditions />} />
+        </Routes>
+      </Suspense>
 
       <Toaster
         position="top-right"
