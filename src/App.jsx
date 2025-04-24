@@ -73,11 +73,13 @@ function App() {
           <Route
             path="/channel/:username"
             element={
+              <Suspense fallback={<Spinner />}>
               <AuthLayout authentication={true}>
-                <Suspense fallback={<Spinner />}>
+
                   <Channel />
-                </Suspense>
+
               </AuthLayout>
+              </Suspense>
             }
           >
             <Route
