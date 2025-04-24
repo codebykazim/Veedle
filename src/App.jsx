@@ -6,8 +6,8 @@ import { getCurrentUser } from "./store/authSlice";
 import Spinner from "./components/Spinner";
 
 const Home = lazy(() => import("./pages/Home"));
-const Login = lazy(() => import("./components/Login"));
-const SignUp = lazy(() => import("./components/SignUp"));
+const Login = lazy(() => import("./components/index"));
+const SignUp = lazy(() => import("./components/index"));
 const Channel = lazy(() => import("./pages/Channel/Channel"));
 const ChannelVideos = lazy(() => import("./pages/index"));
 const ChannelTweets = lazy(() => import("./pages/index"));
@@ -21,10 +21,10 @@ const ChannelPlaylist = lazy(() => import("./pages/index"));
 const PlaylistVideos = lazy(() => import("./pages/PlaylistVideos"));
 const SearchVideos = lazy(() => import("./pages/SearchVideos"));
 const TermsAndConditions = lazy(() => import("./pages/TermsAndConditions"));
-const AuthLayout = lazy(() => import("./components/AuthLayout"));
-const Layout = lazy(() => import("./components/Layout"));
-const EditPersonalInfo = lazy(() => import("./components/EditPersonalInfo"));
-const ChangePassword = lazy(() => import("./components/ChangePassword"));
+const AuthLayout = lazy(() => import("./components/index"));
+const Layout = lazy(() => import("./components/index"));
+const EditPersonalInfo = lazy(() => import("./components/index"));
+const ChangePassword = lazy(() => import("./components/index"));
 
 function App() {
   const dispatch = useDispatch();
