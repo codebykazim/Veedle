@@ -5,16 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCurrentUser } from "./store/authSlice";
 import Spinner from "./components/Spinner";
 
-
+// Lazy loaded pages & components
 const Home = lazy(() => import("./pages/Home"));
-
 const Login = lazy(() => import("./components/Login"));
 const SignUp = lazy(() => import("./components/Signup"));
 const AuthLayout = lazy(() => import("./components/AuthLayout"));
 const Layout = lazy(() => import("./components/Layout"));
 const EditPersonalInfo = lazy(() => import("./components/EditPersonalInfo"));
 const ChangePassword = lazy(() => import("./components/ChangePassword"));
-
 const Channel = lazy(() => import("./pages/Channel/Channel"));
 const ChannelVideos = lazy(() => import("./pages/Channel/Videos"));
 const ChannelTweets = lazy(() => import("./pages/Channel/Tweets"));
@@ -39,55 +37,123 @@ function App() {
 
   return (
     <>
-      <Suspense fallback={<Spinner />}>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route
-              path=""
-              element={
+      <Routes>
+        <Route path="/" element={<Suspense fallback={<Spinner />}><Layout /></Suspense>}>
+          {/* Public Routes */}
+          <Route
+            index
+            element={
+              <Suspense fallback={<Spinner />}>
                 <AuthLayout authentication={false}>
                   <Home />
                 </AuthLayout>
-              }
-            />
-            <Route
-              path="/search/:query"
-              element={
+              </Suspense>
+            }
+          />
+          <Route
+            path="/search/:query"
+            element={
+              <Suspense fallback={<Spinner />}>
                 <AuthLayout authentication={false}>
                   <SearchVideos />
                 </AuthLayout>
-              }
-            />
-            <Route
-              path="/channel/:username"
-              element={
+              </Suspense>
+            }
+          />
+
+          {/* Protected Routes */}
+          <Route
+            path="/channel/:username"
+            element={
+              <Suspense fallback={<Spinner />}>
                 <AuthLayout authentication={true}>
                   <Channel />
                 </AuthLayout>
-              }
-            >
-              <Route path="videos" element={<ChannelVideos />} />
-              <Route path="playlists" element={<ChannelPlaylist />} />
-              <Route path="playlist/:id" element={<PlaylistVideos />} />
-              <Route path="tweets" element={<ChannelTweets />} />
-              <Route path="subscribed" element={<ChannelSubscribers />} />
-            </Route>
-            <Route path="/history" element={<History />} />
-            <Route path="/liked-videos" element={<LikedVideos />} />
-            <Route path="/subscriptions" element={<AdminDashboard />} />
-            <Route path="/edit" element={<EditChannel />}>
-              <Route path="personalInfo" element={<EditPersonalInfo />} />
-              <Route path="password" element={<ChangePassword />} />
-            </Route>
+              </Suspense>
+            }
+          >
+            <Route
+              path="videos"
+              element={<Suspense fallback={<Spinner />}><ChannelVideos /></Suspense>}
+            />
+            <Route
+              path="playlists"
+              element={<Suspense fallback={<Spinner />}><ChannelPlaylist /></Suspense>}
+            />
+            <Route
+              path="playlist/:id"
+              element={<Suspense fallback={<Spinner />}><PlaylistVideos /></Suspense>}
+            />
+            <Route
+              path="tweets"
+              element={<Suspense fallback={<Spinner />}><ChannelTweets /></Suspense>}
+            />
+            <Route
+              path="subscribed"
+              element={<Suspense fallback={<Spinner />}><ChannelSubscribers /></Suspense>}
+            />
           </Route>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/watch/:videoId" element={<VideoDetail />} />
-          <Route path="/collections" element={<AdminDashboard />} />
-          <Route path="/terms&conditions" element={<TermsAndConditions />} />
-        </Routes>
-      </Suspense>
 
+          <Route
+            path="/history"
+            element={
+              <Suspense fallback={<Spinner />}>
+                <AuthLayout authentication={true}>
+                  <History />
+                </AuthLayout>
+              </Suspense>
+            }
+          />
+          <Route
+            path="/liked-videos"
+            element={
+              <Suspense fallback={<Spinner />}>
+                <AuthLayout authentication={true}>
+                  <LikedVideos />
+                </AuthLayout>
+              </Suspense>
+            }
+          />
+          <Route
+            path="/subscriptions"
+            element={
+              <Suspense fallback={<Spinner />}>
+                <AuthLayout authentication={true}>
+                  <AdminDashboard />
+                </AuthLayout>
+              </Suspense>
+            }
+          />
+          <Route
+            path="/edit"
+            element={
+              <Suspense fallback={<Spinner />}>
+                <AuthLayout authentication={true}>
+                  <EditChannel />
+                </AuthLayout>
+              </Suspense>
+            }
+          >
+            <Route
+              path="personalInfo"
+              element={<Suspense fallback={<Spinner />}><EditPersonalInfo /></Suspense>}
+            />
+            <Route
+              path="password"
+              element={<Suspense fallback={<Spinner />}><ChangePassword /></Suspense>}
+            />
+          </Route>
+        </Route>
+
+        {/* Auth and misc routes outside layout */}
+        <Route path="/login" element={<Suspense fallback={<Spinner />}><Login /></Suspense>} />
+        <Route path="/signup" element={<Suspense fallback={<Spinner />}><SignUp /></Suspense>} />
+        <Route path="/watch/:videoId" element={<Suspense fallback={<Spinner />}><VideoDetail /></Suspense>} />
+        <Route path="/collections" element={<Suspense fallback={<Spinner />}><AdminDashboard /></Suspense>} />
+        <Route path="/terms&conditions" element={<Suspense fallback={<Spinner />}><TermsAndConditions /></Suspense>} />
+      </Routes>
+
+      {/* Toast Notifications */}
       <Toaster
         position="top-right"
         reverseOrder={true}
