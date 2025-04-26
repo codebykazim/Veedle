@@ -4,7 +4,7 @@ import { AuthLayout, Login, SignUp } from "./components/index";
 import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrentUser } from "./store/authSlice";
-import Spinner  from './components/Spinner';
+import Spinner from './components/Spinner';
 import {
   History,
   Channel,
@@ -57,58 +57,59 @@ function App() {
             }
           />
           <Route
-            path="/channel/:username"
+            path="/channel"
             element={
-              <AuthLayout authentication={true}>
-                <Channel />
+              <AuthLayout authentication>
+                <div /> {/* Empty element for showing login popup */}
               </AuthLayout>
             }
           >
             <Route
-              path="videos"
+              path=":username"
               element={
-                <AuthLayout authentication={true}>
-                  <ChannelVideos />
+                <AuthLayout authentication>
+                  <Channel />
                 </AuthLayout>
               }
-            />
-            <Route
-              path="playlists"
-              element={
-                <AuthLayout authentication={true}>
-                  <ChannelPlaylist />
-                </AuthLayout>
-              }
-            />
-            <Route
-              path="playlist/:id"
-              element={
-                <AuthLayout authentication={true}>
-                  <PlaylistVideos />
-                </AuthLayout>
-              }
-            />
-            <Route
-              path="tweets"
-              element={
-                <AuthLayout authentication={true}>
-                  <ChannelTweets />
-                </AuthLayout>
-              }
-            />
-            <Route
-              path="subscribed"
-              element={
-                <AuthLayout authentication={false}>
-                  <ChannelSubscribers />
-                </AuthLayout>
-              }
-            />
+            >
+              <Route
+                path="videos"
+                element={
+                  <AuthLayout authentication>
+                    <ChannelVideos />
+                  </AuthLayout>
+                }
+              />
+              <Route
+                path="playlists"
+                element={
+                  <AuthLayout authentication>
+                    <ChannelPlaylist />
+                  </AuthLayout>
+                }
+              />
+              <Route
+                path="tweets"
+                element={
+                  <AuthLayout authentication>
+                    <ChannelTweets />
+                  </AuthLayout>
+                }
+              />
+              <Route
+                path="subscribed"
+                element={
+                  <AuthLayout authentication={false}>
+                    <ChannelSubscribers />
+                  </AuthLayout>
+                }
+              />
+            </Route>
           </Route>
           <Route
             path="/history"
             element={
-              <AuthLayout authentication={true}>
+              <AuthLayout authentication>
                 <History />
               </AuthLayout>
             }
@@ -116,23 +117,23 @@ function App() {
           <Route
             path="/liked-videos"
             element={
-              <AuthLayout authentication={true}>
+              <AuthLayout authentication>
                 <LikedVideos />
               </AuthLayout>
             }
           />
           <Route
-          path="/subscriptions"
-          element={
-            <AuthLayout authentication={true}>
-              <Subscriptions />
-            </AuthLayout>
-          }
-        />
+            path="/subscriptions"
+            element={
+              <AuthLayout authentication>
+                <Subscriptions />
+              </AuthLayout>
+            }
+          />
           <Route
             path="/edit"
             element={
-              <AuthLayout authentication={true}>
+              <AuthLayout authentication>
                 <EditChannel />
               </AuthLayout>
             }
@@ -140,15 +141,15 @@ function App() {
             <Route
               path="personalInfo"
               element={
-                <AuthLayout authentication={true}>
-                  <EditPersonalInfo />
+                <AuthLayout authentication>
+                <EditPersonalInfo />
                 </AuthLayout>
               }
             />
             <Route
               path="password"
               element={
-                <AuthLayout authentication={true}>
+                <AuthLayout authentication>
                   <ChangePassword />
                 </AuthLayout>
               }
@@ -174,7 +175,7 @@ function App() {
         <Route
           path="/watch/:videoId"
           element={
-            <AuthLayout authentication={true}>
+            <AuthLayout authentication>
               <VideoDetail />
             </AuthLayout>
           }
@@ -182,7 +183,7 @@ function App() {
         <Route
           path="/collections"
           element={
-            <AuthLayout authentication={true}>
+            <AuthLayout authentication>
               <AdminDashboard />
             </AuthLayout>
           }
@@ -190,7 +191,7 @@ function App() {
         <Route
           path="/terms&conditions"
           element={
-            <AuthLayout authentication={true}>
+            <AuthLayout authentication>
               <TermsAndConditions />
             </AuthLayout>
           }
