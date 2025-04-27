@@ -1,5 +1,10 @@
-import React from "react"
-import { MdOutlineSlowMotionVideo, RxAvatar, FaRegEye, FaRegHeart } from "../../components/icons"
+import React from "react";
+import {
+  MdOutlineSlowMotionVideo,
+  RxAvatar,
+  FaRegEye,
+  FaRegHeart,
+} from "../../components/icons";
 
 function StatsSection({ dashboard }) {
   const stats = [
@@ -23,7 +28,7 @@ function StatsSection({ dashboard }) {
       label: "Total Likes",
       value: dashboard?.totalLikes || 0,
     },
-  ]
+  ];
 
   return (
     <div className="grid sm:grid-cols-4 grid-cols-2 gap-4">
@@ -38,7 +43,7 @@ function StatsSection({ dashboard }) {
         </div>
       ))}
     </div>
-  )
+  );
 }
 
-export default StatsSection
+export default StatsSection;

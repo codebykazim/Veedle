@@ -1,15 +1,19 @@
-import React from "react"
-import { Button } from "../ui/button"
-import { useNavigate } from "react-router-dom"
+import React from "react";
+import { Button } from "../ui/button";
+import { useNavigate } from "react-router-dom";
 
 function HeaderSection({ username, setPopUp }) {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
       <div>
-        <h1 className="text-3xl font-bold text-[#00ed64]">Welcome Back, {username}</h1>
-        <p className="text-gray-400 text-sm">Seamless Video Management, Elevated Results.</p>
+        <h1 className="text-3xl font-bold text-[#00ed64]">
+          Welcome Back, {username}
+        </h1>
+        <p className="text-gray-400 text-sm">
+          Seamless Video Management, Elevated Results.
+        </p>
       </div>
       <div className="flex items-center gap-4">
         <Button
@@ -26,7 +30,7 @@ function HeaderSection({ username, setPopUp }) {
         </Button>
       </div>
     </div>
-  )
+  );
 }
 
-export default HeaderSection
+export default HeaderSection;

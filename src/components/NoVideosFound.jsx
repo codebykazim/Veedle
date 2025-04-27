@@ -1,6 +1,4 @@
-"use client"
-
-import { PlayCircle } from "lucide-react"
+import { PlayCircle } from "lucide-react";
 
 function NoVideosFound({ text }) {
   return (
@@ -13,7 +11,7 @@ function NoVideosFound({ text }) {
         </p>
       </div>
     </div>
-  )
+  );
 }
 
-export default NoVideosFound
+export default NoVideosFound;

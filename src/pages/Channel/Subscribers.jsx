@@ -1,28 +1,28 @@
-"use client"
-
-import { useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { getUserChannelSubscribers } from "../../store/subscriptionSlice"
-import Avatar from "@/components/Avatar"
-import { Button } from "@/components/ui/button"
-import { Link } from "react-router-dom"
-import ChannelSubscribersSkeleton from "@/skeleton/ChannelSubscribersSkeleton"
-import { Users } from "lucide-react"
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserChannelSubscribers } from "../../store/subscriptionSlice";
+import Avatar from "@/components/Avatar";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import ChannelSubscribersSkeleton from "@/skeleton/ChannelSubscribersSkeleton";
+import { Users } from "lucide-react";
 
 function ChannelSubscribers() {
-  const dispatch = useDispatch()
-  const channelId = useSelector((state) => state.user.profileData?._id)
-  const subscribers = useSelector((state) => state.subscription.channelSubscribers)
-  const loading = useSelector((state) => state.subscription.loading)
+  const dispatch = useDispatch();
+  const channelId = useSelector((state) => state.user.profileData?._id);
+  const subscribers = useSelector(
+    (state) => state.subscription.channelSubscribers
+  );
+  const loading = useSelector((state) => state.subscription.loading);
 
   useEffect(() => {
     if (channelId) {
-      dispatch(getUserChannelSubscribers(channelId))
+      dispatch(getUserChannelSubscribers(channelId));
     }
-  }, [dispatch, channelId])
+  }, [dispatch, channelId]);
 
   if (loading) {
-    return <ChannelSubscribersSkeleton />
+    return <ChannelSubscribersSkeleton />;
   }
 
   if (!loading && (!subscribers || subscribers.length === 0)) {
@@ -30,10 +30,12 @@ function ChannelSubscribers() {
       <div className="flex flex-col items-center justify-center p-8 text-white">
         <div className="bg-[#072331] p-8 rounded-lg text-center max-w-md">
           <h3 className="text-xl font-medium mb-3">No subscribers yet</h3>
-          <p className="text-gray-400">When people subscribe to your channel, they'll appear here.</p>
+          <p className="text-gray-400">
+            When people subscribe to your channel, they'll appear here.
+          </p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -51,9 +53,14 @@ function ChannelSubscribers() {
             className="flex px-5 py-4 justify-between items-center text-white hover:bg-[#051622]/50 transition-colors"
           >
             <div className="flex gap-4 items-center">
-              <Avatar src={subscriber?.subscriber?.avatar} channelName={subscriber?.subscriber?.username} />
+              <Avatar
+                src={subscriber?.subscriber?.avatar}
+                channelName={subscriber?.subscriber?.username}
+              />
               <div>
-                <h5 className="text-sm font-medium">{subscriber?.subscriber?.username}</h5>
+                <h5 className="text-sm font-medium">
+                  {subscriber?.subscriber?.username}
+                </h5>
                 <span className="text-xs text-slate-400 flex items-center gap-1">
                   <Users size={12} />
                   {subscriber?.subscriber?.subscribersCount} Subscribers
@@ -67,13 +74,15 @@ function ChannelSubscribers() {
                   : "bg-[#00ed64] hover:bg-[#00c050] text-[#051622]"
               } text-xs py-1 px-4 rounded-md transition-colors`}
             >
-              {subscriber?.subscriber?.subscribedToSubscriber ? "Subscribed" : "Subscribe"}
+              {subscriber?.subscriber?.subscribedToSubscriber
+                ? "Subscribed"
+                : "Subscribe"}
             </Button>
           </Link>
         ))}
       </div>
     </div>
-  )
+  );
 }
 
-export default ChannelSubscribers
+export default ChannelSubscribers;

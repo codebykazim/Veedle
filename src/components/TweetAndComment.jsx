@@ -1,42 +1,40 @@
-"use client"
-
-import { Button } from "@/components/ui/button"
-import { useForm } from "react-hook-form"
-import { useDispatch } from "react-redux"
-import { createTweet } from "../store/tweetSlice"
-import { createAComment } from "../store/commentSlice"
+import { Button } from "@/components/ui/button";
+import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { createTweet } from "../store/tweetSlice";
+import { createAComment } from "../store/commentSlice";
 
 function TweetAndComment({ tweet, comment, videoId }) {
-  const { register, handleSubmit, setValue } = useForm()
-  const dispatch = useDispatch()
+  const { register, handleSubmit, setValue } = useForm();
+  const dispatch = useDispatch();
 
   const sendContent = (data) => {
     if (data) {
       if (tweet) {
-        dispatch(createTweet(data))
+        dispatch(createTweet(data));
       } else if (comment) {
-        dispatch(createAComment({ content: data.content, videoId }))
+        dispatch(createAComment({ content: data.content, videoId }));
       }
-      setValue("content", "")
+      setValue("content", "");
     }
-  }
+  };
 
   return (
-    <form onSubmit={handleSubmit(sendContent)} className="sm:p-5 p-3 sm:max-w-4xl w-full relative">
+    <form onSubmit={handleSubmit(sendContent)} className="relative">
       <textarea
-        placeholder={`${tweet ? "Write a tweet..." : "Add a comment..."}`}
-        className="p-3 text-sm pr-16 focus:border-[#00ed64] text-white border border-[#1e3a47] bg-[#0d3446] outline-none w-full rounded-md resize-none transition-colors"
+        placeholder={`${tweet ? "What's happening?" : "Add a comment..."}`}
+        className="p-4 text-sm pr-20 focus:border-[#00ed64] text-white border border-[#1e3a47] bg-[#0d3446] outline-none w-full rounded-lg resize-none transition-all min-h-[100px] placeholder-gray-400"
         {...register("content", { required: true })}
-        rows={2}
+        rows={3}
       />
       <Button
         type="submit"
-        className="bg-[#00ed64] hover:bg-[#00c050] px-4 py-1 text-[#051622] absolute sm:bottom-8 sm:right-8 bottom-6 right-5 text-xs sm:text-sm rounded-md transition-all"
+        className="bg-[#00ed64] hover:bg-[#00c050] px-6 py-2 text-[#051622] absolute bottom-3 right-3 text-sm font-medium rounded-full transition-all shadow-md hover:shadow-[#00ed64]/30"
       >
-        Send
+        {tweet ? "Tweet" : "Comment"}
       </Button>
     </form>
-  )
+  );
 }
 
-export default TweetAndComment
+export default TweetAndComment;

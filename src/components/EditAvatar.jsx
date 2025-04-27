@@ -1,33 +1,31 @@
-"use client"
-
-import { useState } from "react"
-import { X, Upload } from "lucide-react"
-import { useDispatch } from "react-redux"
-import { useForm } from "react-hook-form"
-import { updateAvatar, updateCoverImg } from "../store/authSlice"
-import GetImagePreview from "./GetImagePreview"
+import { useState } from "react";
+import { X, Upload } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { useForm } from "react-hook-form";
+import { updateAvatar, updateCoverImg } from "../store/authSlice";
+import GetImagePreview from "./GetImagePreview";
 
 function EditAvatar({ cover, preImage }) {
-  const [isOpen, setIsOpen] = useState(false)
-  const dispatch = useDispatch()
+  const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
   const {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm()
+  } = useForm();
 
   const upload = (data) => {
-    setIsOpen(false)
-    const formData = new FormData()
-    formData.append(`${cover ? "coverImage" : "avatar"}`, data.avatar[0])
+    setIsOpen(false);
+    const formData = new FormData();
+    formData.append(`${cover ? "coverImage" : "avatar"}`, data.avatar[0]);
 
     if (data) {
-      const action = cover ? updateCoverImg : updateAvatar
+      const action = cover ? updateCoverImg : updateAvatar;
       dispatch(action(formData)).then(() => {
-        window.location.reload() // Refresh the page after update
-      })
+        window.location.reload(); // Refresh the page after update
+      });
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit(upload)} className="relative">
@@ -48,7 +46,9 @@ function EditAvatar({ cover, preImage }) {
               <X size={20} />
             </button>
 
-            <h2 className="text-lg font-bold text-white mb-4">Change {cover ? "Cover" : "Profile"} Picture</h2>
+            <h2 className="text-lg font-bold text-white mb-4">
+              Change {cover ? "Cover" : "Profile"} Picture
+            </h2>
 
             <div className="flex flex-col items-center">
               <GetImagePreview
@@ -68,12 +68,16 @@ function EditAvatar({ cover, preImage }) {
               </button>
             </div>
 
-            {errors.avatar && <span className="text-red-500 block mt-2 text-sm">{errors.avatar.message}</span>}
+            {errors.avatar && (
+              <span className="text-red-500 block mt-2 text-sm">
+                {errors.avatar.message}
+              </span>
+            )}
           </div>
         </div>
       )}
     </form>
-  )
+  );
 }
 
-export default EditAvatar
+export default EditAvatar;

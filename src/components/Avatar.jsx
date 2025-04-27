@@ -1,19 +1,18 @@
-"use client"
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 
 function Avatar({ src, channelName, size = "md" }) {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const sizeClasses = {
     sm: "w-8 h-8",
     md: "w-10 h-10",
     lg: "w-12 h-12",
-  }
+  };
 
   const handleAvatarClick = (e) => {
-    e.stopPropagation()
-    navigate(`/channel/${channelName}`)
-  }
+    e.stopPropagation();
+    navigate(`/channel/${channelName}`);
+  };
 
   return (
     <div
@@ -27,10 +26,12 @@ function Avatar({ src, channelName, size = "md" }) {
           onClick={handleAvatarClick}
         />
       ) : (
-        <span className="text-lg font-bold text-[#00ed64]">{channelName?.charAt(0)?.toUpperCase()}</span>
+        <span className="text-lg font-bold text-[#00ed64]">
+          {channelName?.charAt(0)?.toUpperCase()}
+        </span>
       )}
     </div>
-  )
+  );
 }
 
-export default Avatar
+export default Avatar;

@@ -1,52 +1,52 @@
-"use client"
-
-import { useEffect, useRef, useState } from "react"
-import Input from "../components/Input"
-import { Button } from "@/components/ui/button"
-import { useForm } from "react-hook-form"
-import { useNavigate, Link } from "react-router-dom"
-import { useDispatch, useSelector } from "react-redux"
-import { getCurrentUser, userLogin } from "../store/authSlice"
-import { motion } from "framer-motion"
-import { Eye, EyeOff } from "lucide-react"
+import { useEffect, useRef, useState } from "react";
+import Input from "../components/Input";
+import { Button } from "@/components/ui/button";
+import { useForm } from "react-hook-form";
+import { useNavigate, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getCurrentUser, userLogin } from "../store/authSlice";
+import { motion } from "framer-motion";
+import { Eye, EyeOff } from "lucide-react";
 
 function Login() {
-  const modalRef = useRef(null)
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const modalRef = useRef(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
-        navigate("/")
+        navigate("/");
       }
-    }
+    };
 
-    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [])
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const {
     handleSubmit,
     register,
     formState: { errors },
-  } = useForm()
-  const loading = useSelector((state) => state.auth?.loading)
+  } = useForm();
+  const loading = useSelector((state) => state.auth?.loading);
 
   const submit = async (data) => {
-    const isEmail = data.username.includes("@")
-    const loginData = isEmail ? { email: data.username, password: data.password } : data
+    const isEmail = data.username.includes("@");
+    const loginData = isEmail
+      ? { email: data.username, password: data.password }
+      : data;
 
-    const response = await dispatch(userLogin(loginData))
-    const user = await dispatch(getCurrentUser())
+    const response = await dispatch(userLogin(loginData));
+    const user = await dispatch(getCurrentUser());
     if (user && response?.payload) {
-      navigate("/")
+      navigate("/");
     }
-  }
+  };
 
   return (
     <motion.div
@@ -98,7 +98,11 @@ function Login() {
                   required: "Username or email is required",
                 })}
               />
-              {errors.username && <p className="mt-1 text-sm text-red-400">{errors.username.message}</p>}
+              {errors.username && (
+                <p className="mt-1 text-sm text-red-400">
+                  {errors.username.message}
+                </p>
+              )}
             </div>
 
             <div className="relative">
@@ -119,7 +123,11 @@ function Login() {
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
 
-              {errors.password && <p className="mt-1 text-sm text-red-400">{errors.password.message}</p>}
+              {errors.password && (
+                <p className="mt-1 text-sm text-red-400">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
 
             <Button
@@ -131,7 +139,10 @@ function Login() {
 
             <p className="text-center text-sm text-slate-400 mt-4">
               Don't have an account?{" "}
-              <Link to="/signup" className="text-[#00ed64] hover:text-[#00c050] font-medium transition-colors">
+              <Link
+                to="/signup"
+                className="text-[#00ed64] hover:text-[#00c050] font-medium transition-colors"
+              >
                 Sign Up
               </Link>
             </p>
@@ -139,7 +150,7 @@ function Login() {
         </div>
       </motion.div>
     </motion.div>
-  )
+  );
 }
 
-export default Login
+export default Login;

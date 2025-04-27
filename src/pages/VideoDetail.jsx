@@ -1,9 +1,7 @@
-"use client"
-
-import { useCallback, useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { useParams } from "react-router-dom"
-import { getVideoById, getAllVideos } from "../store/videoSlice"
+import { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { getVideoById, getAllVideos } from "../store/videoSlice";
 import {
   CommentList,
   TweetAndComment,
@@ -13,40 +11,71 @@ import {
   InfiniteScroll,
   Navbar,
   VideoList,
-} from "../components"
-import { cleanUpComments, getVideoComments } from "../store/commentSlice"
+} from "../components";
+import { cleanUpComments, getVideoComments } from "../store/commentSlice";
 
 function VideoDetail() {
-  const dispatch = useDispatch()
-  const { videoId } = useParams()
-  const [page, setPage] = useState(1)
+  const dispatch = useDispatch();
+  const { videoId } = useParams();
+  const [commentPage, setCommentPage] = useState(1);
+  const [videoPage, setVideoPage] = useState(1);
 
-  const video = useSelector((state) => state.video?.video)
-  const allVideos = useSelector((state) => state.video?.videos?.docs || [])
-  const videosLoading = useSelector((state) => state.video?.loading)
+  const video = useSelector((state) => state.video?.video);
+  const allVideos = useSelector((state) => state.video?.videos?.docs || []);
+  const videosLoading = useSelector((state) => state.video?.loading);
+  const videosHasNextPage = useSelector(
+    (state) => state.video?.videos?.hasNextPage
+  );
 
-  const comments = useSelector((state) => state.comment?.comments)
-  const totalComments = useSelector((state) => state.comment?.totalComments)
-  const hasNextPage = useSelector((state) => state.comment?.hasNextPage)
-  const commentLoading = useSelector((state) => state.comment?.loading)
+  const comments = useSelector((state) => state.comment?.comments);
+  const totalComments = useSelector((state) => state.comment?.totalComments);
+  const commentsHasNextPage = useSelector(
+    (state) => state.comment?.hasNextPage
+  );
+  const commentLoading = useSelector((state) => state.comment?.loading);
 
-  const relatedVideos = allVideos.filter((v) => v._id !== videoId)
+  // Filter related videos and remove duplicates
+  const relatedVideos = allVideos.filter(
+    (v, index, self) =>
+      v._id !== videoId && self.findIndex((vid) => vid._id === v._id) === index
+  );
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     if (videoId) {
-      dispatch(getVideoById({ videoId }))
-      dispatch(getVideoComments({ videoId }))
-      dispatch(getAllVideos({ page: 1, limit: 15 }))
+      dispatch(getVideoById({ videoId }));
+      dispatch(getVideoComments({ videoId, page: 1 }));
+      dispatch(getAllVideos({ page: 1, limit: 15 }));
     }
-    return () => dispatch(cleanUpComments())
-  }, [dispatch, videoId])
+
+    return () => {
+      dispatch(cleanUpComments());
+      // You might want to add a cleanup for videos too if needed
+    };
+  }, [dispatch, videoId]);
 
   const fetchMoreComments = useCallback(() => {
-    if (!commentLoading && hasNextPage) {
-      dispatch(getVideoComments({ videoId, page: page + 1 }))
-      setPage((prev) => prev + 1)
+    if (!commentLoading && commentsHasNextPage) {
+      const nextPage = commentPage + 1;
+      dispatch(getVideoComments({ videoId, page: nextPage }));
+      setCommentPage(nextPage);
     }
-  }, [page, commentLoading, hasNextPage, dispatch, videoId])
+  }, [commentPage, commentLoading, commentsHasNextPage, dispatch, videoId]);
+
+  const fetchMoreVideos = useCallback(() => {
+    if (!videosLoading && videosHasNextPage) {
+      const nextPage = videoPage + 1;
+      dispatch(getAllVideos({ page: nextPage, limit: 15 }));
+      setVideoPage(nextPage);
+    }
+  }, [videoPage, videosLoading, videosHasNextPage, dispatch]);
+
+  // Deduplicate comments (in case your backend sends duplicates)
+  const uniqueComments = comments?.filter(
+    (comment, index, self) =>
+      self.findIndex((c) => c._id === comment._id) === index
+  );
 
   return (
     <div className="bg-[#051622] min-h-screen text-white">
@@ -85,14 +114,23 @@ function VideoDetail() {
           {/* Comments Section */}
           <div className="mt-6">
             <div className="flex items-center gap-2 mb-4">
-              <h2 className="text-lg font-semibold">{totalComments} Comments</h2>
+              <h2 className="text-lg font-semibold">
+                {totalComments} Comments
+              </h2>
             </div>
 
-            <TweetAndComment comment={true} videoId={video?._id} className="mb-4" />
+            <TweetAndComment
+              comment={true}
+              videoId={video?._id}
+              className="mb-4"
+            />
 
-            <InfiniteScroll fetchMore={fetchMoreComments} hasNextPage={hasNextPage}>
+            <InfiniteScroll
+              fetchMore={fetchMoreComments}
+              hasNextPage={commentsHasNextPage}
+            >
               <div className="space-y-4">
-                {comments?.map((comment) => (
+                {uniqueComments?.map((comment) => (
                   <CommentList
                     key={comment?._id}
                     avatar={comment?.owner?.avatar}
@@ -105,7 +143,9 @@ function VideoDetail() {
                     username={comment?.owner?.username}
                   />
                 ))}
-                {commentLoading && <Spinner width={8} className="mx-auto my-4" />}
+                {commentLoading && (
+                  <Spinner width={8} className="mx-auto my-4" />
+                )}
               </div>
             </InfiniteScroll>
           </div>
@@ -115,38 +155,52 @@ function VideoDetail() {
         <div className="w-full lg:w-[350px] shrink-0 space-y-3 mt-6 lg:mt-0">
           <h3 className="font-medium text-[15px] mb-2">Related Videos</h3>
 
-          {videosLoading ? (
-            Array(5).fill(0).map((_, i) => (
-              <div key={i} className="flex gap-2">
-                <div className="w-[168px] h-[94px] bg-[#0d3446] rounded animate-pulse" />
-                <div className="flex-1 space-y-1">
-                  <div className="h-3.5 bg-[#0d3446] rounded w-full" />
-                  <div className="h-3 bg-[#0d3446] rounded w-3/4" />
-                  <div className="h-3 bg-[#0d3446] rounded w-2/3" />
+          {videosLoading && videoPage === 1 ? (
+            Array(5)
+              .fill(0)
+              .map((_, i) => (
+                <div key={i} className="flex gap-2">
+                  <div className="w-[168px] h-[94px] bg-[#0d3446] rounded animate-pulse" />
+                  <div className="flex-1 space-y-1">
+                    <div className="h-3.5 bg-[#0d3446] rounded w-full" />
+                    <div className="h-3 bg-[#0d3446] rounded w-3/4" />
+                    <div className="h-3 bg-[#0d3446] rounded w-2/3" />
+                  </div>
                 </div>
-              </div>
-            ))
+              ))
           ) : (
-            relatedVideos.slice(0, 8).map((video) => (
-              <VideoList
-                key={video._id}
-                avatar={video.ownerDetails?.avatar}
-                duration={video.duration}
-                title={video.title}
-                thumbnail={video.thumbnail?.url}
-                createdAt={video.createdAt}
-                views={video.views}
-                channelName={video.ownerDetails?.username}
-                videoId={video._id}
-                compact={true}
-                className="!gap-2 !items-start"
-              />
-            ))
+            <>
+              {relatedVideos.slice(0, 8).map((video) => (
+                <VideoList
+                  key={video._id}
+                  avatar={video.ownerDetails?.avatar}
+                  duration={video.duration}
+                  title={video.title}
+                  thumbnail={video.thumbnail?.url}
+                  createdAt={video.createdAt}
+                  views={video.views}
+                  channelName={video.ownerDetails?.username}
+                  videoId={video._id}
+                  compact={true}
+                  className="!gap-2 !items-start"
+                />
+              ))}
+
+              {videosHasNextPage && (
+                <button
+                  onClick={fetchMoreVideos}
+                  disabled={videosLoading}
+                  className="text-sm text-blue-400 hover:text-blue-300 mt-2"
+                >
+                  {videosLoading ? "Loading..." : "Load More Videos"}
+                </button>
+              )}
+            </>
           )}
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default VideoDetail
+export default VideoDetail;

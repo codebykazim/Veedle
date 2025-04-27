@@ -1,12 +1,10 @@
-"use client"
-
-import { useEffect, useState } from "react"
-import { Button } from "../ui/button"
-import EditAvatar from "../EditAvatar"
-import { useDispatch, useSelector } from "react-redux"
-import { toggleSubscription } from "../../store/subscriptionSlice"
-import { Link } from "react-router-dom"
-import HeaderSkeleton from "@/skeleton/HeaderSkeleton"
+import { useEffect, useState } from "react";
+import { Button } from "../ui/button";
+import EditAvatar from "../EditAvatar";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleSubscription } from "../../store/subscriptionSlice";
+import { Link } from "react-router-dom";
+import HeaderSkeleton from "@/skeleton/HeaderSkeleton";
 
 function ChannelHeader({
   coverImage,
@@ -19,30 +17,31 @@ function ChannelHeader({
   channelId,
   edit,
 }) {
-  const [localIsSubscribed, setLocalIsSubscribed] = useState(isSubscribed)
-  const [localSubscribersCount, setLocalSubscribersCount] = useState(subscribersCount)
-  const dispatch = useDispatch()
-  const userProfile = useSelector((state) => state.user?.profileData?._id)
-  const user = useSelector((state) => state.auth?.userData?._id)
-  const loading = useSelector((state) => state.user?.loading)
+  const [localIsSubscribed, setLocalIsSubscribed] = useState(isSubscribed);
+  const [localSubscribersCount, setLocalSubscribersCount] =
+    useState(subscribersCount);
+  const dispatch = useDispatch();
+  const userProfile = useSelector((state) => state.user?.profileData?._id);
+  const user = useSelector((state) => state.auth?.userData?._id);
+  const loading = useSelector((state) => state.user?.loading);
 
   useEffect(() => {
-    setLocalSubscribersCount(subscribersCount)
-    setLocalIsSubscribed(isSubscribed)
-  }, [subscribersCount, isSubscribed])
+    setLocalSubscribersCount(subscribersCount);
+    setLocalIsSubscribed(isSubscribed);
+  }, [subscribersCount, isSubscribed]);
 
   const handleSubscribe = () => {
-    dispatch(toggleSubscription(channelId))
-    setLocalIsSubscribed((prev) => !prev)
+    dispatch(toggleSubscription(channelId));
+    setLocalIsSubscribed((prev) => !prev);
     if (localIsSubscribed) {
-      setLocalSubscribersCount((prev) => prev - 1)
+      setLocalSubscribersCount((prev) => prev - 1);
     } else {
-      setLocalSubscribersCount((prev) => prev + 1)
+      setLocalSubscribersCount((prev) => prev + 1);
     }
-  }
+  };
 
   if (loading) {
-    return <HeaderSkeleton />
+    return <HeaderSkeleton />;
   }
 
   return (
@@ -51,7 +50,11 @@ function ChannelHeader({
       <section className="w-full">
         <div className="w-full">
           {coverImage ? (
-            <img src={coverImage || "/placeholder.svg"} alt="Cover" className="sm:h-40 h-28 w-full object-cover" />
+            <img
+              src={coverImage || "/placeholder.svg"}
+              alt="Cover"
+              className="sm:h-40 h-28 w-full object-cover"
+            />
           ) : (
             <div className="sm:h-40 h-28 w-full border-[#1e3a47] border-b bg-[#072331]"></div>
           )}
@@ -91,7 +94,9 @@ function ChannelHeader({
               <h1 className="text-xl font-bold">{fullName}</h1>
               <h3 className="text-sm text-slate-400">@{username}</h3>
               <div className="flex gap-3">
-                <p className="text-xs text-slate-400">{localSubscribersCount} Subscribers</p>
+                <p className="text-xs text-slate-400">
+                  {localSubscribersCount} Subscribers
+                </p>
                 {user === userProfile && (
                   <Link
                     to="/subscriptions"
@@ -132,7 +137,7 @@ function ChannelHeader({
         </div>
       </section>
     </div>
-  )
+  );
 }
 
-export default ChannelHeader
+export default ChannelHeader;

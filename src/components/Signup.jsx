@@ -1,58 +1,41 @@
-"use client"
-
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { useNavigate } from "react-router-dom"
-import { useDispatch, useSelector } from "react-redux"
-import { createAccount, userLogin } from "../store/authSlice"
-import { Link } from "react-router-dom"
-import Input from "./Input"
-import { Button } from "@/components/ui/button"
-import { Eye, EyeOff } from "lucide-react"
-import { motion } from "framer-motion"
-import GetImagePreview from "./GetImagePreview"
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { createAccount, userLogin } from "../store/authSlice";
+import { Link } from "react-router-dom";
+import Input from "./Input";
+import { Button } from "@/components/ui/button";
+import { Eye, EyeOff } from "lucide-react";
+import { motion } from "framer-motion";
+import GetImagePreview from "./GetImagePreview";
 
 function SignUp() {
-  // const modalRef = useRef(null);
-
-  // useEffect(() => {
-  //     const handleClickOutside = (event) => {
-  //         if (modalRef.current && !modalRef.current.contains(event.target)) {
-  //             navigate("/");
-  //         }
-  //     };
-
-  //     document.addEventListener("mousedown", handleClickOutside);
-  //     return () => {
-  //         document.removeEventListener("mousedown", handleClickOutside);
-  //     };
-  // }, []);
-
   const {
     handleSubmit,
     register,
     control,
     formState: { errors },
-  } = useForm()
-  const [showPassword, setShowPassword] = useState(false)
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const loading = useSelector((state) => state.auth?.loading)
+  } = useForm();
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const loading = useSelector((state) => state.auth?.loading);
 
   const submit = async (data) => {
-    const response = await dispatch(createAccount(data))
+    const response = await dispatch(createAccount(data));
     if (response?.payload?.success) {
-      const username = data?.username
-      const password = data?.password
-      const loginResult = await dispatch(userLogin({ username, password }))
+      const username = data?.username;
+      const password = data?.password;
+      const loginResult = await dispatch(userLogin({ username, password }));
 
       if (loginResult?.type === "login/fulfilled") {
-        navigate("/terms&conditions")
+        navigate("/terms&conditions");
       } else {
-        navigate("/login")
+        navigate("/login");
       }
     }
-  }
+  };
 
   return (
     <motion.div
@@ -110,12 +93,16 @@ function SignUp() {
             <h1 className="text-2xl sm:text-3xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-[#00ed64] to-[#00c050]">
               Create Account
             </h1>
-            <p className="text-slate-400 text-sm text-center mt-2 mb-6">Join us today!</p>
+            <p className="text-slate-400 text-sm text-center mt-2 mb-6">
+              Join us today!
+            </p>
 
             <form onSubmit={handleSubmit(submit)} className="space-y-4">
               <div className="grid grid-cols-1 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1">Username</label>
+                  <label className="block text-sm font-medium text-slate-300 mb-1">
+                    Username
+                  </label>
                   <Input
                     type="text"
                     placeholder="Enter username"
@@ -124,11 +111,17 @@ function SignUp() {
                     })}
                     className="w-full bg-[#0d3446] border-[#1e3a47] text-white placeholder-gray-500 py-2 px-4 rounded-lg focus:ring-2 focus:ring-[#00ed64] focus:border-transparent"
                   />
-                  {errors.username && <p className="mt-1 text-sm text-red-400">{errors.username.message}</p>}
+                  {errors.username && (
+                    <p className="mt-1 text-sm text-red-400">
+                      {errors.username.message}
+                    </p>
+                  )}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1">Email</label>
+                  <label className="block text-sm font-medium text-slate-300 mb-1">
+                    Email
+                  </label>
                   <Input
                     type="email"
                     placeholder="Enter email"
@@ -137,11 +130,17 @@ function SignUp() {
                     })}
                     className="w-full bg-[#0d3446] border-[#1e3a47] text-white placeholder-gray-500 py-2 px-4 rounded-lg focus:ring-2 focus:ring-[#00ed64] focus:border-transparent"
                   />
-                  {errors.email && <p className="mt-1 text-sm text-red-400">{errors.email.message}</p>}
+                  {errors.email && (
+                    <p className="mt-1 text-sm text-red-400">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1">Full Name</label>
+                  <label className="block text-sm font-medium text-slate-300 mb-1">
+                    Full Name
+                  </label>
                   <Input
                     type="text"
                     placeholder="Enter full name"
@@ -150,11 +149,17 @@ function SignUp() {
                     })}
                     className="w-full bg-[#0d3446] border-[#1e3a47] text-white placeholder-gray-500 py-2 px-4 rounded-lg focus:ring-2 focus:ring-[#00ed64] focus:border-transparent"
                   />
-                  {errors.fullName && <p className="mt-1 text-sm text-red-400">{errors.fullName.message}</p>}
+                  {errors.fullName && (
+                    <p className="mt-1 text-sm text-red-400">
+                      {errors.fullName.message}
+                    </p>
+                  )}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1">Password</label>
+                  <label className="block text-sm font-medium text-slate-300 mb-1">
+                    Password
+                  </label>
                   <Input
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter password"
@@ -170,7 +175,11 @@ function SignUp() {
                   >
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
-                  {errors.password && <p className="mt-1 text-sm text-red-400">{errors.password.message}</p>}
+                  {errors.password && (
+                    <p className="mt-1 text-sm text-red-400">
+                      {errors.password.message}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -209,7 +218,10 @@ function SignUp() {
 
               <p className="text-center text-sm text-slate-400 mt-4">
                 Already have an account?{" "}
-                <Link to="/login" className="text-[#00ed64] hover:text-[#00c050] font-medium transition-colors">
+                <Link
+                  to="/login"
+                  className="text-[#00ed64] hover:text-[#00c050] font-medium transition-colors"
+                >
                   Login
                 </Link>
               </p>
@@ -218,7 +230,7 @@ function SignUp() {
         </div>
       </motion.div>
     </motion.div>
-  )
+  );
 }
 
-export default SignUp
+export default SignUp;

@@ -1,8 +1,6 @@
-"use client"
-
-import Navbar from "../components/Header/Navbar"
-import { Outlet } from "react-router-dom"
-import Sidebar from "../components/Header/Sidebar"
+import Navbar from "../components/Header/Navbar";
+import { Outlet } from "react-router-dom";
+import Sidebar from "../components/Header/Sidebar";
 
 function Layout() {
   return (
@@ -17,7 +15,7 @@ function Layout() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Layout
+export default Layout;

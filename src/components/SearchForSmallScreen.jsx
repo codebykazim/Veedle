@@ -1,22 +1,20 @@
-"use client"
-
-import { useForm } from "react-hook-form"
-import { useNavigate } from "react-router-dom"
-import Input from "./Input"
-import { Button } from "./ui/button"
-import { IoCloseCircleOutline } from "react-icons/io5"
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import Input from "./Input";
+import { Button } from "./ui/button";
+import { IoCloseCircleOutline } from "react-icons/io5";
 
 function SearchForSmallScreen({ open, setOpenSearch }) {
-  const { register, handleSubmit } = useForm()
-  const navigate = useNavigate()
+  const { register, handleSubmit } = useForm();
+  const navigate = useNavigate();
 
   const search = (data) => {
-    const query = data?.query
-    navigate(`/search/${query}`)
-    setOpenSearch((prev) => !prev)
-  }
+    const query = data?.query;
+    navigate(`/search/${query}`);
+    setOpenSearch((prev) => !prev);
+  };
 
-  if (!open) return null
+  if (!open) return null;
 
   return (
     <div className="fixed inset-0 bg-[#051622] backdrop-blur-sm z-50 flex items-start justify-center animate-in fade-in duration-200">
@@ -29,7 +27,10 @@ function SearchForSmallScreen({ open, setOpenSearch }) {
           <IoCloseCircleOutline size={30} />
         </button>
 
-        <form onSubmit={handleSubmit(search)} className="flex flex-col sm:flex-row items-center gap-2 mt-16 sm:mt-10">
+        <form
+          onSubmit={handleSubmit(search)}
+          className="flex flex-col sm:flex-row items-center gap-2 mt-16 sm:mt-10"
+        >
           <Input
             type="text"
             placeholder="Search videos, channels..."
@@ -45,7 +46,7 @@ function SearchForSmallScreen({ open, setOpenSearch }) {
         </form>
       </div>
     </div>
-  )
+  );
 }
 
-export default SearchForSmallScreen
+export default SearchForSmallScreen;

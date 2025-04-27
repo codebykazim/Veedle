@@ -41,9 +41,9 @@ function AdminDashboard() {
   }, [dispatch, uploaded, publishToggled, deleting]);
 
   return (
-    <div className="min-h-screen bg-[#051622] text-white pt-14">
+    <div className="min-h-screen bg-[#051622] text-white pt-14 pb-20 sm:pb-0">
       <Container>
-        <div className="space-y-8 p-4">
+        <div className="space-y-8 p-4 sm:p-6">
           {popUp.uploadVideo && (
             <UploadVideo
               setUploadVideoPopup={() =>
@@ -93,13 +93,16 @@ function AdminDashboard() {
           <StatsSection dashboard={dashboard} />
 
           {/* Video Table */}
-          <div className="bg-[#072331] border border-[#1e3a47] rounded-lg overflow-hidden">
+          <div className="bg-[#072331] border border-[#1e3a47] rounded-lg overflow-hidden mb-8 sm:mb-0">
             <VideoTable
               videos={videos}
               setPopUp={setPopUp}
               setVideoDetails={setVideoDetails}
             />
           </div>
+
+          {/* Bottom spacing for mobile */}
+          <div className="block sm:hidden h-1"></div>
         </div>
       </Container>
     </div>

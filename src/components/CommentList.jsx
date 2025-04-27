@@ -1,40 +1,46 @@
-"use client"
+import { useState } from "react";
+import { timeAgo } from "../helpers/timeAgo";
+import { useSelector, useDispatch } from "react-redux";
+import { Like, DeleteConfirmation, Edit } from "./index";
+import { MoreVertical } from "lucide-react";
+import { deleteAComment, editAComment } from "../store/commentSlice";
+import Avatar from "./Avatar";
 
-import { useState } from "react"
-import { timeAgo } from "../helpers/timeAgo"
-import { useSelector, useDispatch } from "react-redux"
-import { Like, DeleteConfirmation, Edit } from "./index"
-import { MoreVertical } from "lucide-react"
-import { deleteAComment, editAComment } from "../store/commentSlice"
-import Avatar from "./Avatar"
-
-function CommentsList({ avatar, username, createdAt, content, commentId, isLiked, likesCount }) {
-  const avatar2 = useSelector((state) => state.auth?.userData?.avatar?.url)
-  const authUsername = useSelector((state) => state.auth?.userData?.username)
-  const dispatch = useDispatch()
+function CommentsList({
+  avatar,
+  username,
+  createdAt,
+  content,
+  commentId,
+  isLiked,
+  likesCount,
+}) {
+  const avatar2 = useSelector((state) => state.auth?.userData?.avatar?.url);
+  const authUsername = useSelector((state) => state.auth?.userData?.username);
+  const dispatch = useDispatch();
 
   const [editState, setEditState] = useState({
     editing: false,
     editedContent: content,
     isOpen: false,
     delete: false,
-  })
+  });
 
   const handleEditComment = (editedContent) => {
-    dispatch(editAComment({ commentId, content: editedContent }))
+    dispatch(editAComment({ commentId, content: editedContent }));
     setEditState((prev) => ({
       ...prev,
       editing: false,
       editedContent,
       isOpen: false,
       delete: false,
-    }))
-  }
+    }));
+  };
 
   const handleDeleteComment = () => {
-    dispatch(deleteAComment(commentId))
-    setEditState((prev) => ({ ...prev, delete: false }))
-  }
+    dispatch(deleteAComment(commentId));
+    setEditState((prev) => ({ ...prev, delete: false }));
+  };
 
   return (
     <div className="w-full flex gap-4 p-4 hover:bg-[#0d3446] transition-colors border-b border-[#1e3a47]">
@@ -49,21 +55,32 @@ function CommentsList({ avatar, username, createdAt, content, commentId, isLiked
         {editState.editing ? (
           <Edit
             initialContent={editState.editedContent}
-            onCancel={() => setEditState((prev) => ({ ...prev, editing: false }))}
+            onCancel={() =>
+              setEditState((prev) => ({ ...prev, editing: false }))
+            }
             onSave={handleEditComment}
           />
         ) : (
-          <p className="text-sm text-gray-300 mb-2">{editState.editedContent}</p>
+          <p className="text-sm text-gray-300 mb-2">
+            {editState.editedContent}
+          </p>
         )}
 
         <div className="flex items-center gap-4">
-          <Like isLiked={isLiked} likesCount={likesCount} commentId={commentId} size={16} />
+          <Like
+            isLiked={isLiked}
+            likesCount={likesCount}
+            commentId={commentId}
+            size={16}
+          />
         </div>
 
         {authUsername === username && (
           <div className="absolute top-0 right-0">
             <button
-              onClick={() => setEditState((prev) => ({ ...prev, isOpen: !prev.isOpen }))}
+              onClick={() =>
+                setEditState((prev) => ({ ...prev, isOpen: !prev.isOpen }))
+              }
               className="text-gray-400 hover:text-white p-1"
             >
               <MoreVertical size={18} />
@@ -102,14 +119,16 @@ function CommentsList({ avatar, username, createdAt, content, commentId, isLiked
 
         {editState.delete && (
           <DeleteConfirmation
-            onCancel={() => setEditState((prev) => ({ ...prev, delete: false }))}
+            onCancel={() =>
+              setEditState((prev) => ({ ...prev, delete: false }))
+            }
             onDelete={handleDeleteComment}
             comment={true}
           />
         )}
       </div>
     </div>
-  )
+  );
 }
 
-export default CommentsList
+export default CommentsList;

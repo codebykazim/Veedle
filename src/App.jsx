@@ -4,7 +4,7 @@ import { AuthLayout, Login, SignUp } from "./components/index";
 import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrentUser } from "./store/authSlice";
-import Spinner  from './components/Spinner';
+import Spinner from "./components/Spinner";
 import {
   History,
   Channel,
@@ -20,13 +20,13 @@ import {
   SearchVideos,
   TermsAndConditions,
   ChannelPlaylist,
-  PlaylistVideos
+  PlaylistVideos,
 } from "./pages";
 import { EditPersonalInfo, ChangePassword, Layout } from "./components";
 
 function App() {
   const dispatch = useDispatch();
-  const { loading, status } = useSelector(state => state.auth);
+  const { loading, status } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(getCurrentUser());
@@ -54,6 +54,12 @@ function App() {
               <AuthLayout authentication={false}>
                 <SearchVideos />
               </AuthLayout>
+            }
+          />
+          <Route
+            path="/channel"
+            element={
+              <AuthLayout authentication={true}>{/* <Channel /> */}</AuthLayout>
             }
           />
           <Route
@@ -122,13 +128,13 @@ function App() {
             }
           />
           <Route
-          path="/subscriptions"
-          element={
-            <AuthLayout authentication={true}>
-              <Subscriptions />
-            </AuthLayout>
-          }
-        />
+            path="/subscriptions"
+            element={
+              <AuthLayout authentication={true}>
+                <Subscriptions />
+              </AuthLayout>
+            }
+          />
           <Route
             path="/edit"
             element={

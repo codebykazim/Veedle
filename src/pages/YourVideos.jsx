@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button"
-import { Upload } from "lucide-react"
+import { Button } from "@/components/ui/button";
+import { Upload } from "lucide-react";
 
 function YourVideos() {
   return (
@@ -17,14 +17,17 @@ function YourVideos() {
           <div className="max-w-md mx-auto">
             <h2 className="text-xl font-medium mb-2">No videos uploaded yet</h2>
             <p className="text-gray-400 mb-6">
-              Your uploaded videos will appear here. Start creating and sharing your content with the world.
+              Your uploaded videos will appear here. Start creating and sharing
+              your content with the world.
             </p>
-            <Button className="bg-[#00ed64] hover:bg-[#00c050] text-[#051622]">Upload Your First Video</Button>
+            <Button className="bg-[#00ed64] hover:bg-[#00c050] text-[#051622]">
+              Upload Your First Video
+            </Button>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default YourVideos
+export default YourVideos;

@@ -1,23 +1,21 @@
-"use client"
-
-import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { useSelector } from "react-redux"
-import LoginPopup from "./LoginPopup"
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import LoginPopup from "./LoginPopup";
 
 export default function Protected({ children, authentication = true }) {
-  const navigate = useNavigate()
-  const authStatus = useSelector((state) => state.auth.status)
-  const [loader, setLoader] = useState(false)
+  const navigate = useNavigate();
+  const authStatus = useSelector((state) => state.auth.status);
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     if (!authentication && authStatus !== authentication) {
-      return
+      return;
     }
-  }, [authStatus, authentication, navigate])
+  }, [authStatus, authentication, navigate]);
 
   if (authentication && authStatus !== authentication) {
-    return <LoginPopup />
+    return <LoginPopup />;
   }
 
   return loader ? (
@@ -29,5 +27,5 @@ export default function Protected({ children, authentication = true }) {
     </div>
   ) : (
     <>{children}</>
-  )
+  );
 }

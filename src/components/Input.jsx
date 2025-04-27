@@ -1,11 +1,12 @@
-"use client"
+import React from "react";
 
-import React from "react"
+import { useId } from "react";
 
-import { useId } from "react"
-
-const Input = React.forwardRef(function Input({ label, type = "text", placeholder, className = "", ...props }, ref) {
-  const id = useId()
+const Input = React.forwardRef(function Input(
+  { label, type = "text", placeholder, className = "", ...props },
+  ref
+) {
+  const id = useId();
   return (
     <div className="w-full">
       {label && (
@@ -22,7 +23,7 @@ const Input = React.forwardRef(function Input({ label, type = "text", placeholde
         id={id}
       />
     </div>
-  )
-})
+  );
+});
 
-export default Input
+export default Input;

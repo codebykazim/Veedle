@@ -1,20 +1,20 @@
-import React, { useEffect } from "react"
-import ChannelHeader from '../../components/Channel/ChannelHeader'
-import ChannelNavigate from "../../components/Channel/ChannelNavigate"
-import { useDispatch, useSelector } from "react-redux"
-import { userChannelProfile } from '../../store/userSlice.js'
-import { Outlet, useParams } from "react-router-dom"
+import React, { useEffect } from "react";
+import ChannelHeader from "../../components/Channel/ChannelHeader";
+import ChannelNavigate from "../../components/Channel/ChannelNavigate";
+import { useDispatch, useSelector } from "react-redux";
+import { userChannelProfile } from "../../store/userSlice.js";
+import { Outlet, useParams } from "react-router-dom";
 
 function Channel() {
-  const dispatch = useDispatch()
-  const { username } = useParams()
-  const channel = useSelector((state) => state.user?.profileData)
+  const dispatch = useDispatch();
+  const { username } = useParams();
+  const channel = useSelector((state) => state.user?.profileData);
 
   useEffect(() => {
-    dispatch(userChannelProfile(username))
-  }, [dispatch, username])
+    dispatch(userChannelProfile(username));
+  }, [dispatch, username]);
 
-  window.scrollTo(0, 0)
+  window.scrollTo(0, 0);
 
   return (
     <div className="min-h-screen bg-[#051622] text-white">
@@ -37,7 +37,7 @@ function Channel() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Channel
+export default Channel;

@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getLikedVideos } from "../store/likeSlice";
@@ -7,7 +5,6 @@ import { makeVideosNull } from "../store/videoSlice";
 import LikedVideosSkeleton from "@/skeleton/LikedVideosSkeleton";
 import { MoreVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import MessyDoodle from "../assets/MessyDoodle.svg";
 import { useNavigate } from "react-router-dom";
 
 function LikedVideos() {

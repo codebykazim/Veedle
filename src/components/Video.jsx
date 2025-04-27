@@ -1,8 +1,6 @@
-"use client"
-
 function Video({ src, poster }) {
   return (
-    <div className="relative w-full bg-black rounded-md overflow-hidden">
+    <div className="relative w-full bg-gray-300 rounded-md overflow-hidden">
       <video
         src={src}
         poster={poster}
@@ -12,7 +10,7 @@ function Video({ src, poster }) {
         className="w-full aspect-video object-contain mx-auto"
       ></video>
     </div>
-  )
+  );
 }
 
-export default Video
+export default Video;

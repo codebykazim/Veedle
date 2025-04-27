@@ -1,13 +1,11 @@
-"use client"
-
-import { useState } from "react"
+import { useState } from "react";
 
 function Edit({ initialContent, onCancel, onSave }) {
-  const [editedContent, setEditedContent] = useState(initialContent)
+  const [editedContent, setEditedContent] = useState(initialContent);
 
   const handleSave = () => {
-    onSave(editedContent)
-  }
+    onSave(editedContent);
+  };
 
   return (
     <div className="w-full text-sm">
@@ -32,7 +30,7 @@ function Edit({ initialContent, onCancel, onSave }) {
         </button>
       </div>
     </div>
-  )
+  );
 }
 
-export default Edit
+export default Edit;

@@ -1,34 +1,32 @@
-"use client"
-
-import { useState } from "react"
-import { Input, UploadingVideo } from "./index"
-import { Button } from "./ui/button"
-import { useForm } from "react-hook-form"
-import { useDispatch, useSelector } from "react-redux"
-import { publishAvideo } from "../store/videoSlice"
-import { X } from "lucide-react"
-import GetImagePreview from "./GetImagePreview"
+import { useState } from "react";
+import { Input, UploadingVideo } from "./index";
+import { Button } from "./ui/button";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { publishAvideo } from "../store/videoSlice";
+import { X } from "lucide-react";
+import GetImagePreview from "./GetImagePreview";
 
 function UploadVideo({ setUploadVideoPopup }) {
-  const [videoName, setVideoName] = useState("")
-  const [videoSize, setVideoSize] = useState(0)
+  const [videoName, setVideoName] = useState("");
+  const [videoSize, setVideoSize] = useState(0);
   const {
     handleSubmit,
     register,
     control,
     formState: { errors, isSubmitting },
-  } = useForm()
-  const dispatch = useDispatch()
-  const uploaded = useSelector((state) => state.video.uploaded)
+  } = useForm();
+  const dispatch = useDispatch();
+  const uploaded = useSelector((state) => state.video.uploaded);
 
   const publishVideo = async (data) => {
-    console.log("Form data being submitted:", data)
-    console.log("Video file:", data.videoFile?.[0])
-    console.log("Thumbnail:", data.thumbnail?.[0])
+    console.log("Form data being submitted:", data);
+    console.log("Video file:", data.videoFile?.[0]);
+    console.log("Thumbnail:", data.thumbnail?.[0]);
 
-    setVideoSize(Math.floor(data.videoFile[0].size / (1024 * 1024)))
-    await dispatch(publishAvideo(data))
-  }
+    setVideoSize(Math.floor(data.videoFile[0].size / (1024 * 1024)));
+    await dispatch(publishAvideo(data));
+  };
 
   if (uploaded) {
     return (
@@ -38,7 +36,7 @@ function UploadVideo({ setUploadVideoPopup }) {
         fileSize={videoSize}
         uploaded
       />
-    )
+    );
   }
 
   return (
@@ -54,7 +52,11 @@ function UploadVideo({ setUploadVideoPopup }) {
               />
               <h3 className="text-xl font-bold">Upload Video</h3>
             </div>
-            <Button type="submit" className="bg-[#00ed64] hover:bg-[#00c050] text-[#051622]" disabled={isSubmitting}>
+            <Button
+              type="submit"
+              className="bg-[#00ed64] hover:bg-[#00c050] text-[#051622]"
+              disabled={isSubmitting}
+            >
               {isSubmitting ? "Uploading..." : "Save"}
             </Button>
           </div>
@@ -62,8 +64,12 @@ function UploadVideo({ setUploadVideoPopup }) {
           <div className="p-6 space-y-6">
             <div className="border-2 border-dashed border-[#1e3a47] rounded-lg p-8 text-center hover:border-[#00ed64] transition-colors">
               <div className="mb-4">
-                <h1 className="font-medium">Drag and drop video files to upload</h1>
-                <p className="text-sm text-gray-400 mt-1">Your videos will be private until you publish them</p>
+                <h1 className="font-medium">
+                  Drag and drop video files to upload
+                </h1>
+                <p className="text-sm text-gray-400 mt-1">
+                  Your videos will be private until you publish them
+                </p>
               </div>
               <label className="cursor-pointer bg-[#00ed64] hover:bg-[#00c050] text-[#051622] font-medium py-2 px-4 rounded-lg inline-block">
                 Select Files
@@ -78,8 +84,14 @@ function UploadVideo({ setUploadVideoPopup }) {
                   })}
                 />
               </label>
-              {videoName && <p className="mt-3 text-sm text-gray-300">{videoName}</p>}
-              {errors.videoFile && <p className="text-red-500 text-xs mt-2">{errors.videoFile.message}</p>}
+              {videoName && (
+                <p className="mt-3 text-sm text-gray-300">{videoName}</p>
+              )}
+              {errors.videoFile && (
+                <p className="text-red-500 text-xs mt-2">
+                  {errors.videoFile.message}
+                </p>
+              )}
             </div>
 
             <div className="grid lg:grid-cols-2 gap-6">
@@ -92,7 +104,11 @@ function UploadVideo({ setUploadVideoPopup }) {
                   cameraIcon
                   cameraSize={40}
                 />
-                {errors.thumbnail && <p className="text-red-500 text-xs mt-1">{errors.thumbnail.message}</p>}
+                {errors.thumbnail && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.thumbnail.message}
+                  </p>
+                )}
               </div>
 
               <div className="space-y-4">
@@ -104,7 +120,9 @@ function UploadVideo({ setUploadVideoPopup }) {
                 />
 
                 <div>
-                  <label className="block text-sm font-medium mb-1">Description</label>
+                  <label className="block text-sm font-medium mb-1">
+                    Description
+                  </label>
                   <textarea
                     rows={5}
                     className="w-full bg-[#0d3446] border border-[#1e3a47] rounded-lg p-3 text-sm focus:ring-1 focus:ring-[#00ed64] focus:border-transparent"
@@ -112,7 +130,11 @@ function UploadVideo({ setUploadVideoPopup }) {
                       required: "Description is required",
                     })}
                   />
-                  {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description.message}</p>}
+                  {errors.description && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.description.message}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -120,7 +142,7 @@ function UploadVideo({ setUploadVideoPopup }) {
         </form>
       </div>
     </div>
-  )
+  );
 }
 
-export default UploadVideo
+export default UploadVideo;

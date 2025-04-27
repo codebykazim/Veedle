@@ -1,5 +1,3 @@
-"use client"
-
 function Spinner({ width = 10 }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
@@ -23,7 +21,7 @@ function Spinner({ width = 10 }) {
         <span className="sr-only">Loading...</span>
       </div>
     </div>
-  )
+  );
 }
 
-export default Spinner
+export default Spinner;

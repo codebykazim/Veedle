@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect } from "react";
 import { NoVideosFound, VideoList } from "../components";
 import { useDispatch, useSelector } from "react-redux";
@@ -47,13 +45,13 @@ function History() {
       <div className="py-2">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-2">
-          <h1 className="text-2xl sm:text-xl md:text-2xl font-bold text-white mt-0 mb-3">
+          <h1 className="text-3xl sm:text-xl md:text-2xl font-bold text-white mt-0 mb-3">
             Your History
           </h1>
         </div>
 
         {/* Video Grid */}
-        <div className="grid gap-x-4 gap-y-6 grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 text-white">
+        <div className="grid gap-x-4 gap-y-4 grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 text-white">
           {videos?.map((video) => (
             <VideoList
               key={video._id}

@@ -1,11 +1,9 @@
-"use client"
-
-import { useEffect } from "react"
-import { Input } from "../components"
-import { Button } from "./ui/button"
-import { useForm } from "react-hook-form"
-import { useDispatch, useSelector } from "react-redux"
-import { updateUserDetails } from "../store/authSlice"
+import { useEffect } from "react";
+import { Input } from "../components";
+import { Button } from "./ui/button";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUserDetails } from "../store/authSlice";
 
 function EditPersonalInfo() {
   const {
@@ -14,35 +12,36 @@ function EditPersonalInfo() {
     formState: { errors, isDirty, isSubmitting },
     setValue,
     reset,
-  } = useForm()
-  const dispatch = useDispatch()
-  const auth = useSelector((state) => state.auth?.userData)
+  } = useForm();
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth?.userData);
 
   useEffect(() => {
     if (auth) {
       reset({
         fullName: auth.fullName,
         email: auth.email,
-      })
+      });
     }
-  }, [auth, reset])
+  }, [auth, reset]);
 
-  // Modify your saveChanges function to log the data
   const saveChanges = async (data) => {
-    console.log("Submitting data:", data)
+    console.log("Submitting data:", data);
     try {
-      const result = await dispatch(updateUserDetails(data)).unwrap()
-      console.log("Update response:", result)
+      const result = await dispatch(updateUserDetails(data)).unwrap();
+      console.log("Update response:", result);
     } catch (error) {
-      console.error("Update failed:", error)
+      console.error("Update failed:", error);
     }
-  }
+  };
 
   return (
     <div className="w-full text-white flex justify-center items-start pt-8 px-4">
       <div className="bg-[#072331] p-6 rounded-lg shadow-lg w-full max-w-md border border-[#1e3a47]">
         <h2 className="text-xl font-bold mb-2">Personal Information</h2>
-        <p className="text-sm text-gray-400 mb-6">Update your personal details</p>
+        <p className="text-sm text-gray-400 mb-6">
+          Update your personal details
+        </p>
 
         <form onSubmit={handleSubmit(saveChanges)} className="space-y-5">
           <div className="space-y-1">
@@ -54,7 +53,11 @@ function EditPersonalInfo() {
                 required: "Full name is required",
               })}
             />
-            {errors.fullName && <span className="text-xs text-red-500">{errors.fullName.message}</span>}
+            {errors.fullName && (
+              <span className="text-xs text-red-500">
+                {errors.fullName.message}
+              </span>
+            )}
           </div>
 
           <div className="space-y-1">
@@ -70,7 +73,11 @@ function EditPersonalInfo() {
                 },
               })}
             />
-            {errors.email && <span className="text-xs text-red-500">{errors.email.message}</span>}
+            {errors.email && (
+              <span className="text-xs text-red-500">
+                {errors.email.message}
+              </span>
+            )}
           </div>
 
           <div className="flex justify-end gap-3 pt-2">
@@ -93,7 +100,7 @@ function EditPersonalInfo() {
         </form>
       </div>
     </div>
-  )
+  );
 }
 
-export default EditPersonalInfo
+export default EditPersonalInfo;

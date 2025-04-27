@@ -1,5 +1,5 @@
-import React from "react"
-import { NavLink } from "react-router-dom"
+import React from "react";
+import { NavLink } from "react-router-dom";
 
 function ChannelNavigate({ username, edit }) {
   if (edit) {
@@ -26,7 +26,7 @@ function ChannelNavigate({ username, edit }) {
           <p className="p-2">Change Password</p>
         </NavLink>
       </section>
-    )
+    );
   }
   return (
     <section className="text-white w-full flex justify-evenly items-center border-b border-[#1e3a47] text-sm sm:text-base sm:mt-4 md:mt-0 mt-2">
@@ -71,7 +71,7 @@ function ChannelNavigate({ username, edit }) {
         <p className="p-2">Subscribed</p>
       </NavLink>
     </section>
-  )
+  );
 }
 
-export default ChannelNavigate
+export default ChannelNavigate;

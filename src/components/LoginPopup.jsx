@@ -1,27 +1,25 @@
-"use client"
-
-import { useEffect, useRef } from "react"
-import { Link } from "react-router-dom"
-import { Button } from "@/components/ui/button"
-import { motion } from "framer-motion"
-import { useNavigate } from "react-router-dom"
+import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const LoginPopup = () => {
-  const modalRef = useRef(null)
-  const navigate = useNavigate()
+  const modalRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
-        navigate("/")
+        navigate("/");
       }
-    }
+    };
 
-    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [])
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <motion.div
@@ -64,7 +62,8 @@ const LoginPopup = () => {
           </h2>
 
           <p className="text-slate-300 mb-6">
-            Login or sign up to access all features and personalize your experience.
+            Login or sign up to access all features and personalize your
+            experience.
           </p>
 
           <div className="space-y-4">
@@ -76,7 +75,10 @@ const LoginPopup = () => {
 
             <p className="text-slate-400 text-sm">
               Don't have an account?{" "}
-              <Link to="/signup" className="text-[#00ed64] hover:text-[#00c050] font-medium transition-colors">
+              <Link
+                to="/signup"
+                className="text-[#00ed64] hover:text-[#00c050] font-medium transition-colors"
+              >
                 Sign up
               </Link>
             </p>
@@ -84,7 +86,7 @@ const LoginPopup = () => {
         </div>
       </motion.div>
     </motion.div>
-  )
-}
+  );
+};
 
-export default LoginPopup
+export default LoginPopup;
