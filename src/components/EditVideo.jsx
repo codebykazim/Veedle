@@ -112,13 +112,13 @@ function EditVideo({
                 type="button"
                 onClick={handleClosePopUp}
                 variant="outline"
-                className="border-[#1e3a47] hover:bg-[#0d3446]"
+                className=" border-[#1e3a47] bg-[#0d3446] hover:bg-[#164863]"
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
-                className="bg-[#00ed64] hover:bg-[#00c050] text-[#051622]"
+                className="bg-[#00ed64] hover:bg-[#00c050] text-black"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Updating..." : "Save Changes"}
