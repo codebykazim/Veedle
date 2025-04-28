@@ -53,7 +53,7 @@ function ChannelHeader({
             <img
               src={coverImage || "/placeholder.svg"}
               alt="Cover"
-              className="sm:h-40 h-28 w-full object-cover"
+              className="sm:h-55 h-40 w-full object-cover"
             />
           ) : (
             <div className="sm:h-40 h-28 w-full border-[#1e3a47] border-b bg-[#072331]"></div>
