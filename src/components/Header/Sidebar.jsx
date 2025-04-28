@@ -117,7 +117,7 @@ function Sidebar() {
             {username && (
               <button
                 onClick={logout}
-                className="group flex items-center gap-4 px-4 py-3 text-sm text-gray-300 hover:bg-[#0d3446] hover:text-[#00ed64] transition-colors"
+                className="group flex items-center gap-4 px-4 py-3 text-sm text-gray-300 hover:bg-[#0d3446] hover:text-[#00ed64] transition-colors w-full"
               >
                 <IoMdLogOut size={20} className="group-hover:text-[#00ed64]" />
                 Logout
