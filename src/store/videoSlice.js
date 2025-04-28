@@ -53,14 +53,6 @@ export const publishAvideo = createAsyncThunk("publishAvideo", async (data) => {
   }
 
   try {
-    // Log the formData contents to verify what's being sent
-    // console.log("FormData contents:");
-    // for (let pair of formData.entries()) {
-    //     console.log(pair[0] + ': ' + (pair[1] instanceof File ?
-    //                 pair[1].name + ' (' + pair[1].type + ', ' + pair[1].size + ' bytes)' :
-    //                 pair[1]));
-    // }
-
     const response = await axiosInstance.post("/video", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -103,6 +95,7 @@ export const updateAVideo = createAsyncThunk(
     }
   }
 );
+
 
 export const deleteAVideo = createAsyncThunk(
   "deleteAVideo",
