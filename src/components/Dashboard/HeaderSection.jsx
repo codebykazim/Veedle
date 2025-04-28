@@ -12,7 +12,7 @@ function HeaderSection({ username, setPopUp }) {
           Welcome Back, {username}
         </h1>
         <p className="text-gray-400 text-sm">
-          Seamless Video Management, Elevated Results.
+          Master Your Videos. Maximize Your Results.
         </p>
       </div>
       <div className="flex items-center gap-4">
