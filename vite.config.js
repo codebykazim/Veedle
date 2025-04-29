@@ -13,7 +13,7 @@ export default defineConfig({
   },
   server: {
     proxy:{
-      '/api': 'https://youtube-backend-dockerized.onrender.com/api/v1'
+      '/api': 'https://youtube-backend-8c9r.onrender.com/api/v1'
     },
   },
 })
