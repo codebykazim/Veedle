@@ -22,6 +22,7 @@ function HomePage() {
   const hasNextPage = useSelector((state) => state.video?.videos?.hasNextPage);
 
   const [page, setPage] = useState(1);
+  const [shuffledVideos, setShuffledVideos] = useState([]);
 
   useEffect(() => {
     dispatch(getAllVideos({ page: 1, limit: 6 }));
@@ -52,11 +53,18 @@ function HomePage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [fetchMoreVideos, loading, hasNextPage]);
 
-  const uniqueVideos = shuffleArray(
-    videos?.filter(
-      (video, index, self) => index === self.findIndex((v) => v._id === video._id)
-    ) || []
-  );
+  // Only shuffle once when new videos are fetched for the first time
+  useEffect(() => {
+    if (videos && videos.length > 0 && page === 1) {
+      const unique = videos.filter(
+        (video, index, self) =>
+          index === self.findIndex((v) => v._id === video._id)
+      );
+      setShuffledVideos(shuffleArray(unique));
+    } else {
+      setShuffledVideos(videos || []);
+    }
+  }, [videos, page]);
 
   return (
     <div className="bg-[#051622] min-h-screen px-4 sm:px-6 md:px-10 pt-16 sm:pt-14 sm:ml-60 pb-20 sm:pb-8">
@@ -67,7 +75,7 @@ function HomePage() {
       {loading && (!videos || videos.length === 0) && <HomeSkeleton />}
 
       <div className="grid gap-4 grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 text-white">
-        {uniqueVideos?.map((video) => (
+        {(shuffledVideos || []).map((video) => (
           <VideoList
             key={video._id}
             avatar={video.ownerDetails?.avatar}

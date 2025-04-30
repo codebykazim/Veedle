@@ -14,7 +14,7 @@ import HomeSkeleton from "@/skeleton/HomeSkeleton";
 
 function SearchVideos() {
   const loading = useSelector((state) => state.video?.loading);
-  const videos = useSelector((state) => state.video?.videos);
+  const videos = useSelector((state) => state.video?.videos?.docs);
   const dispatch = useDispatch();
   const { query } = useParams();
   const [filterOpen, setFilterOpen] = useState(false);
@@ -35,7 +35,7 @@ function SearchVideos() {
     setFilterOpen(false);
   };
 
-  const uniqueVideos = videos?.docs?.filter(
+  const uniqueVideos = videos?.filter(
     (video, index, self) => index === self.findIndex((v) => v._id === video._id)
   );
 
@@ -46,17 +46,17 @@ function SearchVideos() {
         <h1 className="text-xl font-semibold">
           Search results for <span className="text-[#00ed64]">"{query}"</span>
         </h1>
-        <button
+        {/* <button
           className="flex items-center gap-2 px-3 py-1.5 bg-[#0d3446] hover:bg-[#164863] rounded-md text-sm transition-colors"
           onClick={() => setFilterOpen(true)}
         >
           <Filter size={16} />
           <span>Filters</span>
-        </button>
+        </button> */}
       </div>
 
       {/* Filter Dialog */}
-      <Dialog open={filterOpen} onOpenChange={setFilterOpen}>
+      {/* <Dialog open={filterOpen} onOpenChange={setFilterOpen}>
         <DialogContent className="bg-[#072331] border border-[#1e3a47] text-white sm:max-w-md">
           <DialogHeader className="border-b border-[#1e3a47] pb-4">
             <DialogTitle className="text-xl font-bold flex justify-between items-center">
@@ -128,7 +128,7 @@ function SearchVideos() {
             </div>
           </div>
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
 
       {/* Skeleton Loader */}
       {loading && <HomeSkeleton rows={2} />}
