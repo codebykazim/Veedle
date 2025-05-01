@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { timeAgo } from "../helpers/timeAgo";
-import Like from "./Like";
+import { Like, Dislike } from "./index";
 import DeleteConfirmation from "./DeleteConfirmation";
 import Edit from "./Edit";
 import { MoreVertical } from "lucide-react";
@@ -13,8 +13,10 @@ function TweetsList({
   username,
   createdAt,
   content,
-  likesCount = 0,
+  likesCount,
   isLiked,
+  dislikesCount,
+  isDisliked,
 }) {
   const avatar2 = useSelector((state) => state.user?.profileData?.avatar);
   const authUsername = useSelector((state) => state.auth?.userData?.username);
@@ -86,8 +88,14 @@ function TweetsList({
         <div className="mt-2 flex items-center gap-4">
           <Like
             isLiked={isLiked}
-            likesCount={likesCount}
             tweetId={tweetId}
+            likesCount={likesCount}
+            size={20}
+          />
+          <Dislike
+            isDisliked={isDisliked}
+            tweetId={tweetId}
+            dislikesCount={dislikesCount}
             size={20}
           />
         </div>

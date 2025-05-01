@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { ThumbsUp, ThumbsDown } from "lucide-react";
+import { ThumbsUp } from "lucide-react";
 import {
   toggleCommentLike,
   toggleTweetLike,
@@ -57,10 +57,6 @@ function Like({ isLiked, likesCount = 0, tweetId, commentId, videoId, size }) {
           {localLikesCount}
         </span>
       </button>
-      <ThumbsDown
-        size={size}
-        className="cursor-pointer hover:text-gray-300 transition-colors"
-      />
     </div>
   );
 }

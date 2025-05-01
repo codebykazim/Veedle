@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleSubscription } from "../store/subscriptionSlice";
 import { timeAgo } from "../helpers/timeAgo";
-import { Like } from "./index";
+import { Like, Dislike } from "./index";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
 import Avatar from "./Avatar";
@@ -15,9 +15,11 @@ function Description({
   avatar,
   subscribersCount,
   likesCount,
+  dislikesCount,
   isSubscribed,
   description,
   isLiked,
+  isDisliked,
   videoId,
   channelId,
 }) {
@@ -58,6 +60,12 @@ function Description({
               isLiked={isLiked}
               videoId={videoId}
               likesCount={likesCount}
+              size={20}
+            />
+            <Dislike
+              isDisliked={isDisliked}
+              videoId={videoId}
+              dislikesCount={dislikesCount}
               size={20}
             />
           </div>

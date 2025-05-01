@@ -28,13 +28,14 @@ function VideoDetail() {
   );
 
   const comments = useSelector((state) => state.comment?.comments);
+  console.log(comments);
+
   const totalComments = useSelector((state) => state.comment?.totalComments);
   const commentsHasNextPage = useSelector(
     (state) => state.comment?.hasNextPage
   );
   const commentLoading = useSelector((state) => state.comment?.loading);
 
-  // Filter related videos and remove duplicates
   const relatedVideos = allVideos.filter(
     (v, index, self) =>
       v._id !== videoId && self.findIndex((vid) => vid._id === v._id) === index
@@ -51,7 +52,6 @@ function VideoDetail() {
 
     return () => {
       dispatch(cleanUpComments());
-      // You might want to add a cleanup for videos too if needed
     };
   }, [dispatch, videoId]);
 
@@ -71,7 +71,6 @@ function VideoDetail() {
     }
   }, [videoPage, videosLoading, videosHasNextPage, dispatch]);
 
-  // Deduplicate comments (in case your backend sends duplicates)
   const uniqueComments = comments?.filter(
     (comment, index, self) =>
       self.findIndex((c) => c._id === comment._id) === index
@@ -102,10 +101,12 @@ function VideoDetail() {
               description={video?.description}
               isSubscribed={video?.owner?.isSubscribed}
               likesCount={video?.likesCount}
+              dislikesCount={video?.dislikesCount}
               subscribersCount={video?.owner?.subscribersCount}
               title={video?.title}
               views={video?.views}
               isLiked={video?.isLiked}
+              isDisliked={video?.isDisliked}
               videoId={video?._id}
               channelId={video?.owner?._id}
             />
@@ -139,7 +140,9 @@ function VideoDetail() {
                     createdAt={comment?.createdAt}
                     fullName={comment?.owner?.fullName}
                     isLiked={comment?.isLiked}
+                    isDisliked={comment?.isDisliked}
                     likesCount={comment?.likesCount}
+                    dislikesCount={comment?.dislikesCount}
                     username={comment?.owner?.username}
                   />
                 ))}

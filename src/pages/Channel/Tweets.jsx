@@ -13,6 +13,8 @@ function ChannelTweets() {
   const authId = useSelector((state) => state.auth?.userData?._id);
   const userId = useSelector((state) => state.user?.profileData?._id);
   const tweets = useSelector((state) => state.tweet?.tweets);
+  console.log(tweets);
+
   const loading = useSelector((state) => state.tweet?.loading);
 
   useEffect(() => {
@@ -48,9 +50,11 @@ function ChannelTweets() {
               content={tweet?.content}
               createdAt={tweet?.createdAt}
               likesCount={tweet?.likesCount}
+              dislikesCount={tweet?.dislikesCount}
               tweetId={tweet?._id}
               username={tweet?.ownerDetails?.username}
               isLiked={tweet?.isLiked}
+              isDisliked={tweet?.isDisliked}
             />
           ))
         ) : (

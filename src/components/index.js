@@ -15,6 +15,7 @@ import CommentList from "./CommentList";
 import Edit from "./Edit";
 import DeleteConfirmation from "./DeleteConfirmation";
 import Like from "./Like";
+import Dislike from "./Dislike";
 import Description from "./Description";
 import TweetsList from "./TweetsList";
 import Avatar from "./Avatar";
@@ -54,6 +55,7 @@ export {
   Edit,
   DeleteConfirmation,
   Like,
+  Dislike,
   Description,
   TweetsList,
   ChannelNavigate,
