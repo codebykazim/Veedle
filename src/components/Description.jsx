@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleSubscription } from "../store/subscriptionSlice";
 import { timeAgo } from "../helpers/timeAgo";
-import { Like, Dislike } from "./index";
+import { LikeDislike } from "./index";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
 import Avatar from "./Avatar";
@@ -56,17 +56,12 @@ function Description({
             <span>{timeAgo(createdAt)}</span>
           </div>
           <div className="flex items-center gap-2">
-            <Like
+            <LikeDislike
               isLiked={isLiked}
-              videoId={videoId}
-              likesCount={likesCount}
-              size={20}
-            />
-            <Dislike
               isDisliked={isDisliked}
-              videoId={videoId}
+              likesCount={likesCount}
               dislikesCount={dislikesCount}
-              size={20}
+              videoId={videoId}
             />
           </div>
         </div>

@@ -14,8 +14,7 @@ import Video from "./Video";
 import CommentList from "./CommentList";
 import Edit from "./Edit";
 import DeleteConfirmation from "./DeleteConfirmation";
-import Like from "./Like";
-import Dislike from "./Dislike";
+import LikeDislike from "./LikeDislike";
 import Description from "./Description";
 import TweetsList from "./TweetsList";
 import Avatar from "./Avatar";
@@ -54,8 +53,7 @@ export {
   CommentList,
   Edit,
   DeleteConfirmation,
-  Like,
-  Dislike,
+  LikeDislike,
   Description,
   TweetsList,
   ChannelNavigate,

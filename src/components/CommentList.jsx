@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { timeAgo } from "../helpers/timeAgo";
 import { useSelector, useDispatch } from "react-redux";
-import { Like, Dislike, DeleteConfirmation, Edit } from "./index";
+import { LikeDislike, DeleteConfirmation, Edit } from "./index";
 import { MoreVertical } from "lucide-react";
 import { deleteAComment, editAComment } from "../store/commentSlice";
 import Avatar from "./Avatar";
@@ -69,17 +69,12 @@ function CommentsList({
         )}
 
         <div className="flex items-center gap-4">
-          <Like
+          <LikeDislike
             isLiked={isLiked}
-            likesCount={likesCount}
-            commentId={commentId}
-            size={16}
-          />
-          <Dislike
             isDisliked={isDisliked}
-            commentId={commentId}
+            likesCount={likesCount}
             dislikesCount={dislikesCount}
-            size={20}
+            commentId={commentId}
           />
         </div>
 
