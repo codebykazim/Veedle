@@ -18,6 +18,7 @@ export const createAComment = createAsyncThunk(
       const response = await axiosInstance.post(`/comment/${videoId}`, {
         content,
       });
+      console.log("Response from createAComment:", response.data);
       return response.data.data;
     } catch (error) {
       toast.error(error?.response?.data?.error);

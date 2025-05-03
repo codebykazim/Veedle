@@ -68,7 +68,7 @@ function ChannelNavigate({ username, edit }) {
             : "text-gray-400 hover:text-white transition-colors"
         }
       >
-        <p className="p-2">Subscribed</p>
+        <p className="p-2">Subscribers</p>
       </NavLink>
     </section>
   );

@@ -113,8 +113,8 @@ function VideoDetail() {
           </div>
 
           {/* Comments Section */}
-          <div className="mt-6">
-            <div className="flex items-center gap-2 mb-4">
+          <div className=" mt-6">
+            <div className="flex items-center gap-2 mb-4 mx-4">
               <h2 className="text-lg font-semibold">
                 {totalComments} Comments
               </h2>
@@ -155,8 +155,8 @@ function VideoDetail() {
         </div>
 
         {/* Related Videos Sidebar */}
-        <div className="w-full lg:w-[350px] shrink-0 space-y-3 mt-6 lg:mt-0">
-          <h3 className="font-medium text-[15px] mb-2">Related Videos</h3>
+        <div className="w-full lg:w-[350px] shrink-0 space-y-3 mt-0 lg:mt-0">
+          <h3 className="font-medium text-[20px] mb-3">Related Videos</h3>
 
           {videosLoading && videoPage === 1 ? (
             Array(5)
