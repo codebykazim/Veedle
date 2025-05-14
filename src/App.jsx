@@ -1,39 +1,41 @@
-import React, { useEffect, lazy, Suspense } from "react";
-import { Route, Routes } from "react-router-dom";
-import { AuthLayout, Login, SignUp } from "./components/index";
-import { Toaster } from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
-import { getCurrentUser } from "./store/authSlice";
-import Spinner from "./components/Spinner";
-import { EditPersonalInfo, ChangePassword, Layout } from "./components";
+"use client"
+
+import { useEffect, lazy, Suspense } from "react"
+import { Route, Routes } from "react-router-dom"
+import { AuthLayout, Login, SignUp } from "./components/index"
+import { Toaster } from "react-hot-toast"
+import { useDispatch, useSelector } from "react-redux"
+import { getCurrentUser } from "./store/authSlice"
+import Spinner from "./components/Spinner"
+import { EditPersonalInfo, ChangePassword, Layout } from "./components"
 
 // Lazy loading
-const History = lazy(() => import("./pages/History"));
-const Channel = lazy(() => import("./pages/Channel/Channel"));
-const ChannelVideos = lazy(() => import("./pages/Channel/Videos"));
-const ChannelTweets = lazy(() => import("./pages/Channel/Tweets"));
-const LikedVideos = lazy(() => import("./pages/LikedVideos"));
-const VideoDetail = lazy(() => import("./pages/VideoDetail"));
-const ChannelSubscribers = lazy(() => import("./pages/Channel/Subscribers"));
-const Subscriptions = lazy(() => import("./pages/Subscriptions"));
-const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
-const EditChannel = lazy(() => import("./pages/EditChannel"));
-const Home = lazy(() => import("./pages/Home"));
-const SearchVideos = lazy(() => import("./pages/SearchVideos"));
-const TermsAndConditions = lazy(() => import("./pages/TermsAndConditions"));
-const ChannelPlaylist = lazy(() => import("./pages/Channel/Playlist"));
-const PlaylistVideos = lazy(() => import("./pages/PlaylistVideos"));
+const History = lazy(() => import("./pages/History"))
+const Channel = lazy(() => import("./pages/Channel/Channel"))
+const ChannelVideos = lazy(() => import("./pages/Channel/Videos"))
+const ChannelTweets = lazy(() => import("./pages/Channel/Tweets"))
+const LikedVideos = lazy(() => import("./pages/LikedVideos"))
+const VideoDetail = lazy(() => import("./pages/VideoDetail"))
+const ChannelSubscribers = lazy(() => import("./pages/Channel/Subscribers"))
+const Subscriptions = lazy(() => import("./pages/Subscriptions"))
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"))
+const EditChannel = lazy(() => import("./pages/EditChannel"))
+const Home = lazy(() => import("./pages/Home"))
+const SearchVideos = lazy(() => import("./pages/SearchVideos"))
+const TermsAndConditions = lazy(() => import("./pages/TermsAndConditions"))
+const ChannelPlaylist = lazy(() => import("./pages/Channel/Playlist"))
+const PlaylistVideos = lazy(() => import("./pages/PlaylistVideos"))
 
 function App() {
-  const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.auth);
+  const dispatch = useDispatch()
+  const { loading } = useSelector((state) => state.auth)
 
   useEffect(() => {
-    dispatch(getCurrentUser());
-  }, [dispatch]);
+    dispatch(getCurrentUser())
+  }, [dispatch])
 
   if (loading) {
-    return <Spinner />;
+    return <Spinner />
   }
 
   return (
@@ -57,14 +59,7 @@ function App() {
                 </AuthLayout>
               }
             />
-            <Route
-              path="/channel"
-              element={
-                <AuthLayout authentication={true}>
-                  {/* Empty for now */}
-                </AuthLayout>
-              }
-            />
+            <Route path="/channel" element={<AuthLayout authentication={true}>{/* Empty for now */}</AuthLayout>} />
             <Route
               path="/channel/:username"
               element={
@@ -86,14 +81,6 @@ function App() {
                 element={
                   <AuthLayout authentication={true}>
                     <ChannelPlaylist />
-                  </AuthLayout>
-                }
-              />
-              <Route
-                path="playlist/:id"
-                element={
-                  <AuthLayout authentication={true}>
-                    <PlaylistVideos />
                   </AuthLayout>
                 }
               />
@@ -164,6 +151,17 @@ function App() {
               />
             </Route>
           </Route>
+
+          {/* Standalone routes outside of Layout */}
+          <Route
+            path="/playlist/:id"
+            element={
+              <AuthLayout authentication={true}>
+                <PlaylistVideos />
+              </AuthLayout>
+            }
+          />
+
           <Route
             path="/login"
             element={
@@ -221,7 +219,7 @@ function App() {
         }}
       />
     </>
-  );
+  )
 }
 
-export default App;
+export default App
