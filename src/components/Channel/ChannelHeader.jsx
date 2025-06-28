@@ -3,7 +3,7 @@ import { Button } from "../ui/button";
 import EditAvatar from "../EditAvatar";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleSubscription } from "../../store/subscriptionSlice";
-import { Link } from "react-router-dom";
+import { Link , useNavigate, useLocation} from "react-router-dom";
 import HeaderSkeleton from "@/skeleton/HeaderSkeleton";
 
 function ChannelHeader({
@@ -39,6 +39,17 @@ function ChannelHeader({
       setLocalSubscribersCount((prev) => prev + 1);
     }
   };
+
+const navigate = useNavigate();
+const location = useLocation();
+
+useEffect(() => {
+  const currentPath = `/channel/${username}`;
+  if (location.pathname === currentPath) {
+    navigate(`/channel/${username}/videos`, { replace: true });
+  }
+}, [username, navigate, location.pathname]);
+
 
   if (loading) {
     return <HeaderSkeleton />;
