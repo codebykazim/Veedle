@@ -47,7 +47,6 @@ function ChannelPlaylist() {
     }
   }, [dispatch, userId])
 
-  // Update local playlists when Redux playlists change
   useEffect(() => {
     if (playlists) {
       setLocalPlaylists(playlists)
@@ -80,13 +79,9 @@ function ChannelPlaylist() {
   const handleAddVideo = async (videoId) => {
     if (selectedPlaylistId && videoId) {
       try {
-        // Make direct API call
         const response = await axiosInstance.patch(`/playlist/add/${videoId}/${selectedPlaylistId}`)
         if (response.data?.success) {
-          // Fetch the updated playlist directly
           const updatedPlaylist = await fetchCurrentPlaylist(selectedPlaylistId)
-
-          // Also update the local playlists array
           if (updatedPlaylist) {
             updateLocalPlaylist(updatedPlaylist)
           }
@@ -103,7 +98,6 @@ function ChannelPlaylist() {
         const response = await axiosInstance.patch(`/playlist/remove/${videoId}/${selectedPlaylistId}`)
         if (response.data?.success) {
           const updatedPlaylist = await fetchCurrentPlaylist(selectedPlaylistId)
-
           if (updatedPlaylist) {
             updateLocalPlaylist(updatedPlaylist)
           }
@@ -114,7 +108,6 @@ function ChannelPlaylist() {
     }
   }
 
-  // Update the local playlists array with the updated playlist
   const updateLocalPlaylist = (updatedPlaylist) => {
     setLocalPlaylists((prev) =>
       prev.map((playlist) => (playlist._id === updatedPlaylist._id ? updatedPlaylist : playlist)),
@@ -135,7 +128,6 @@ function ChannelPlaylist() {
     reset()
   }
 
-  // Function to fetch the current playlist directly from the API
   const fetchCurrentPlaylist = async (playlistId) => {
     setModalLoading(true)
     try {
@@ -156,14 +148,11 @@ function ChannelPlaylist() {
   const openVideoManagementModal = async (playlistId) => {
     setSelectedPlaylistId(playlistId)
     setOpenVideoModal(true)
-
     await fetchCurrentPlaylist(playlistId)
   }
 
-  // Function to check if a video is in the current playlist
   const isVideoInPlaylist = (videoId) => {
     if (!currentPlaylist || !currentPlaylist.videos) return false
-
     return currentPlaylist.videos.some((video) => {
       if (typeof video === "object" && video._id) {
         return video._id === videoId
@@ -175,7 +164,6 @@ function ChannelPlaylist() {
   const handleCloseVideoModal = () => {
     setOpenVideoModal(false)
     setCurrentPlaylist(null)
-
     if (userId) {
       dispatch(getPlaylistsByUser(userId))
     }
@@ -217,69 +205,90 @@ function ChannelPlaylist() {
 
         <div className="grid xl:grid-cols-3 md:grid-cols-2 p-4 gap-6 grid-cols-1 w-full mt-5">
           {localPlaylists?.map((playlist) => (
-            <div
+            <Link
+              to={`/playlist/${playlist._id}`}
               key={playlist._id}
-              className="relative h-[15rem] w-full border border-[#1e3a47] rounded-xl overflow-hidden hover:border-[#00ed64] transition-all hover:shadow-lg hover:shadow-[#00ed64]/20 group bg-gradient-to-t from-[#051622] to-[#072331]"
+              className="relative h-[15rem] w-full border border-[#1e3a47] rounded-xl overflow-hidden hover:border-[#00ed64] transition-all hover:shadow-lg hover:shadow-[#00ed64]/20 group bg-gradient-to-t from-[#051622] to-[#072331] block"
             >
-              <Link to={`/playlist/${playlist._id}`} className="absolute inset-0 z-10" />
+              <div className="relative w-full h-full rounded-xl overflow-hidden">
+                {/* Thumbnail area */}
+                {playlist.thumbnail?.url && (
+                  <img
+                    src={playlist.thumbnail.url}
+                    alt="Thumbnail"
+                    className="absolute inset-0 w-full h-full object-cover brightness-75"
+                  />
+                )}
 
-              <div className="absolute inset-0 bg-gradient-to-t from-[#051622]/90 to-transparent"></div>
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#051622]/90 to-transparent"></div>
 
-              <div className="absolute flex justify-between bottom-0 left-0 border-t border-[#1e3a47] py-3 px-4 w-full backdrop-blur-sm bg-[#051622]/40 z-20">
-                <div className="flex flex-col gap-1">
-                  <h1 className="text-lg font-medium">Playlist</h1>
-                  <div className="text-xs text-slate-300">
-                    {playlist.totalViews} Views • {timeAgo(playlist.updatedAt)}
+                {/* Content */}
+                <div className="relative z-10 h-full flex flex-col p-4">
+                  {/* Top section with title and buttons */}
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1 min-w-0">
+                      <h2 className="text-lg font-bold group-hover:text-[#00ed64] transition-colors truncate">
+                        {playlist.name || "Untitled Playlist"}
+                      </h2>
+                      <p className="text-xs text-gray-300 mt-1 truncate">
+                        {playlist.description || "No description"}
+                      </p>
+                    </div>
+
+                    {/* Action buttons */}
+                    {authId === userId && (
+                      <div className="flex gap-1.5 ml-2">
+                        <Button
+                          className="text-xs px-2 py-1 bg-black/60 hover:bg-black/80 rounded"
+                          onClick={(e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                            openVideoManagementModal(playlist._id)
+                          }}
+                        >
+                          Manage
+                        </Button>
+                        <Button
+                          className="p-1.5 bg-black/60 hover:bg-black/80 rounded"
+                          onClick={(e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                            openEditModal(playlist)
+                          }}
+                        >
+                          <Pencil size={14} />
+                        </Button>
+                        <Button
+                          className="p-1.5 bg-black/60 hover:bg-black/80 rounded"
+                          onClick={(e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                            setSelectedPlaylistId(playlist._id)
+                            setOpenDeleteConfirm(true)
+                          }}
+                        >
+                          <Trash size={14} />
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </div>
-                <p className="bg-[#051622]/70 px-3 py-1 rounded-md text-xs self-start border border-[#1e3a47]/50">
-                  {playlist.totalVideos} Videos
-                </p>
-              </div>
 
-              <div className="py-3 px-4 z-20 relative">
-                <h2 className="text-lg font-bold group-hover:text-[#00ed64] transition-colors">{playlist.name}</h2>
-                <p className="text-xs w-full h-4 overflow-hidden text-gray-300">{playlist.description}</p>
-              </div>
-
-              {authId === userId && (
-                <div className="absolute top-3 right-3 flex gap-2 z-30">
-                  <Button
-                    className="text-xs bg-[#0d3446] hover:bg-[#164863] border border-[#1e3a47]/50 shadow-md"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      e.stopPropagation()
-                      openVideoManagementModal(playlist._id)
-                    }}
-                  >
-                    Manage Videos
-                  </Button>
-
-                  <Button
-                    className="p-1.5 bg-[#0d3446] hover:bg-[#164863] border border-[#1e3a47]/50 shadow-md"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      e.stopPropagation()
-                      openEditModal(playlist)
-                    }}
-                  >
-                    <Pencil size={16} />
-                  </Button>
-
-                  <Button
-                    className="p-1.5 bg-[#0d3446] hover:bg-[#164863] border border-[#1e3a47]/50 shadow-md"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      e.stopPropagation()
-                      setSelectedPlaylistId(playlist._id)
-                      setOpenDeleteConfirm(true)
-                    }}
-                  >
-                    <Trash size={16} />
-                  </Button>
+                {/* Bottom stats section */}
+                <div className="absolute flex justify-between bottom-0 left-0 border-t border-[#1e3a47] py-3 px-4 w-full backdrop-blur-sm bg-[#051622]/40 z-20">
+                  <div className="flex flex-col gap-1">
+                    <h1 className="text-lg font-medium">Playlist</h1>
+                    <div className="text-xs text-slate-300">
+                      {playlist.totalViews} Views • {timeAgo(playlist.updatedAt)}
+                    </div>
+                  </div>
+                  <p className="bg-[#051622]/70 px-3 py-1 rounded-md text-xs self-start border border-[#1e3a47]/50">
+                    {playlist.totalVideos} Videos
+                  </p>
                 </div>
-              )}
-            </div>
+              </div>
+            </Link>
           ))}
         </div>
       </div>
@@ -295,7 +304,7 @@ function ChannelPlaylist() {
               className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
               onClick={closeModal}
             >
-              {/* <X size={24} /> */}
+              <X size={24} />
             </button>
           </DialogHeader>
 
@@ -353,7 +362,7 @@ function ChannelPlaylist() {
               ) : videos?.length > 0 ? (
                 videos.map((video, index) => {
                   const isInPlaylist = isVideoInPlaylist(video._id)
-                  const key = `${video._id || "no-id"}-${index}` // Ensure unique fallback key
+                  const key = `${video._id || "no-id"}-${index}`
 
                   return (
                     <div key={key} className="flex justify-between items-center border-b border-[#1e3a47] pb-4 mb-4">
